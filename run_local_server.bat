@@ -1,2 +1,2 @@
-cd C:\Users\armel\Documents\Programation\JavaScript\Strange Day
+cd C:\Users\armel\Documents\Programation\Web\StrangeDay
 npm start
