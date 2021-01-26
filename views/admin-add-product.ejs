@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <!-- Import CSS Bootstrap -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <!-- Import custom CSS -->
+        <link rel="stylesheet" type="text/css" href="/css/style-account.css">
+        <link rel="stylesheet" type="text/css" href="/css/style-admin.css">
+        <link rel="stylesheet" type="text/css" href="/css/style-navbar.css">
+        <title>Strange Day</title>
+    </head>
+ 
+    <body>
+        <header>
+            <%- include('navbar') %>
+        </header>
+
+        <main class="pt-5 mt-3">
+            <div class="m-3"> 
+                <span href="#" class="link-title p-2 pl-4">
+                    Ajout d'un article
+                </span>
+            </div>
+            <div class="new-product-content container-fluid px-4">
+                <div class="images pb-3">
+                    <label class="title my-2"> Image(s) </label>
+                    <div class="img-preview">
+                    </div>
+                    <label class="btn btn-primary m-0 mt-3" for="files">Ajouter une image</label>
+                    <input class="form-control" type="file" id="files" name="images" accept="image/*">
+                    <a href="#" class="btn btn-secondary mt-3" id="clear"> Supprimer </a>
+                    <div class="invalid-feedback">Veuillez ajouter au moins une image</div>
+                </div>
+                <div class="d-flex flex-wrap ">
+                    <div class="pr-sm-4">
+                        <div class="name">
+                            <label class="title my-2"> Nom </label>
+                            <input type="text" placeholder="Nom" class="form-control col" name="name">
+                            <div class="invalid-feedback">Veuillez rentrer un nom</div>
+                        </div>
+                        <div class="description">
+                            <label class="title my-2"> Description </label>
+                            <textarea class="form-control col" placeholder="Ajouter une description ici ..." rows="7" name="description"></textarea>
+                            <div class="invalid-feedback">Veuillez rentrer une description</div>
+                        </div>
+                    </div>
+                    <div class="pr-sm-4">
+                        <div class="price">
+                            <label class="title my-2"> Prix </label>
+                            <input type="text" placeholder="12.99" class="form-control col" name="price">
+                            <div class="invalid-feedback">Veuillez rentrer un prix valide (ex: 12.99)</div>
+                        </div>
+                        <div class="available">
+                            <label class="title my-2"> Type </label>
+                            <br/>
+                            <label class="checkbox-inline"><input type="radio" name="type" value="clothe" id="t1" checked > Vêtement </label>
+                            <label class="checkbox-inline ml-3"><input type="radio" name="type" value="print" id="t2" %> > Affiche </label>
+                            <label class="checkbox-inline ml-3"><input type="radio" name="type" value="accessory" id="t3" %> > Accessoire </label>
+                        </div>
+
+                        <div class="type-clothe">
+                            <div class="size">
+                                <label class="title my-2"> Composition </label>
+                                <input type="text" placeholder="Composition du vêtement" class="form-control col" name="composition">
+                            </div>
+                        </div>
+                        <div class="type-poster hide">
+                            <div class="size">
+                                <label class="title my-2"> Format </label>
+                                <input type="text" placeholder="A3" class="form-control col" name="size">
+                            </div>
+                            <div class="printing">
+                                <label class="title my-2"> Poids </label>
+                                <input type="text" placeholder="250mg" class="form-control col" name="printing">
+                                <div class="invalid-feedback">veuillez rentrer un poids</div>
+                            </div>
+                        </div>
+                        <div class="type-accessory hide">
+                            <div class="acc_type">
+                                <label class="title my-2"> Type d'accessoire </label>
+                                <input type="text" placeholder="Sac" class="form-control col" name="acc_type">
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="collection">
+                            <label class="title my-2"> Collection/Capsule </label>
+                            <br/>
+                            <select class="custom-select" name="collection">
+                                <option selected value="Aucune" class="attached enabled">Aucune</option>
+                                <option value="Collection 1" class="attached enabled">Collection 1</option>
+                            </select>
+                        </div>
+                        <div class="available">
+                            <label class="title my-2"> Disponible </label>
+                            <br/>
+                            <label class="checkbox-inline"><input type="radio" name="available" value="1" id="a1" checked> Oui </label>
+                            <label class="checkbox-inline ml-3"><input type="radio" name="available" value="0" id="a2"> Non </label>
+                        </div>
+                    </div>
+                </div>
+                <form action="/admin-add-product" method="post">
+                    <button class="btn btn-success my-4" type="submit"> Ajouter le produit </button>
+                </form>
+            </div>
+        </main>
+        <footer>
+            <%- include('footer') %>
+        </footer>
+    </body>
+    
+    <script type="text/javascript">
+        var fileTypes = [
+          'image/jpeg',
+          'image/jpeg',
+          'image/png'
+        ]
+
+        // prend un fichier en paramètre et verifie qu'il est bien du type autorisé
+        function validFileType(file) {
+            for(var i = 0; i < fileTypes.length; i++) {
+                if(file.type === fileTypes[i]) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function addImgPreview (file) {
+            console.log(file)
+            var path = window.URL.createObjectURL(file); // on créer un lien provisoire pour l'image
+            $('.img-preview').append(`<img src="${path}" img-name='${file.name}'></img>`)
+        }
+
+        function getImgList() {
+            var list = []
+            $('.images img').each(function () {
+                list.push($(this).attr('img-name'));
+            });
+
+            return list
+        }
+
+        // Upload la liste des images sur le serveur
+        function uploadImgFiles(files) {
+            var form = new FormData()
+            for (var i=0; i<files.length; i++) {
+                form.append('file', files[i])
+            }
+
+            $.ajax({
+                type: 'POST',
+                url: '/upload-img', 
+                // Form data
+                data: form,//new FormData(files[i]),
+
+                // Tell jQuery not to process data or worry about content-type
+                // You *must* include these options!
+                cache: false,
+                contentType: false,
+                processData: false,
+            })
+        }
+
+        var file_list = []
+        // Actualise le cadre de preview d'images
+        $('.images input').change(function () {
+            var files = $(this).prop('files');
+            file_list.push(files[0]);
+            if (files.length) {
+                for (var i=0; i<files.length; i++) {
+                    if (validFileType(files[i])) {
+                        addImgPreview(files[i]);
+                    }
+                }
+            }
+        });
+
+        // Actualise le cadre de preview d'images
+        $('.images #clear').click(function () {
+            $('.images .img-preview').empty()
+        })
+
+        // Change les champs à remplir selon le type
+        $('input[name="type"]').change(function () {
+            var value = $('input[name="type"]:checked').val();
+            if (value=="clothe") {
+                $('.type-clothe').removeClass('hide');
+                $('.type-poster').addClass('hide');
+                $('.type-accessory').addClass('hide');
+            }
+            else if (value=="print") {
+                $('.type-poster').removeClass('hide');
+                $('.type-clothe').addClass('hide');
+                $('.type-accessory').addClass('hide');
+            }
+            else if (value=="accessory") {
+                $('.type-accessory').removeClass('hide');
+                $('.type-clothe').addClass('hide');
+                $('.type-poster').addClass('hide');
+            }
+        }); 
+
+        // Ajouter un produit
+        $('form[action="/admin-add-product"]').submit(function () {
+            var image = $('input[name="images"]');
+            var name = $('input[name="name"]');
+            var description = $('textarea[name="description"]');
+            var price = $('input[name="price"]');
+            var type = $('input[name="type"]:checked');
+            var composition = $('input[name="composition"]');
+            var size = $('input[name="size"]');
+            var weight = $('input[name="printing"]');
+            var acc_type = $('input[name="acc_type"]');
+            var collection = $('.custom-select');
+            var available = $('input[name="available"]:checked');
+            var regexPrice = new RegExp("^(\\d+[.]\\d{1,2})$");
+
+            if (type.val() == "clothe") {
+                size.val('');
+                weight.val('');
+                acc_type.val('');
+            } else if (type.val() == "print") {
+                composition.val('');
+                acc_type.val('');
+            }
+            else if (type.val() == "accessory") {
+                composition.val('');
+                size.val('');
+                weight.val('');
+            }
+
+            // On check les erreurs et on ajoute la classe en consequant
+            if (!file_list.length) {
+                image.removeClass('is-valid').addClass('is-invalid');
+                return false;
+            } else {
+                image.removeClass('is-invalid').addClass('is-valid');
+            }
+            if (!name.val()) {
+                name.removeClass('is-valid').addClass('is-invalid');
+                return false;
+            } else {
+                name.removeClass('is-invalid').addClass('is-valid');
+            }
+            if (!description.val()) {
+                description.removeClass('is-valid').addClass('is-invalid');
+                return false;
+            } else {
+                description.removeClass('is-invalid').addClass('is-valid');
+            }
+            if (!price.val()) {
+                price.removeClass('is-valid').addClass('is-invalid');
+                return false;
+            } else if (!price.val().match(regexPrice)) {
+                price.removeClass('is-valid').addClass('is-invalid');
+                return false;
+            }
+            else {
+                price.removeClass('is-invalid').addClass('is-valid');
+            }
+            if (!composition.val() && type.val() == "clothe") {
+                composition.removeClass('is-valid').addClass('is-invalid');
+                return false;
+            } else {
+                composition.removeClass('is-invalid').addClass('is-valid');
+            }
+            if (!size.val() && type.val() == "print") {
+                size.removeClass('is-valid').addClass('is-invalid');
+                return false;
+            }
+            else {
+                size.removeClass('is-invalid').addClass('is-valid');
+            }
+            if (!weight.val() && type.val() == "print") {
+                weight.removeClass('is-valid').addClass('is-invalid');
+                return false;
+            }
+            else {
+                weight.removeClass('is-invalid').addClass('is-valid');
+            }
+            if (!acc_type.val() && type.val() == "accessory") {
+                acc_type.removeClass('is-valid').addClass('is-invalid');
+                return false;
+            }
+            else {
+                acc_type.removeClass('is-invalid').addClass('is-valid');
+            }
+
+            uploadImgFiles(file_list) // On upload les images sur le serveur en parallèle
+
+            $.post("/admin-add-product", {
+                images: JSON.stringify(getImgList()),
+                name: name.val(),
+                description: description.val(),
+                price: price.val(),
+                composition: composition.val(),
+                size: size.val(),
+                weight: weight.val(),
+                acc_type: acc_type.val(),
+                collection: collection.val(),
+                type: type.val(),
+                available: available.val()
+            })
+            .done( function (data) {
+                if (data == "badInfos") {
+                }
+                else {
+                    location.assign('/admin-products-list');
+                }
+            });
+            return false; // on execute pas le submit normal
+         
+        });
+
+    </script>
+
+</html>

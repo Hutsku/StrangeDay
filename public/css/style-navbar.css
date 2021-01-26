@@ -1,0 +1,212 @@
+@font-face {
+	font-family: "Swiss 721";
+	src: url('font/swis721_3.ttf') format("truetype");
+	font-weight: normal;
+    font-style: normal;
+}
+
+/* ====================== MODIFICATIONS GENERALES DU SITE ==================== */
+
+body {
+	padding: 0;
+}
+
+main {
+	min-height: 90vh;
+	background-color: #fff9e7;
+	text-transform: uppercase;
+	position: relative;
+}
+
+a {
+	color: rgb(185, 157, 46);
+}
+a:hover {
+	color: rgb(126, 106, 27);
+}
+
+.head-title h1, .head-title h2 {
+	text-align: center;
+	font-weight: 700;
+}
+
+.btn {
+	text-transform: uppercase;
+	border-radius: 0;
+}
+.btn:focus {
+	box-shadow: none;
+}
+
+.btn-cart {
+	background-color: rgb(222, 188, 54);
+	color: white;
+	transition: 0.1s;
+}
+.btn-cart:hover {
+	/*box-shadow: 0.1rem 0.1rem 0.2rem rgba(0,0,0,.3);*/
+	background-color: rgb(188, 158, 41);
+	color: white;
+}
+.btn-cart:active {
+	background-color: rgb(154, 129, 33);
+}
+
+.btn-log {
+	background-color: rgb(180, 180, 180);
+	color: white;
+	transition: 0.1s;
+}
+.btn-log:hover {
+	/*box-shadow: 0.1rem 0.1rem 0.2rem rgba(0,0,0,.3);*/
+	background-color: rgb(150,150, 150);
+	color: white;
+}
+.btn-log:active {
+	background-color: rgb(130, 130, 130);
+}
+
+.custom-select, .form-control {
+	border-radius: 0;
+}
+.custom-select:focus, .form-control:focus {
+	box-shadow: none;
+	border-color: rgb(222, 188, 54);
+}
+
+/* =========================================================================== */
+
+/* SHOP DROPDOWN */
+@media (max-width: 768px) { 
+	#shopDropdownMenuLink + .dropdown-menu, #accountDropdownMenuLink + .dropdown-menu {
+		background-color: transparent;
+		border: none;	
+	}
+}
+
+
+.disclaimer {
+	background-color: black;
+	height: 50px;
+	color: white;
+
+	font-size: 13px;
+	text-transform: uppercase;
+}
+.disclaimer .disclaimer-text {
+	display: inline-block; /* important */
+  	white-space: nowrap;
+  	overflow: hidden;
+  	text-overflow: ellipsis;
+
+  	transition: 0.3;
+}
+.disclaimer .disclaimer-text span {
+	position: relative;
+	left: 0;
+	/*transition: 3s;
+	transition-timing-function: linear;*/
+}
+/*.disclaimer .disclaimer-text span:hover {
+	left: -100px;
+}*/
+
+.disclaimer .fas {
+	color: yellow;
+}
+
+.hide {
+	display: none;
+}
+
+.navbar {
+	text-transform: uppercase;
+	/*font-family: "Swiss 721";*/
+    font-weight: 700; /* en attendant de résoudre le problème de police */
+	font-size: 16px;
+	background-color: rgb(242, 216, 117);
+}
+
+.navbar-light .navbar-nav .nav-link {
+    color: rgb(0, 0, 0);
+}
+
+.navbar.shadow {
+	box-shadow: 0 .4rem 1rem rgba(0,0,0,.15) !important;
+}
+
+.navbar-brand img {
+	height:38px;
+}
+
+.navbar-collapse {
+	transition: 0.3s;
+}
+
+#searchForm button {
+	color: white;
+}
+
+#searchForm input {
+	background-color: rgb(0, 0, 0, 0);
+	border: none;
+	color: white;
+
+	height: 30px;
+	width: 0;
+	transition: 0.5s;
+}
+
+#searchForm:hover input {
+	border-bottom: 2px solid white;
+	width: 200px;
+}
+
+li.nav-item {
+	width: auto;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+.modal-content {
+	color: black;
+	text-transform: uppercase;
+	font-weight: 700;
+	background-color: #f2d875;
+}
+.modal-body, .modal-footer {
+	background-color: #fff9e7;
+}
+.modal-footer {
+	font-size: 14px;
+	font-weight: 600;
+}
+
+/* CART DROPDOWN */
+
+.cart-product img {
+	border-radius: 10px;
+}
+.dropdown-menu {
+	font-weight: 400;
+	width: 400px;
+}
+.cart-total-price {
+	color: #c12020;
+}
+.cart-total-title small, .cart-product-name {
+	color: grey;
+}
+
+/* NOTIF CONTAINER */
+.notif-container {
+	z-index: 1031;
+	top: 70px;
+	position: fixed;
+}
+
+.sticky-bottom {
+	position: sticky !important;
+	bottom: 0px;
+	z-index: 99;
+}

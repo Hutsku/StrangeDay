@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <!-- Import CSS Bootstrap -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <!-- Import custom CSS -->
+        <link rel="stylesheet" type="text/css" href="/css/style-shop.css">
+        <link rel="stylesheet" type="text/css" href="/css/style-navbar.css">
+
+        <title>Strange Day</title>
+    </head>
+ 
+    <body>
+        <header>
+            <%- include('navbar') %>
+        </header>
+        <main class="py-5 mt-3">
+            <%- include('jumbo') %>
+            <div class="head-title my-5">
+                <h2>Qui sommes-nous ?</h2>
+            </div>
+            <div class="container desc">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </div>
+            <div class="head-title mt-5">
+                <h2>L'équipe</h2>
+            </div>
+            <div class="container staff-list">
+                <div class="staff col-md-4 p-5">
+                    <div class="staff-img text-center">
+                        <img class="w-100" src="/img/placeholder.png">
+                    </div>
+                    <div class="staff-name p-2 text-center">
+                        <span class="name w-100">Yoann Dogbe</span>
+                    </div>
+                </div>
+                <div class="staff col-md-4 p-5">
+                    <div class="staff-img text-center">
+                        <img class="w-100" src="/img/placeholder.png">
+                    </div>
+                    <div class="staff-name p-2 text-center">
+                        <span class="name w-100">Armel Rouxel</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <footer>
+            <%- include('footer') %>
+        </footer>
+    </body>
+</html>

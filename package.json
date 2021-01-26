@@ -1,0 +1,27 @@
+{
+  "name": "@hutsku/ydogbe-website",
+  "version": "0.0.1",
+  "description": "test site web",
+  "author": "Hutsku",
+  "license": "BSD-2-Clause",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "latest",
+    "bootstrap-input-spinner": "^1.13.3",
+    "ejs": "latest",
+    "email-templates": "latest",
+    "express": "latest",
+    "express-session": "^1.17.1",
+    "multer": "latest",
+    "mysql": "latest",
+    "node-vault": "^0.9.20",
+    "stripe": "latest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:/Hutsku/NodeWeb.git"
+  },
+  "scripts": {
+    "start": "node index.js"
+  }
+}
