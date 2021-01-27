@@ -45,6 +45,6 @@ config.cookies = {
 
 config.debug      = false; // active some test button etc.
 config.production = false; // Inutile pour l'instant mais bon
-config.local_test = false; // Fait la distintion entre la version web et locale. Permet d'éviter le vault entre autre.
+config.local_test = true; // Fait la distintion entre la version web et locale. Permet d'éviter le vault entre autre.
 
 module.exports = config;
