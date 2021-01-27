@@ -324,16 +324,24 @@ function addProduct(data) {
 
 		// On ajoute une par une les images à la BDD
 		for (image of data.images) {
-			connection.query(`INSERT INTO image (name) VALUES (?)`, [image], function(err, result) {
-			    if (err) throw err;
-			    var imageId = result.insertId;
+            // On verifie si les images n'existent pas déjà
+            connection.query(`SELECT * FROM image WHERE name = ?`, [image], function(err, rows, fields) {
+                if (err) throw err;
 
-			    // On lie les images au produit dans la BDD
-			    var linkImageProduct = `INSERT INTO product_image (product_id, image_id) VALUES (?, ?)`;
-			    connection.query(linkImageProduct, [productId, imageId], function(err, result) {
-				    if (err) throw err;
-				});
-			});
+                // Si l'image n'existe pas, on l'ajoute à la BDD
+                if (!rows.length) {
+        			connection.query(`INSERT INTO image (name) VALUES (?)`, [image], function(err, result) {
+        			    if (err) throw err;
+        			    var imageId = result.insertId;
+
+        			    // On lie les images au produit dans la BDD
+        			    var linkImageProduct = `INSERT INTO product_image (product_id, image_id) VALUES (?, ?)`;
+        			    connection.query(linkImageProduct, [productId, imageId], function(err, result) {
+        				    if (err) throw err;
+        				});
+        			});
+                }
+            });
 		}
 	});
 }
