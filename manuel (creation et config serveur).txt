@@ -102,6 +102,8 @@ https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-
 	- git clone https://github.com/Hutsku/StrangeDay.git (exemple)
 	- git init (initialize le repo, à faire à la racine du projet)
 	- sudo git pull (si on veut synchroniser le projet avec github)
+4 - Créer la base de données MySQL
+	1 - sudo apt-get install mysql-client-core-8.0 (installe mysql)	
 
 
 
