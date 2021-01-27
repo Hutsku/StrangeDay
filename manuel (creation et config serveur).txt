@@ -86,6 +86,8 @@ https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-
 	- sudo certbot renew --dry-run (pour simuler un renouvellement)
 
 ========== Mettre le site sur le serveur ==========
+https://www.digitalocean.com/community/tutorials/how-to-set-up-a-node-js-application-for-production-on-ubuntu-16-04
+
 1 - Installer node.js
 	- cd ~ (on se place à la racine du compte)
 	- curl -sL https://deb.nodesource.com/setup_12.x -o nodesource_setup.sh
@@ -102,10 +104,43 @@ https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-
 	- git clone https://github.com/Hutsku/StrangeDay.git (exemple)
 	- git init (initialize le repo, à faire à la racine du projet)
 	- sudo git pull (si on veut synchroniser le projet avec github)
-4 - Créer la base de données MySQL
-	1 - sudo apt-get install mysql-client-core-8.0 (installe mysql)	
+4 - Installer PM2, pour daemonizer le site
+	- sudo npm install -g pm2 (installe pm2)
+	- pm2 start index.js (lance le daemon)
+	- pm2 stop id_app (stop le process)
+	- pm2 restart id_app (restart le process)
+	- pm2 list (liste des process)
+5 - Configurer Nginx comme reverse-proxy (écoute en localhost)
+	- sudo nano /etc/nginx/sites-available/default (ouvre l'editeur)
+	- Remplacez le bloc "location /" par: (les requêtes sont redirigées vers localhost:8080)
+	{
+            proxy_pass http://localhost:8080;
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host $host;
+            proxy_cache_bypass $http_upgrade;
+    	}
+	- sudo nginx -t (on verifie le fichier)
+	- sudo systemctl restart nginx (et on relance nginx)
 
+========== Configurer le site (mysql et vault) ==========
+https://medium.com/@eligijuskrepsta/setting-up-node-mysql-and-nginx-on-digital-ocean-247546be20df
 
+1 - Installer MySQL
+	- sudo apt-get install mysql-server (installe mysql)	
+	- sudo mysql (accède à la BDD)
+2 - Créer et remplir la BDD
+	- SHOW DATABASES; (montre les base de données)
+	- CREATE DATABASE database_name; (créer une BDD)
+	- USE db_name; (on se place dans la BDD)
+	- SHOW TABLES; (affiche toutes les tables de la BDD)
+	- CREATE TABLE potluck (id INT NOT NULL PRIMARY KEY AUTO_INCREMENT, 
+		name VARCHAR(20),
+		food VARCHAR(30),
+		confirmed CHAR(1), 
+		signup_date DATE
+	  ); (exemple, créer une table avec ses colonnes)
 
 
 
