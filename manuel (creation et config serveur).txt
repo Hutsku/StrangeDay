@@ -1,0 +1,114 @@
+========== Création et configuration initiale du serveur ==========
+https://www.digitalocean.com/community/tutorials/initial-server-setup-with-ubuntu-16-04
+
+1 - Parametrer le projet et droplet 
+2 - Créer la clef ssh (https://www.digitalocean.com/docs/droplets/how-to/add-ssh-keys/create-with-openssh/)
+	- cmd: ssh-keygen (créer une nouvelle clef)
+	- On peut aussi récuperer une ancienne sur user/.ssh/id_rsa
+	- c/c sur la fenêtre, fichier id_rsa.pub
+3 - Se connecter en tant que root via ssh
+	- cmd: root@ip_droplet
+4 - Créer un nouveau compte utilisateur via root
+	- cmd: adduser name_user
+	- Ajoutez un mot de passe si besoin
+5 - Donner les droits root à l'utilisateur
+	- cmd: usermod -aG sudo name_user
+6 - Copier la clef ssh sur le serveur
+	- Change le repertoire utilisateur: 
+		su - name_user
+	- Créer le repertoire .ssh et restreindre ses droits:
+		mkdir ~/.ssh
+		chmod 700 ~/.ssh
+	- Créer le fichier: 
+		nano ~/.ssh/authorized_keys
+	- c/c la clef ssh dedans et sauvegarder + quitter le fichier
+	- Restreindre ses droits d'accès: 
+		chmod 600 ~/.ssh/authorized_keys
+	- cmd: exit (pour retourner en tant que root)
+
+7 - Garder seulement l'authentification ssh
+	- sudo nano /etc/ssh/sshd_config (on ouvre le fichier de config)
+	- Trouver la ligne "PasswordAuthentication" et mettre la valeur "no"
+	- De même pour "PubkeyAuthentication yes" et "ChallengeResponseAuthentication no"
+	- sudo systemctl reload sshd (recharge le daemon ssh)
+8 - Se connecter avec le compte utilisateur
+	- cmd: user_name@ip_droplet
+9 - Créer un pare-feu
+	- sudo ufw allow OpenSSH (autorise les connection ssh)
+	- sudo ufw enable (active le pare-feu)
+
+========== Lier un nom de domaine au serveur (Gandi) =========
+https://www.digitalocean.com/community/tutorials/how-to-point-to-digitalocean-nameservers-from-common-domain-registrars
+
+1 - Sur le dashboard de Gandi, allez sur votre nom de domaine et "serveur de noms"
+2 - Cliquez sur "Modifier" et changez par: (en selectionnant "externe")
+    ns1.digitalocean.com
+    ns2.digitalocean.com
+    ns3.digitalocean.com
+
+https://www.digitalocean.com/docs/networking/dns/how-to/manage-records/
+4 - Ajouter le nom de domaine à lier sur DigitalOcean via l'onglet 'Networking'
+5 - Créer un DNS (A) en entrant @ pour l'host name et en selectionnant le droplet cible (les droplet n'ont que ipv4)
+
+========== Installer et configurer Nginx (+certificat SSL) ==========
+https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-16-04
+
+1 - Installer Nginx sur le serveur
+	- sudo apt-get update (on met à jour les modules si jamais)
+	- sudo apt-get install nginx
+2 - Mettre à jour le pare-feu
+	- sudo ufw allow 'Nginx FULL' (active HTTP et HTTPS)
+3 - Verifier le serveur web
+	- systemctl status nginx (pour verifier si le service tourne)
+	- http://nom_de_domaine.ext -> devrait vous diriger sur nginx
+4 - Diverses commandes:
+	- sudo systemctl stop nginx (stop le serveur)
+	- sudo systemctl start nginx (lance le serveur)
+	- sudo systemctl restart nginx (pour restart le serveur)
+	- sudo systemctl reload nginx (pour juste mettre à jour la config sans relancer)
+
+https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-16-04
+5 - Installer Certbot (renouvellement de certificat SSL)
+	- sudo add-apt-repository ppa:certbot/certbot (on ajoute le dépot)
+	- sudo apt-get update (met à jour les infos de package)
+	- sudo apt-get install python3-certbot-nginx (installe certbot)
+6 - Parametrer Nginx
+	- sudo nano /etc/nginx/sites-available/default (ouvre l'editeur)
+	- Trouver la ligne "server_name" et mettre vos noms de domaine
+		"server_name exemple.com www.exemple.com"
+	- sudo nginx -t (verifie les erreurs de syntaxe ou autre)
+	- sudo systemctl reload nginx (met à jour la config)
+7 - Obtenir un certificat SSL
+	- sudo certbot --nginx -d example.com -d www.example.com
+	- Remplir les champs et choisissez de redirigez les requêtes http vers https
+8 - Renouvellement automatique des certificats SSL
+	- Le renouvellement automatique est normalement activé par défaut
+	- sudo certbot renew --dry-run (pour simuler un renouvellement)
+
+========== Mettre le site sur le serveur ==========
+1 - Installer node.js
+	- cd ~ (on se place à la racine du compte)
+	- curl -sL https://deb.nodesource.com/setup_12.x -o nodesource_setup.sh
+	- sudo bash nodesource_setup.sh (script pour ajouter nodeJS 12)
+	- sudo apt-get install nodejs (install nodejs)
+	- sudo apt-get install build-essential (installe divers package essentiels)
+	- sudo apt-get install npm (insall npm)
+2 - Verifier la version de NodeJS (si besoin)
+	- npm cache clean -f (on vide le cache au cas ou)
+	- sudo npm install -g n (install n, le gestionnaire de version node)
+	- sudo n stable (installe la dernière version stable de node)
+	- node -v (si on veut regarder la version actuelle de node)
+3 - Cloner le repertoire git du site surle serveur
+	- git clone https://github.com/Hutsku/StrangeDay.git (exemple)
+	- git init (initialize le repo, à faire à la racine du projet)
+	- sudo git pull (si on veut synchroniser le projet avec github)
+
+
+
+
+
+
+
+
+
+
