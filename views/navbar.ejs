@@ -303,6 +303,7 @@
             password: passwordInput.val()
         })
         .done( function (data) {
+            console.log(data)
             if (data == "badEmail") {
                 console.log("bad email")
                 emailInput.removeClass('is-valid').addClass('is-invalid');

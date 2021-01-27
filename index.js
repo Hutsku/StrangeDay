@@ -832,7 +832,7 @@ app.get('/', function(req, res) {
         } 
         else {
             req.session.error = error;
-            res.send('error');
+            res.send(error);
         }
     }); 
 })

@@ -94,12 +94,12 @@ function login([email, password], callback) {
                 	callback(user);
                 } 
                 else {
-                	callback(false, 'BadPassword')
+                	callback(false, 'badPassword')
                 }
             });
         }
         else {
-        	callback(false, 'BadEmail')
+        	callback(false, 'badEmail')
         }
     }); 
 }
