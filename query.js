@@ -94,14 +94,12 @@ function login([email, password], callback) {
                 	callback(user);
                 } 
                 else {
-                	callback(false, 'Bad password')
-                    req.session.error = "Bad password";
-                    res.send('badPassword');
+                	callback(false, 'BadPassword')
                 }
             });
         }
         else {
-        	callback(false, 'Unknown email')
+        	callback(false, 'BadEmail')
         }
     }); 
 }
