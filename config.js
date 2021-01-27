@@ -36,7 +36,7 @@ config.email = {
 var timeCookieDefault = 30 // en minute
 var timeCookieStayConnected = 30*24*60 // durée de 30 jours
 config.cookies = { 
-    name: 'ydogbe',
+    name: 'strangeday',
     secret: 'keyboard cat', 
     cookie: { maxAge: timeCookieDefault*60*1000}, // in millisecond
     resave: false,

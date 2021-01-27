@@ -131,28 +131,28 @@ if (config.local_test) {
     secret_paypal = cred[path_paypal].client_id;
 } 
 else {
-    vault.read('ydogbe/email')
+    vault.read('strangeday/email')
     .then(function(res) {
         email_init(res.data);
     }).catch(console.error);
 
-    vault.read('ydogbe/mysql')
+    vault.read('strangeday/mysql')
     .then(function(res) {
         query.init(res.data);
     }).catch(console.error);
 
-    vault.read(`ydogbe/${path_stripe}`)
+    vault.read(`strangeday/${path_stripe}`)
     .then(function(res) {
         stripe_init(res.data);
         secret_stripe = res.data.public;
     }).catch(console.error);
 
-    vault.read('ydogbe/admin')
+    vault.read('strangeday/admin')
     .then(function(res) {
         adminUser_init(Object.values(res.data));
     }).catch(console.error);
 
-    vault.read(`ydogbe/${path_stripe}`)
+    vault.read(`strangeday/${path_stripe}`)
     .then(function(res) {
         secret_paypal = res.data.client_id;
     }).catch(console.error);
