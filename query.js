@@ -102,8 +102,6 @@ function login([email, password], callback) {
         }
         else {
         	callback(false, 'Unknown email')
-            req.session.error = "Unknown email";
-            res.send('badEmail');
         }
     }); 
 }
