@@ -199,6 +199,9 @@
 	            $('.subscribe-pannel input[name="cgu"]').removeClass('is-invalid').addClass('is-valid');
 	        }
 
+	        if (newsletterInput.val()) var newsletterInputValue = 1;
+	        else var newsletterInputValue = 0;
+
 	        $.post("/sign-up", {
 	        	name: nameInput.val(),
 	            email: emailInput.val(),
@@ -210,7 +213,7 @@
 	            state: stateInput.val(),
 	            password: passwordInput.val(),
 	            tel: telInput.val(),
-	            newsletter: newsletterInput.val()
+	            newsletter: newsletterInputValue
 	        })
 	        .done( function (data) {
 	            if (data == "badEmail") {
