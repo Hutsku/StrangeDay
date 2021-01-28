@@ -341,6 +341,13 @@ function addProduct(data) {
         				});
         			});
                 }
+                else {
+                    // On créer le lien entre le produit et l'image             
+                    var linkImageProduct = `INSERT INTO product_image (product_id, image_id) VALUES (?, ?)`;
+                    connection.query(linkImageProduct, [data.id, rows[0].id], function(err, result) {
+                        if (err) throw err;
+                    });
+                }
             });
 		}
 	});

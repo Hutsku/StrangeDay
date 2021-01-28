@@ -59,6 +59,7 @@ function email_init (cred) {
     // setup transporter (mailtrap for test, gmail for production)
     var transport_mailtrap = config.email.mailtrap;
     var transport_gmail    = config.email.gmail;
+    var transport_gandi    = config.email.gandi;
 
     // edit the transporter with real credentials
     transport_gmail.auth = {
@@ -66,7 +67,7 @@ function email_init (cred) {
         pass: cred.password  
     }
 
-    transporter = transport_gmail;
+    transporter = transport_gandi;
     if (config.email.test) transporter = transport_mailtrap;
 
     // Build-up the email object (pour les email venant du site)
@@ -201,7 +202,7 @@ function contactEmail(emailFrom, parameter) {
     email_contact.send({
         template: 'contact',
         message: {
-            to: config.email.from
+            to: 'arouxel@strangeday.fr'
         },
         locals: parameter,
     })
