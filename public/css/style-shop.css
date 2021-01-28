@@ -33,6 +33,11 @@
 	font-weight: 700;
 }
 
+.desc {
+	text-transform: none;
+	font-weight: 700;
+}
+
 /* PANEL SWITCH */
 
 div.tab {
