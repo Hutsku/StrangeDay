@@ -111,6 +111,7 @@
 		    				<span>Reference </span>
 		    				<span><%= reference %></span>
 		    			</div>
+		    			<a class="size-chart mt-3" href="#" data-toggle="modal" data-target="#sizeChartModal" name="delete-product">Guide des tailles</a>
     				</div>
     			</div>
     			
@@ -136,21 +137,21 @@
 
 			    			if (type == "clothe") { %>
 				    			<div class="row composition mb-1">
-				    				<span>Composition </span>
+				    				<span class="title">Composition </span>
 				    				<span><%= composition %></span>
 				    			</div>
 			    			<% } else if (type == "poster") { %>
 				    			<div class="row material mb-1">
-				    				<span>Impression </span>
+				    				<span class="title">Impression </span>
 				    				<span>Impression sur papier <%= printing %></span>
 				    			</div>
 				    			<div class="row size mb-1">
-				    				<span>Dimension </span>
+				    				<span class="title">Dimension </span>
 				    				<span>Affiche <%= size %></span>
 				    			</div>
 				    		<% } %>
 			    			<div class="row ref mb-1">
-			    				<span>Reference </span>
+			    				<span class="title">Reference </span>
 			    				<span><%= reference %></span>
 			    			</div>
 	    				</div>
@@ -164,12 +165,13 @@
 			    					var class_available = "invalid";
 			    					var text_available = "Non disponible";	
 			    				} %>
-				    			<div class="mb-2">
+				    			<div class="disp-info mb-2 col-7 p-0">
 				    				<small class="storage-info <%= class_available %>"><i class="fas fa-box"></i> <%= text_available %></small>
+		    						<a class="size-chart" href="#" data-toggle="modal" data-target="#sizeChartModal" name="delete-product">Guide des tailles</a>
 				    			</div>
 
 				    			<% if (type == "clothe") { %>
-				    				<select class="custom-select size col-7 mb-3">
+				    				<select class="custom-select size col-7 mb-3" <% if (!available) { %> disabled=true <% } %>>
 								        <option selected disabled>Sélectionnez la taille</option>
 		    							<option value="S" class="attached enabled">S</option>
 				    					<option value="M" class="attached enabled">M</option>
@@ -192,6 +194,23 @@
 	    			</div>
 	    		</div>
 	    	</div>
+            <!-- MODAL SIZE CHART -->
+            <div class="modal fade" id="sizeChartModal" tabindex="-1" role="dialog" aria-labelledby="sizeChartModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="sizeChartModalLabel">Guide des tailles</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+
+                        <div class="modal-body p-4" style="text-transform:none; font-weight: 500;">
+                            <img class="w-100" src="/img/placeholder.png">
+                        </div>
+                    </div>
+                </div>
+            </div>
         </main>
         <footer>
             <%- include('footer') %>

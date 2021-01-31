@@ -321,6 +321,9 @@ app.get('/', function(req, res) {
             total_cost: 4.95,
         }
     }
+    if (req.session.account) {
+        req.session.cart.shipping_cost = cart.getShippingCost(req.session.account.country, req.session.account.postal_code);
+    }
     res.render('cart.ejs', {session: req.session});
 })
 

@@ -70,6 +70,17 @@
     			
     			<!---------------------------------------------------------------------->
 
+                <% 
+                var subtot = session.cart.subtotal_cost+'€';
+                var ship = session.cart.shipping_cost+'€';
+                var tot = session.cart.total_cost+'€';
+                if (!parseInt(ship)) ship = 'Gratuite';
+                if (!session.cart.products.length) { 
+                    subtot = "-";
+                    ship = "-";
+                    tot = "-";
+                } %>
+
 	    		<div class="cart-payout col-md-4 mt-4 mt-md-5">
 	    			<div class="sticky-top sticky-offset p-4">
 	    				<div class="row">
@@ -78,16 +89,16 @@
 		    			<div class="w-100 border-bottom my-3"></div>
 		    			<div class="row py-3">
 		    				<span class="title col-5">SOUS-TOTAL <span class="detail">(TTC)</span></span>
-		    				<span class="price price-sub-total"><%= session.cart.subtotal_cost %>€</span>
+		    				<span class="price price-sub-total"><%= subtot %></span>
 		    			</div>
 		    			<div class="row py-3">
 		    				<span class="title col-5">LIVRAISON <span class="detail">(estimée)</span></span>
-		    				<span class="price price-shipping"><%= session.cart.shipping_cost %>€</span>
+		    				<span class="price price-shipping"><%= ship %></span>
 		    			</div>
 		    			<div class="w-100 border-bottom my-3"></div>
 		    			<div class="row pb-4">
 			    			<span class="title total col-5">TOTAL <span class="detail">(TTC)</span></span>
-			    			<span class="price price-total"><%= session.cart.total_cost %>€</span>
+			    			<span class="price price-total"><%= tot %></span>
 			    		</div>
                         <div class="form-check w-100 pb-2">
                             <input class="form-check-input" type="checkbox" id="validCgv" name="cgv" value="yes">
@@ -165,7 +176,7 @@
             var new_cart = {
                 products: [],
                 subtotal_cost: $('.price-sub-total').text(),
-                shipping_cost: $('.price-shipping').text(),
+                shipping_cost: <%= session.cart.shipping_cost %>,
                 total_cost: $('.price-total').text(),
                 nb_products: 0
             }

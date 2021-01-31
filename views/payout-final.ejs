@@ -183,7 +183,9 @@
                         </div>
                         <div class="row py-3">
                             <span class="title col-5">LIVRAISON</span>
-                            <span class="price price-shipping col text-right"><%= shipping_cost %>€</span>
+                            <% var ship = session.cart.shipping_cost+'€';
+                            if (!parseInt(ship)) ship = 'Gratuite'; %>
+                            <span class="price price-shipping col text-right"><%= ship %></span>
                         </div>
                         <div class="w-100 border-bottom my-3"></div>
                         <div class="row pb-5">
@@ -206,7 +208,7 @@
                 </div>
                 <div class="row py-2">
                     <span class="title col-5">LIVRAISON</span>
-                    <span class="price price-shipping col text-right"><%= shipping_cost %>€</span>
+                    <span class="price price-shipping col text-right"><%= ship %></span>
                 </div>
                 <div class="w-100 border-bottom my-2"></div>
                 <div class="row">

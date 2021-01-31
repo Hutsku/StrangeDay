@@ -55,7 +55,7 @@
                     <div class="p-4 container shipping-address-pannel">
                         <form action="/valid-shipping" method="post" class="container p-0">
                             <span class="title"> Adresse de livraison </span>
-                            <div class="shipping-address px-3 mb-4 border rounded text-secondary">
+                            <div class="shipping-address px-3 border rounded text-secondary">
                                 <div class="row radio-payout py-2">
                                     <div class="radio col-1">
                                         <input type="radio" id="sa1" class="" name="shippingAddress" value="1" checked>
@@ -105,10 +105,14 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="mt-2 mb-4" style="font-size:13px;">
+                                <a class="shipping-chart" href="#" data-toggle="modal" data-target="#shipChartModal">Guide des frais de port
+                                </a>
+                            </div>
 
                             <span class="title"> Mode d'expedition </span>
                             <div class="shipping-method p-2 pl-3 mb-4 border rounded text-secondary">
-                                <div class="row radio-payout">
+                                <div class="row radio-payout mr-3">
                                     <div class="radio col-1">
                                         <input type="radio" id="sm1" class="" name="shippingMethod" checked value="colissimo">
                                     </div>
@@ -116,7 +120,9 @@
                                         <label for="sm1" class="m-0"> Colissimo </label>
                                     </div>
                                     <div class="label col-2 colissimo-price">
-                                        <span> <%= session.cart.shipping_cost%>€ </label>
+                                        <% var ship = session.cart.shipping_cost+'€';
+                                        if (!parseInt(ship)) ship = 'Gratuit'; %>
+                                        <span style="font-size:14px;"> <%= ship %> </label>
                                     </div>
                                 </div>
                             </div>
@@ -143,7 +149,9 @@
                         </div>
                         <div class="row py-3">
                             <span class="title col-5">LIVRAISON <span class="detail">(estimée)</span></span>
-                            <span class="price price-shipping col text-right"><%= session.cart.shipping_cost %>€</span>
+                            <% var ship = session.cart.shipping_cost+'€';
+                            if (!parseInt(ship)) ship = 'Gratuite'; %>
+                            <span class="price price-shipping col text-right"><%= ship %></span>
                         </div>
                         <div class="w-100 border-bottom my-3"></div>
                         <div class="row pb-5">
@@ -153,6 +161,25 @@
                     </div>
                 </div>
 	    	</div>
+
+            <!-- MODAL SHIPPING CHART -->
+            <div class="modal fade" id="shipChartModal" tabindex="-1" role="dialog" aria-labelledby="shipChartModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="shipChartModalLabel">Guide des frais de port</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+
+                        <div class="modal-body p-4" style="text-transform:none; font-weight: 500;">
+                            <img class="w-100" src="/img/placeholder.png">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </main>
         <footer>
            <%- include('footer') %>
@@ -166,7 +193,7 @@
                 </div>
                 <div class="row py-2">
                     <span class="title col-5">LIVRAISON <span class="detail">(estimée)</span></span>
-                    <span class="price price-shipping col text-right"><%= session.cart.shipping_cost %>€</span>
+                    <span class="price price-shipping col text-right"><%= ship %></span>
                 </div>
                 <div class="w-100 border-bottom my-2"></div>
                 <div class="row">
@@ -198,6 +225,9 @@
 
         // Renvoit le frais de port selon le pays et code postal (Colissimo)
         function getShippingCost(country, postal_code) {
+            // Si le client habite à Plaisir, frais gratuit
+            if (postal_code == '78370') return 0;
+ 
             // On définie à l'avance les prix (250mg)
             var metroCost = 4.95;
             var domtomCost = 9.60;
@@ -226,8 +256,12 @@
             shippingCost = <%= session.cart.shipping_cost %>;
             totalCost = parseFloat((shippingCost + <%= session.cart.subtotal_cost %>).toFixed(10));
             $('span.price-shipping').text(`${shippingCost}€`);
+            if (!shippingCost) $('span.price-shipping').text(`Gratuite`);
+
             $('span.price-total').text(`${totalCost}€`);
+
             $('.colissimo-price span').text(`${shippingCost}€`);
+            if (!shippingCost) $('.colissimo-price span').text(`Gratuit`);
         }
         // Met à jour les frais de port selon la nouvele adresse
         function newShippingCost() {
@@ -236,8 +270,12 @@
             shippingCost = getShippingCost(country, postal_code);
             totalCost = parseFloat((shippingCost + <%= session.cart.subtotal_cost %>).toFixed(10));
             $('span.price-shipping').text(`${shippingCost}€`);
+            if (!shippingCost) $('span.price-shipping').text(`Gratuite`);
+
             $('span.price-total').text(`${totalCost}€`);
+
             $('.colissimo-price span').text(`${shippingCost}€`);
+            if (!shippingCost) $('.colissimo-price span').text(`Gratuit`);
         }
         // Radio button pannels
         $( "input[type=radio][name=shippingAddress]" ).change(function() {

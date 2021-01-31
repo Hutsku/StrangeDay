@@ -6,6 +6,9 @@ function roundPrice(x) {
 
 // Renvoit le frais de port selon le pays et code postal (Colissimo)
 function getShippingCost(country, postal_code) {
+    // Si le client habite à Plaisir, frais gratuit
+    if (postal_code == '78370') return 0;
+    
     // On définie à l'avance les prix (250mg)
     var metroCost = 4.95;
     var domtomCost = 9.60;
@@ -17,8 +20,6 @@ function getShippingCost(country, postal_code) {
     var euro = ['DE', 'AT', 'BE', 'BG', 'CY', 'HR', 'DK', 'ES', 'EE', 'FI', 'FR', 'GR', 'HU', 'IE', 'IT', 'LT', 
     'LV', 'LU', 'MT', 'NL', 'PL', 'PT', 'RO', 'SK', 'SI', 'SE', 'CZ', 'CH', 'SM', 'LI']; // UE + suisse etc
     var inter1 = ['NO', 'BA', 'HR', 'MK', 'ME', 'RS', 'AL', 'DZ', 'MA', 'TN', 'LY', 'MR'] // Europe Est + Norvège + Maghreb
-
-    console.log(country)
 
     // Si le client est en france ...
     if (country == 'FR') {
