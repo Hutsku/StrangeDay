@@ -2,10 +2,10 @@
 <link rel="stylesheet" type="text/css" href="../emails/style-email.css">
 
 <body>
-    <div class="d-flex logo bg-light justify-content-center">
-        <img class="col-md-4" src="https://ydogbe.store/img/logo1.png">
+    <div class="logo my-3">
+        <img src="https://strangeday.fr/img/logoSD.png">
     </div>
-    <div class="content bg-light p-3">
+    <div class="content p-3">
 		<div class="font-weight-bold d-flex justify-content-center mb-2"> Confirmation de votre commande </div>
 
 		<div class="d-flex justify-content-center mb-4"> 
@@ -15,28 +15,28 @@
 			<span> Voici ci-dessous et en pièce jointe le reçu de votre commande. Vous pourrez également la voir en détail ainsi que son avancement sur votre profil</span>
 		</div>
 	</div>
-	<div class="order-products bg-light px-3">
+	<div class="order-products px-3">
 		<div class="order-separator">
-			<span class="font-weight-bold"> Numéro de commande : <%= order_id %></span>
+			<span class="font-weight-bold"> Numéro de commande : <a href="https://strangeday.fr/order-detail/<%= order_id %>"><%= order_id %></a></span>
 			<span class="row m-0"> Adresse de facturation: <%= billing_address %></span>
-			<span class="row m-0"> Adresse de livraison: <%= shipping_address %></span>
+			<span class="row m-0"> Adresse de livraison: <%= shipping_address.string %></span>
 		</div>
 
 		<div class="order-separator">
 			<table class="table table-striped">
 	            </thead>
 	            <tbody>
-	                <% for (var i in products) { %>
+	                <% for (product of products) { %>
 	                    <tr>
 	                        <td class="col-2">
-	                            <a class="product-img" href="https://ydogbe.store/product/<%= products[i].id %>">
-	                                <img class="col" src="https://ydogbe.store/img/<%= products[i].img %>">
+	                            <a class="product-img" href="https://strangeday.fr/product/<%= product.id %>">
+	                                <img class="col" src="https://strangeday.fr/img/<%= product.image %>">
 	                            </a>
 	                        </td>
-	                        <td class="col-4"><a href="https://ydogbe.store/product/<%= products[i].id %>"><%= products[i].name %></a></td>
-	                        <td class="col-2"><%= products[i].option %></td>
-	                        <td class="col-2">x<%= products[i].nb %></td>
-	                        <td class="col-2"><%= products[i].price %>€</td>
+	                        <td class="col-4"><a href="https://strangeday.fr/product/<%= product.id %>"><%= product.name %></a></td>
+	                        <td class="col-2"><%= product.option %></td>
+	                        <td class="col-2">x<%= product.cart_qty %></td>
+	                        <td class="col-2"><%= product.price %>€</td>
 	                    </tr>
 	                <% } %>
 	            </tbody>
@@ -49,7 +49,7 @@
 			<span class="font-weight-bold row m-0">Total: <%= total_cost %>€</span>
 		</div>
 		<div class="d-flex justify-content-center">
-            <a href="https://ydogbe.store" class="w-auto btn btn-dark my-3">
+            <a href="https://strangeday.fr" class="w-auto btn btn-cart my-3">
                 Visitez notre boutique
             </a>
 		</div>

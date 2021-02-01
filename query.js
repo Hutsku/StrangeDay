@@ -47,7 +47,7 @@ _getProduct = `SELECT p.id, p.name, description, price, available, p.type, image
 			LEFT JOIN print ON print.product_id = p.id
             LEFT JOIN accessory a ON a.product_id = p.id
 			WHERE p.id = ?`;
-_getOrder      = `SELECT o.id, date, subtotal_cost, shipping_cost, total_cost, billing_address, shipping_address, payment_method, shipping_method, state, p.id as product_id, p.name as product, oc.option, oc.nb, p.price as product_price, cover_image 
+_getOrder      = `SELECT o.id, user_id, date, subtotal_cost, shipping_cost, total_cost, billing_address, shipping_address, payment_method, shipping_method, state, p.id as product_id, p.name as product, oc.option, oc.nb, p.price as product_price, cover_image 
 			FROM \`order\` o, order_content oc, product p 
 			WHERE o.id = ? AND oc.product_id = p.id AND oc.order_id = o.id`;
 _getOrderEmail = `SELECT email FROM \`order\` o, user WHERE o.user_id = user.id AND o.id = ?`;

@@ -367,7 +367,7 @@ app.get('/', function(req, res) {
 })
 
 .get('/test-dev', function (req, res) {
-    sendEmail('test', 'arouxel.trash@outlook.fr')
+    contactEmail('arouxel.trash@outlook.fr', {name: 'test', text: "blblbaaaaaaaaaaaahazd"})
     res.redirect('back');
 })
 
@@ -459,7 +459,7 @@ app.get('/', function(req, res) {
             // Si la commande est envoyée, on récupère l'email du client et on lui envoit un email de confirmation
             if (state == "shipped") {
                 query.getUserEmail(order.user_id, function(email) {
-                    sendEmail('order-shipped', email, {
+                    sendEmail('order-shipped', email.email, {
                         order_id: req.params.id
                     });
                 });
@@ -478,7 +478,7 @@ app.get('/', function(req, res) {
 
         // On envois un email d'explication à l'utilisateur de la commande
         query.getOrderEmail(req.params.id, function(email) {
-            sendEmail('order-removed', email);
+            sendEmail('order-removed', email.email);
 
             // Puis on supprime la commande de la BDD
             query.removeOrder(req.params.id)
@@ -678,6 +678,7 @@ app.get('/', function(req, res) {
 
     // On ajoute la commande à la BDD
     query.addOrder(req.session.cart, function(order, orderId) {
+        console.log(order)
         // on envoit un email de confirmation de commande
         sendEmail('order', req.session.account.email, {
             name: req.session.username,

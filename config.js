@@ -38,7 +38,7 @@ config.email = {
 	from: 'arouxel@strangeday.fr',
 	send: true,
 	preview: false,
-	test: true,
+	test: false,
 }
 
 var timeCookieDefault = 30 // en minute
