@@ -123,11 +123,6 @@ function app_init () {
 // Si on est en test local, on prend les id sur le fichier. Sinon, on utilise vault
 var secret_stripe, secret_paypal;
 if (config.local_test) {
-    vault.read('strangeday/test')
-    .then(function(res) {
-        console.log(res.data);
-    }).catch(console.error);
-
     email_init(cred.email);
     query.init(cred.mysql);
     stripe_init(cred[path_stripe]);
@@ -157,7 +152,7 @@ else {
         adminUser_init(Object.values(res.data));
     }).catch(console.error);
 
-    vault.read(`strangeday/${path_stripe}`)
+    vault.read(`strangeday/${path_paypal}`)
     .then(function(res) {
         secret_paypal = res.data.client_id;
     }).catch(console.error);
