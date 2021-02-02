@@ -165,6 +165,7 @@ function getAllUser(callback) {
 
 // Renvoit une liste de tout les produits (avec leur informations)
 function getAllProduct(callback, type) {
+    console.log(connection)
     switch (type) {
         case 'all': query = _getAllProduct;
             break;
