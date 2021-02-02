@@ -1,6 +1,6 @@
 
 var bcrypt     = require('bcryptjs');
-var mysql      = require('mysql');
+var mysql      = require('mysql2');
 
 var connection;
 function init (cred) {
