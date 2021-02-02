@@ -10,7 +10,7 @@ function init (cred) {
         user     : 'root',
         password : '',
         database : 'strange_day',
-        port     : 3307
+        port     : 73469
     });
     connection.connect(function(err) {
       if (err) throw err;
