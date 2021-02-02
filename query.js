@@ -11,7 +11,10 @@ function init (cred) {
         password : cred.password,
         database : 'strange_day'
     });
-    console.log("> BDD MySQL connecté.");
+    connection.connect(function(err) {
+      if (err) throw err;
+      console.log("> BDD MySQL connecté.");
+    });
 };
 
 // Arrondis les operations de float
@@ -165,7 +168,6 @@ function getAllUser(callback) {
 
 // Renvoit une liste de tout les produits (avec leur informations)
 function getAllProduct(callback, type) {
-    console.log(connection)
     switch (type) {
         case 'all': query = _getAllProduct;
             break;
