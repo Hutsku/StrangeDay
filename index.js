@@ -125,7 +125,7 @@ var secret_stripe, secret_paypal;
 if (config.local_test) {
     vault.read('strangeday/test')
     .then(function(res) {
-        email_init(res.data);
+        console.log(res.data);
     }).catch(console.error);
 
     email_init(cred.email);
