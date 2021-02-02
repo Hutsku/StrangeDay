@@ -4,16 +4,10 @@ var config = {};
 config.vault = {
 	apiVersion: 'v1',
 	endpoint: 'http://127.0.0.1:8200', // default
-	token: 's.Bra7MjCR9F2XhYBsHmDsxZZV' // don't put the base root key
+	token: 's.elqpt9Wc57Bmh61oMbMkitr9' // don't put the base root key
 };
 
 config.email = {
-	gmail: {
-		host: 'smtp.gmail.com',
-		port: 465,
-		secure: true,
-		auth: {} // need email credentials
-	},
 	mailtrap: {
 		host: "smtp.mailtrap.io",
 		port: 2525,
@@ -25,10 +19,7 @@ config.email = {
 	gandi: {
 		host: 'mail.gandi.net',
 		port: 465,
-		auth: {
-			user: 'arouxel@strangeday.fr',
-			pass: '2wOoWwcz6ajUZs8eEfA0'
-		}
+		auth: {} // need email credentials
 	},
 	views: { 
 		options: {

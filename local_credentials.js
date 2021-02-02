@@ -8,13 +8,13 @@ var cred = {};
 cred.admin = ['arouxel@outlook.fr', 'yoann.dogbe@gmail.com'];
 
 cred.email = {
-	password: 'AroufGangsta91',
-	user: 'ydogbe.store@gmail.com'
+	user: 'arouxel@strangeday.fr', // gandi cred
+	pass: '2wOoWwcz6ajUZs8eEfA0'
 };
 
 cred.mysql = {
 	user: 'root',
-	password: ''
+	pass: ''
 };
 
 cred.paypal_test = {

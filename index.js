@@ -58,13 +58,12 @@ var transporter;
 function email_init (cred) {
     // setup transporter (mailtrap for test, gmail for production)
     var transport_mailtrap = config.email.mailtrap;
-    var transport_gmail    = config.email.gmail;
     var transport_gandi    = config.email.gandi;
 
     // edit the transporter with real credentials
-    transport_gmail.auth = {
+    transport_gandi.auth = {
         user: cred.user, 
-        pass: cred.password  
+        pass: cred.pass  
     }
 
     transporter = transport_gandi;
@@ -124,6 +123,11 @@ function app_init () {
 // Si on est en test local, on prend les id sur le fichier. Sinon, on utilise vault
 var secret_stripe, secret_paypal;
 if (config.local_test) {
+    vault.read('strangeday/test')
+    .then(function(res) {
+        email_init(res.data);
+    }).catch(console.error);
+
     email_init(cred.email);
     query.init(cred.mysql);
     stripe_init(cred[path_stripe]);
