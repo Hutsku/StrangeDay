@@ -149,29 +149,7 @@ https://learn.hashicorp.com/tutorials/vault/getting-started-dev-server?in=vault/
 	- curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
 	- sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
 	- sudo apt-get install vault
-2 - Lancer le serveur de dev (serveur de test)
-	- vault server -dev
-	- Garder la session ouverte et ouvrir un nouveau terminal
-	- export VAULT_ADDR='http://127.0.0.1:8200' (on communique l'adresse de com)
-	- export VAULT_TOKEN="s.XmpNP......." (config le token avec celui donné lors du lancement du serv)
-	- Mettre de coté la clef de deverouillage (unseal key)
-	- vault status pour verifier l'état du serveur
-3 - Liste des commandes vault
-	- vault secrets list -> Renvoit la liste des bases
-	- vault secrets enable -path=strangeday kv -> créer la base 'strangeday' via le moteur kv
-	- vault secrets disable strangeday/ -> Supprime la base et tout les champs contenus	
-
-	- vault kv list strangeday/ -> Renvoit la liste des champs d'une base
-	- vault kv put strangeday/test foo=a  -> Créer un secret (valeur d'exemple)
-	- vault kv put strangeday/test foo=a faa=b -> on peut créer plusieurs valeurs 
-	- vault kv get strangeday/test        -> renvoit la liste des variables stockés
-	- vault kv -field=foo strangeday/test -> renvoit la valeur d'une variable
-	- vault kv delete strangeday/test     -> détruit les variables stockés
-	
-	- vault token create -> Créer un token fils du token root
-	- vault token revoke <token> -> revoque le token cible (revoque également les token fils)
-	- vault login <token> -> se log avec le token entré
-4 - Initialisation et config du vault
+2 - Initialisation et config du vault
 	- export VAULT_ADDR='http://127.0.0.1:8200' (on stocke en variable l'adresse)
 	- mkdir -p vault/data (on créer le dossier de stockage du vault)
 	- vault server -config=StrangeDay/config.hcl (on lui communique le fichier de config)
@@ -188,6 +166,7 @@ https://learn.hashicorp.com/tutorials/vault/getting-started-dev-server?in=vault/
 		api_addr = "http://127.0.0.1:8200"
 		cluster_addr = "https://127.0.0.1:8201"
 		ui = true
+
 	- Si un service est déjà en route sur ce port: 
 		-> sudo lsof -i :8200 (pour connaître le nom du service)
 		-> pkill <name> (arrête le service sur ce port)
@@ -197,6 +176,22 @@ https://learn.hashicorp.com/tutorials/vault/getting-started-dev-server?in=vault/
 	- vault login <root token> (on se log avec le token root)
 	- Si on a besoin de sceller le vault en cas d'urgence: 
 		-> vault operator seal
+
+3 - Liste des commandes vault
+	- vault secrets list -> Renvoit la liste des bases
+	- vault secrets enable -path=strangeday kv -> créer la base 'strangeday' via le moteur kv
+	- vault secrets disable strangeday/ -> Supprime la base et tout les champs contenus	
+
+	- vault kv list strangeday/ -> Renvoit la liste des champs d'une base
+	- vault kv put strangeday/test foo=a  -> Créer un secret (valeur d'exemple)
+	- vault kv put strangeday/test foo=a faa=b -> on peut créer plusieurs valeurs 
+	- vault kv get strangeday/test        -> renvoit la liste des variables stockés
+	- vault kv -field=foo strangeday/test -> renvoit la valeur d'une variable
+	- vault kv delete strangeday/test     -> détruit les variables stockés
+	
+	- vault token create -> Créer un token fils du token root
+	- vault token revoke <token> -> revoque le token cible (revoque également les token fils)
+	- vault login <token> -> se log avec le token entré
 
 
 
