@@ -7,8 +7,7 @@ function init (cred) {
     // Créer la connection avec la BDD mysql.
     connection = mysql.createConnection({
         host     : 'localhost',
-        user     : cred.user,
-        password : cred.password,
+        user     :'root',
         database : 'strange_day'
     });
     connection.connect(function(err) {
