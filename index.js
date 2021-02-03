@@ -172,20 +172,15 @@ function checkAdmin(email) {
 
 // Envoit un email avec le template et les paramètres specifiés
 function sendEmail(template, emailTo, parameter) {
-    if (template != 'contact') {
-        email.send({
-            template: template,
-            message: {
-                to: emailTo
-            },
-            locals: parameter,
-        })
-        .then(console.log('Email send'))
-        .catch(console.error);
-    }
-    else {
-
-    }
+    email.send({
+        template: template,
+        message: {
+            to: emailTo
+        },
+        locals: parameter,
+    })
+    .then(console.log('Email send'))
+    .catch(console.error);
 }
 
 function contactEmail(emailFrom, parameter) {
