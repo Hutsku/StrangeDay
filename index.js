@@ -70,6 +70,7 @@ function email_init (cred) {
     if (config.email.test) transporter = transport_mailtrap;
 
     // Build-up the email object (pour les email venant du site)
+    console.log(transporter)
     email = new Email({
         views: config.email.views,
         message: {
