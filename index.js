@@ -133,6 +133,7 @@ if (config.local_test) {
 else {
     vault.read('strangeday/email')
     .then(function(res) {
+        console.log(res.data)
         email_init(res.data);
     }).catch(console.error);
 
