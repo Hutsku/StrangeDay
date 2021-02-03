@@ -1,57 +1,71 @@
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-<link rel="stylesheet" type="text/css" href="../emails/style-email.css">
+<%- include('../head') %>
+<tr style="background-color: white;">
+<td class="wrapper">
+  <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+    <tr>
+      <td>
+        <h2> Confirmation de votre commande </h2>
+        <p> 
+          Vous recevez ce mail car vous avez effectué une commande chez Strange Day. Si vous n'avez jamais effectué cette commande, vous pouvez faire une réclamation sur la <a href="https://strangeday.fr/contact" target="_blank">page de contact</a>.
+        </p>
+        <p style="border-top: 1px solid lightgrey; width:100%;"></p>
+        <p style="font-weight: bold"> Numéro de commande : <a href="https://strangeday.fr/order-detail/<%= order_id %>" target="_blank"><%= order_id %></a></p>
 
-<body>
-    <div class="logo my-3">
-        <img src="https://strangeday.fr/img/logoSD.png">
-    </div>
-    <div class="content p-3">
-		<div class="font-weight-bold d-flex justify-content-center mb-2"> Confirmation de votre commande </div>
+        <table>
+          <tbody>
+          	<% for (product of products) { %>
+            <tr>
+              <td>
+                <a href="https://strangeday.fr/product/<%= product.id %>">
+                  <img height="50" alt="Image article" src="https://strangeday.fr/img/<%= product.image %>">
+                </a>
+              </td>
+              <td> 
+                <a href="https://strangeday.fr/product/<%= product.id %>"><%= product.name %></a>
+              </td>
+              <td><%= product.option %></td>
+              <td>x<%= product.cart_qty %></td>
+              <td><%= product.price %>€</td>
+            </tr>
+            >% } %>
+          </tbody>
+        </table>
 
-		<div class="d-flex justify-content-center mb-4"> 
-			<span> Merci <span id="name"><%= name %></span> pour votre commande ! </span>
-		</div>
-		<div> 
-			<span> Voici ci-dessous et en pièce jointe le reçu de votre commande. Vous pourrez également la voir en détail ainsi que son avancement sur votre profil</span>
-		</div>
-	</div>
-	<div class="order-products px-3">
-		<div class="order-separator">
-			<span class="font-weight-bold"> Numéro de commande : <a href="https://strangeday.fr/order-detail/<%= order_id %>"><%= order_id %></a></span>
-			<span class="row m-0"> Adresse de facturation: <%= billing_address %></span>
-			<span class="row m-0"> Adresse de livraison: <%= shipping_address.string %></span>
-		</div>
+        <br/>
+        <p style="border-top: 1px solid lightgrey; width:100%;"></p>
+        <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+          <tbody>
+            <tr>
+              <td>
+                <p><b>Sous-total:</b> <%= subtotal_cost %>€<br/> <b>Livraison:</b> <%= shipping_cost %>€</p>
+                <p style="font-weight: bold; text-transform: uppercase; font-size: 15px">Total: <%= total_cost %>€</p>
+              </td>
+              <td style="vertical-align: top">
+                <b> Adresse de livraison: </b>
+                <p><%= shipping_address.string %></p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
 
-		<div class="order-separator">
-			<table class="table table-striped">
-	            </thead>
-	            <tbody>
-	                <% for (product of products) { %>
-	                    <tr>
-	                        <td class="col-2">
-	                            <a class="product-img" href="https://strangeday.fr/product/<%= product.id %>">
-	                                <img class="col" src="https://strangeday.fr/img/<%= product.image %>">
-	                            </a>
-	                        </td>
-	                        <td class="col-4"><a href="https://strangeday.fr/product/<%= product.id %>"><%= product.name %></a></td>
-	                        <td class="col-2"><%= product.option %></td>
-	                        <td class="col-2">x<%= product.cart_qty %></td>
-	                        <td class="col-2"><%= product.price %>€</td>
-	                    </tr>
-	                <% } %>
-	            </tbody>
-	        </table>
-		</div>
-
-		<div class="order-separator">
-			<span class="row m-0">Sous-total: <%= subtotal_cost %>€</span>
-			<span class="row m-0">Livraison: <%= shipping_cost %>€</span>
-			<span class="font-weight-bold row m-0">Total: <%= total_cost %>€</span>
-		</div>
-		<div class="d-flex justify-content-center">
-            <a href="https://strangeday.fr" class="w-auto btn btn-cart my-3">
-                Visitez notre boutique
-            </a>
-		</div>
-	</div>
-</body>
+        <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
+          <tbody>
+            <tr>
+              <td align="center">
+                <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                  <tbody>
+                    <tr>
+                      <td> <a href="https://strangeday.fr/order-detail/<%= order_id %>" target="_blank">Détail de la commande</a> </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+  </table>
+</td>
+</tr>
+<%- include('../foot') %>

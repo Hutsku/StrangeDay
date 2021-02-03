@@ -363,7 +363,7 @@ app.get('/', function(req, res) {
 })
 
 .get('/test-dev', function (req, res) {
-    contactEmail('arouxel.trash@outlook.fr', {name: 'test', text: "blblbaaaaaaaaaaaahazd"})
+    sendEmail('subscribe', 'arouxel.trash@outlook.fr', {})
     res.redirect('back');
 })
 

@@ -1,23 +1,30 @@
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-<link rel="stylesheet" type="text/css" href="../emails/style-email.css">
-
-<body>
-    <div class="logo my-3">
-        <img src="https://strangeday.fr/img/logoSD.png">
-    </div>
-    <div class="content px-3 mb-2">
-		<h1 class="d-flex justify-content-center"> Au revoir ... </h1>
-
-		<div class="d-flex justify-content-center mb-4"> 
-			<span> Votre desinscription de strangeday.fr a été prise en compte </span>
-		</div>
-		<div class="text-content"> 
-			<span> Revenez quand même nous voir de temps en temps, non ?</span>
-		</div>
-		<div class="d-flex justify-content-center">
-            <a href="https://strangeday.fr" class="w-auto btn btn-cart my-3">
-                Venez une dernière fois
-            </a>
-		</div>
-	</div>
-</body>
+<%- include('../head') %>
+<tr style="background-color: white;">
+	<td class="wrapper">
+	  <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+	    <tr>
+	      <td>
+	        <h1> Au revoir ... </h1>
+	        <p> Quelque chose ne vous a pas plu ? Revenez nous voir de temps en temps ... </p>
+	        <p> Enfin, votre desinscription de Strange Day a bien été pris en compte, nous ne volerons plus vos données personnelles promis.</p>
+	        <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
+	          <tbody>
+	            <tr>
+	              <td align="center">
+	                <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+	                  <tbody>
+	                    <tr>
+	                      <td> <a href="https://strangeday.fr" target="_blank">Revenez nous voir</a> </td>
+	                    </tr>
+	                  </tbody>
+	                </table>
+	              </td>
+	            </tr>
+	          </tbody>
+	        </table>
+	      </td>
+	    </tr>
+	  </table>
+	</td>
+</tr>
+<%- include('../foot') %>
