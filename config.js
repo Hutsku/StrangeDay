@@ -27,8 +27,7 @@ config.email = {
 			extension: 'ejs'
 		} 
 	},
-	from: 'contact@strangeday.fr', // 'Strange Day <contact@strangeday.fr>'
-
+	from: 'Strange Day <contact@strangeday.fr>',
 	send: true,
 	preview: false,
 	test: false,
