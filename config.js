@@ -19,7 +19,7 @@ config.email = {
 	gandi: {
 		host: 'mail.gandi.net',
 		port: 465,
-		name: 'Strange Day'
+		name: 'Strange Day',
 		auth: {} // need email credentials
 	},
 	views: { 
