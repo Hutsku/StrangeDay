@@ -25,7 +25,7 @@
 <script type="text/javascript">
     // on préremplis les champs
     var newsletterInput = $('.account-newsletter input[name="newsletter"]');
-    newsletterInput.prop('checked', <%= session.account.newsletter %>);
+    newsletterInput.prop('checked', <%= newsletter %>);
 
     /* Erreur à afficher pour le login */
     $('form[action="/edit-newsletter"]').submit(function () {

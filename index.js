@@ -214,7 +214,7 @@ app.get('/', function(req, res) {
 
 .get('/login', function(req, res) {
     // Affiche la page complète de connection
-    if (req.session.logged) res.render('/', {session: req.session});
+    if (req.session.logged) res.redirect('/')
     else res.render('login.ejs', {session: req.session});
 })
 
@@ -227,7 +227,7 @@ app.get('/', function(req, res) {
     // On met à jour le panier si jamais
     req.session.cart = cart.refreshCart(req.session);
 
-    res.redirect('back');
+    res.redirect('/');
 })
 
 .get('/subscribe', function(req, res) {
@@ -347,6 +347,11 @@ app.get('/', function(req, res) {
                 res.render('account.ejs', {session: req.session, link: req.params.link, orders: data});
             });
         }
+        if (req.params.link == "newsletter") {
+            query.getUserNewsletter(req.session.account.id, function(data) {
+                res.render('account.ejs', {session: req.session, link: req.params.link, newsletter: !!data});
+            })
+        }
         else res.render('account.ejs', {session: req.session, link: req.params.link});
     }
     else {
@@ -363,6 +368,11 @@ app.get('/', function(req, res) {
 .get('/test-dev', function (req, res) {
     sendEmail('subscribe', 'arouxel.trash@outlook.fr', {})
     res.redirect('back');
+})
+
+.get('/reveal', function (req, res) {
+    // Affiche une page défaut avant que le site soit disponible
+    res.render('reveal.ejs', {session: req.session});
 })
 
 // ----------------------- ADMIN PAGE ------------------------
@@ -577,6 +587,11 @@ app.get('/', function(req, res) {
     res.render('payment-success.ejs', {session: req.session});
 })
 
+.get('/newsletter-success', function(req, res) {
+    // A afficher lorsque le payement a été effectué
+    res.render('newsletter-success.ejs', {session: req.session});
+})
+
 // ============================================= POST ===================================================
 
 // ----------------------- ADMIN EDIT -------------------------------
@@ -695,29 +710,20 @@ app.get('/', function(req, res) {
 
 .post('/edit-password', urlencodedParser, function(req, res) {
     // Change l'ancien mot de passe d'un utilisateur par un nouveau
-    var id = req.session.account.id;
-    var oldPassword = req.body.oldPassword;
-    var newPassword = req.body.newPassword;
+    let id = req.session.account.id;
+    let oldPassword = req.body.oldPassword;
+    let newPassword = req.body.newPassword;
 
-    query.editUserPassword([id, oldPassword, newPassword], function(result) {
-        if (result) {
-            // Si l'utilisateur a été trouvé
-            if (rows.length) {
-                // on met à jour les cookies
-                req.session.alert = "edit account";
-                req.session.account.password = hashedPassword;
-
-                res.send('ok'); // on recharge la page
-            }
-            else {
-                console.log("La modification a échoué");
-                res.send('badEdit');
-            }            
-        }
-        else {
+    query.editUserPassword([id, oldPassword, newPassword], function(error) {
+        if (error) {
             req.session.error = "Bad password";
             console.log("mauvais mot de passe"); // Les hash ne correspondent pas
-            res.send('badPassword');
+            res.send(error);    
+        }
+        else {
+            // on met à jour les cookies
+            req.session.alert = "edit account";
+            res.send('ok'); // on recharge la page    
         }
     })
 })
@@ -733,8 +739,12 @@ app.get('/', function(req, res) {
     var state = req.body.state;
 
     var queryParam = [address1, address2, city, country, state, postal_code, id]
-    query.editUserAddress(queryParam, function(result) {
-        if (result.length) {
+    query.editUserAddress(queryParam, function(error) {
+        if (error) {
+            console.log("La modification a échoué");
+            res.send(error);
+        }
+        else {
             // on met à jour les cookies
             req.session.alert = "edit account";
             req.session.account.address1 = address1;
@@ -747,10 +757,6 @@ app.get('/', function(req, res) {
             console.log("adress changed !");
             res.send('back'); // on recharge la page
         }
-        else {
-            console.log("La modification a échoué");
-            res.send('badAddress');
-        }
     });
 })
 
@@ -761,44 +767,36 @@ app.get('/', function(req, res) {
     var tel = req.body.tel;
     var id = req.session.account.id
 
-    query.editUserInfo([name, email, tel, id], function(result) {
+    query.editUserInfo([name, email, tel, id], function(error) {
         // Si l'utilisateur a été trouvé
-        if (result.length) {
-            // onmet à jour les cookies
+        if (error) {
+            console.log("La modification a échoué");
+            res.send(error);
+        }
+        else {
+            // on met à jour les cookies
             req.session.alert = "edit account";
             req.session.account.name = name;
+            req.session.username = name;
             req.session.account.email = email;
             req.session.account.tel = tel;
 
             console.log("infos changed !");
             res.send('ok'); // on recharge la page
         }
-        else {
-            console.log("La modification a échoué");
-            res.send('badInfos');
-        }
     });
 })
 
 .post('/edit-newsletter', urlencodedParser, function(req, res) {
     // Change l'option de newsleter d'un utilisateur
-    var id = req.session.account.id;
-    var newsletter = req.body.newsletter;
+    var email = req.session.account.email;
+    var newsletter = req.body.newsletter == 'true'; // converti en bool
 
-    query.editUserNewsLet([newsletter, id], function(result) {
-        // Si l'utilisateur a été trouvé
-        if (result.length) {
-            // on met à jour les cookies
-            req.session.alert = "edit account";
-            req.session.account.newsletter = newsletter;
-
-            console.log("newsletter changed !");
-            res.send('ok'); // on recharge la page
-        }
-        else {
-            console.log("La modification a échoué");
-            res.send('badNewsletter');
-        }
+    query.editUserNewsLet([newsletter, email], function(result) {
+        // on met à jour les cookies
+        req.session.alert = "edit account";
+        console.log("newsletter changed !");
+        res.send('ok'); // on recharge la page
     });
 })
 
@@ -837,21 +835,6 @@ app.get('/', function(req, res) {
 })
 
 .post('/sign-up', urlencodedParser, function(req, res) {
-    // Créer un compte utilisateur
-    var user = {
-        address1: req.body.address1,
-        address2: req.body.address2,
-        city: req.body.city,
-        postalCode: req.body.postalCode,
-        country: req.body.country,
-        state: req.body.state,
-        username: req.body.name,
-        password: req.body.password,
-        newsletter: req.body.newsletter,
-        email: req.body.email,
-        tel: req.body.tel,
-    }
-
     query.signUp(req.body, function(user, error) {
         if (user) {
             // on envoit un email de confirmation
@@ -906,6 +889,13 @@ app.get('/', function(req, res) {
 .post('/resetNotif', urlencodedParser, function(req, res) {
     req.session.alert = false;
     res.end();
+})
+
+.post('/submit-newsletter', urlencodedParser, function(req, res) {
+    // Efface le compte d'un utilisateur
+    query.addNewsletter(req.body.email, function() {
+        res.redirect('/newsletter-success');
+    }); 
 });
 
 // ========================================================================================================

@@ -55,9 +55,9 @@
 
     <script type="text/javascript">
         /* Erreur à afficher pour le login */
-        $('.log-box form').submit(function () {
-            var emailInput = $('.log-box input[type="text"]');
-            var passwordInput = $('.log-box input[type="password"]');
+        $('main form[action="/login"]').submit(function () {
+            var emailInput = $('.login-infos input[type="text"]');
+            var passwordInput = $('.login-infos input[type="password"]');
 
             // On check les erreurs et on ajoute la classe en consequant
             if (!emailInput.val()) {
@@ -78,12 +78,11 @@
                 password: passwordInput.val()
             })
             .done( function (data) {
+                console.log(data)
                 if (data == "badEmail") {
-                    console.log("bad email")
                     emailInput.removeClass('is-valid').addClass('is-invalid');
                 }
                 else if (data == "badPassword") {
-                    console.log("bad password")
                     passwordInput.removeClass('is-valid').addClass('is-invalid');
                 }
                 else {

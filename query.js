@@ -56,9 +56,10 @@ _getOrder      = `SELECT o.id, user_id, date, subtotal_cost, shipping_cost, tota
 _getOrderEmail = `SELECT email FROM \`order\` o, user WHERE o.user_id = user.id AND o.id = ?`;
 _getUserOrder  = `SELECT * FROM \`order\` WHERE user_id = ?`;
 _getUserEmail  = `SELECT email FROM user WHERE id = ?`;
+_getUserNewsletter = `SELECT user.email FROM newsletter, user WHERE user.email = newsletter.email AND user.id = ?`;
 
-_addUser     = `INSERT INTO user (name, password, email, tel, address1, address2, city, postal_code, state, country, newsletter) 
-               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+_addUser     = `INSERT INTO user (name, password, email, tel, address1, address2, city, postal_code, state, country) 
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 _addOrder = `INSERT INTO \`order\` (user_id, date, total_cost, subtotal_cost, shipping_cost, shipping_address, billing_address, payment_method, shipping_method) 
                VALUES (?, NOW(), ?, ?, ?, ?, ?, ?, ?)`;
 _addProduct  = `INSERT INTO product (name, description, price, type, cover_image, collection) VALUES (?, ?, ?, ?, ?, ?)`;
@@ -73,7 +74,6 @@ _removeUser    = `DELETE FROM user WHERE id = ?`;
 _editUserPassword = `UPDATE user SET password = ? WHERE id = ?`;
 _editUserAddress  = `UPDATE user SET address1 = ?, address2 = ?, city = ?, country = ?, state = ?, postal_code = ? WHERE id = ?`;
 _editUserInfo     = `UPDATE user SET name = ?, email = ?, tel = ? WHERE id = ?`;
-_editUserNewsLet  = `UPDATE user SET newsletter = ? WHERE id = ?`;
 
 _updateOrder   = `UPDATE \`order\` SET state = ? WHERE id = ?`;
 _updateProduct = `UPDATE product SET name = ?, description = ?, price = ?, available = ?, type = ?, cover_image = ?, collection = ? WHERE id = ?`;
@@ -118,8 +118,9 @@ function signUp(data, callback) {
             if (!rows.length) {
                 var queryParam = [
                 	data.name, hashedPassword, data.email, data.tel, data.address1, data.address2, data.city, 
-			  		data.postalCode, data.state, data.country, data.newsletter
+			  		data.postalCode, data.state, data.country
 			  	];
+                console.log(data)
                 connection.query(_addUser, queryParam, function(err, result) {
                     if (err) throw err;
 
@@ -128,6 +129,9 @@ function signUp(data, callback) {
                     	callback(rows[0]);
                     })
                 });
+
+                // On ajoute à la newsletter si besoin
+                if (parseInt(data.newsletter)) addNewsletter(data.email)
             }
             else {
             	callback(false, 'badEmail');
@@ -155,6 +159,22 @@ function checkCart(cart, callback) {
         cart.subtotal_cost = subtotal_cost;
         cart.total_cost = roundPrice(subtotal_cost + cart.shipping_cost);
         callback(cart);
+    });
+}
+
+// Renvoit les données d'un utilisateur par son id
+function getUser(id, callback) {
+    connection.query(_getUser, [id], function(err, rows, fields) {
+        if (err) throw err;
+        callback(rows[0]);
+    });
+}
+
+// Renvoit les données d'un utilisateur par son email
+function getUserFromEmail(email, callback) {
+    connection.query(_getUserFromEmail, [email], function(err, rows, fields) {
+        if (err) throw err;
+        callback(rows[0]);
     });
 }
 
@@ -296,6 +316,14 @@ function getUserEmail(user_id, callback) {
     });
 }
 
+// Renseigne si l'utilisateur est abonné à la newsletter
+function getUserNewsletter(user_id, callback) {
+    connection.query(_getUserNewsletter, [user_id], function(err, rows, fields) {
+        if (err) throw err;
+        callback(rows[0]);  
+    });
+}
+
 // Ajoute le produit général à la BDD
 function addProduct(data) {
     data.images = JSON.parse(data.images)
@@ -391,48 +419,78 @@ function addOrder(cart, callback) {
     });
 }
 
-// Change l'adresse d'un utilisateur
-function editUserInfo(data, callback) {
-    connection.query(_editUserInfo, data, function(err, rows, fields) {
-        if (err) throw err;
-        callback(rows); 	
+// Ajoute un email dans les newsletter
+function addNewsletter(email, callback) {
+    // on vérifie d'abord que l'ancien mdp est valide ...
+    connection.query('INSERT INTO newsletter (email) VALUES (?)', [email], function(err, result) {
+        if (callback) callback();
     });
+}
+
+// Ajoute un email dans les newsletter
+function removeNewsletter(email, callback) {
+    // on supprime l'email de la BDD
+    connection.query('DELETE FROM newsletter WHERE email=?', [email], function(err, result) {
+        callback();
+    });
+}
+
+// Change l'adresse d'un utilisateur
+function editUserInfo([name, email, tel, id], callback) {
+    // On verifie si l'email n'est pas déjà utilisé par un autre utilisateur
+    getUserFromEmail(email, function (user) {
+        if (user && (user.id != id)) callback('badEmail');
+        else {
+            connection.query(_editUserInfo, [name, email, tel, id], function(err, rows, fields) {
+                if (err) throw err;
+                callback();     
+            });
+        }
+    })
 }
 
 // Change les infos d'un utilisateur
 function editUserAddress(data, callback) {
     connection.query(_editUserAddress, data, function(err, rows, fields) {
         if (err) throw err;
-        callback(rows); 	
+        callback(); 	
     });
 }
 
 // Change le paramètre newsletter d'un utilisateur
-function editUserNewsLet(data, callback) {
-    connection.query(_editUserNewsLet, data, function(err, rows, fields) {
-        if (err) throw err;
-        callback(rows); 	
-    });
+function editUserNewsLet([newsletter, email], callback) {
+    // Par défaut on supprime l'email avant de le reajouter si besoin
+    removeNewsletter(email, function() {
+        if (newsletter) {
+            addNewsletter(email, function(err, rows, fields) {
+                if (err) throw err;
+                callback();     
+            });
+        }
+        else {
+            if (callback) callback(); 
+        }
+    })
 }
 
 // Change l'ancien mot de passe par un nouveau, après verification
 function editUserPassword([user_id, oldPassword, newPassword], callback) {
     // on vérifie d'abord que l'ancien mdp est valide ...
-    getUser(connection, user_id, function(user) {
+    getUser(user_id, function(user) {
         // on compare les mdp ...
         bcrypt.compare(oldPassword, user.password, function(err, response) {
             if (response) {
                 // On hash le nouveau mot de passe à enregistrer dans la DB
                 bcrypt.hash(newPassword, 10, function(err, hashedPassword) {                        
                     // on modifie le nouveau mot de passe
-                    connection.query(_editUserPassword, [hashedPassword, id], function(err, rows, fields) {
+                    connection.query(_editUserPassword, [hashedPassword, user_id], function(err, rows, fields) {
                         if (err) throw err;
-                        callback(rows);
+                        callback();
                     });
                 });
             } 
             else {
-            	callback(false);
+            	callback('badPassword');
             }
         });
     });
@@ -564,9 +622,11 @@ module.exports = {
 	getOrderEmail: getOrderEmail,
 	getUserOrder: getUserOrder,
 	getUserEmail: getUserEmail,
+    getUserNewsletter: getUserNewsletter,
 
 	addProduct: addProduct,
 	addOrder: addOrder,
+    addNewsletter: addNewsletter,
 
 	editUserPassword: editUserPassword,
 	editUserAddress: editUserAddress,

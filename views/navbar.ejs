@@ -53,11 +53,12 @@
                         <i class="fa fa-user"></i> <%- session.username %>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right w-auto" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" href="/account/overview">Mon profil</a>
+                        <a class="dropdown-item" href="/account/overview">Mon compte</a>
                         <% if (session.admin) { %>
                             <div class="dropdown-divider d-none d-md-block"></div>
                             <a class="dropdown-item" href="/admin-orders-list"><i class="fas fa-server mr-2"></i>Gestion des commandes</a>
                             <a class="dropdown-item" href="/admin-products-list"><i class="fas fa-tshirt mr-2"></i>Gestion des articles</a>
+                            <a class="dropdown-item" href="/"><i class="fas fa-network-wired mr-2"></i>Statistique</a>
                             <div class="dropdown-divider d-none d-md-block"></div>
                         <% } %>
                         <a class="dropdown-item" href="/quit"><i class="fa fa-power-off mr-2"></i>Se deconnecter</a>
@@ -305,11 +306,9 @@
         .done( function (data) {
             console.log(data)
             if (data == "badEmail") {
-                console.log("bad email")
                 emailInput.removeClass('is-valid').addClass('is-invalid');
             }
             else if (data == "badPassword") {
-                console.log("bad password")
                 passwordInput.removeClass('is-valid').addClass('is-invalid');
             }
             else {

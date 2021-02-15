@@ -31,6 +31,7 @@
     var emailInput = $('.account-input input[name="email"]');
     var telInput = $('.account-input input[name="tel"]');
     var regex = new RegExp("[0-9]{10}");
+    var regexEmail = new RegExp(`[\\w.+-]{1,64}@([a-zA-Z\\d-]{2,252}\\.[\\w\\.]{2,6})`);
 
     nameInput.val("<%- session.account.name %>");
     emailInput.val("<%= session.account.email %>");
@@ -48,7 +49,11 @@
         if (!emailInput.val()) {
             emailInput.removeClass('is-valid').addClass('is-invalid');
             return false;
-        } else {
+        } else if (!emailInput.val().match(regexEmail)) {
+            emailInput.removeClass('is-valid').addClass('is-invalid');
+            return false;
+        }
+        else {
             emailInput.removeClass('is-invalid').addClass('is-valid');
         }
         if (!telInput.val()) {
@@ -56,6 +61,7 @@
             return false;
         } else if (!telInput.val().match(regex)) {
             telInput.removeClass('is-valid').addClass('is-invalid');
+            return false;
         }
         else {
             telInput.removeClass('is-invalid').addClass('is-valid');
@@ -67,7 +73,7 @@
             tel: telInput.val()
         })
         .done( function (data) {
-            if (data == "badInfos") {
+            if (data == "badEmail") {
                 emailInput.removeClass('is-valid').addClass('is-invalid'); // l'email est déjà utilisé
                 $('header').append(
                 	`<div class="notif-container row w-100 justify-content-center">

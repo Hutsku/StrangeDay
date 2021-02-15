@@ -1,0 +1,42 @@
+main {
+	min-height: 100vh;
+}
+.main-logo {
+	width: 300px;
+	margin-top: 100px;
+	margin-bottom: 100px;
+}
+#countdown {
+	display: flex;
+	justify-content: center;
+}
+#countdown span {
+	color: #debc36;
+}
+.days, .hours, .minutes, .seconds {
+	font-size: 35px;
+	font-weight: 600;
+	line-height: 82px;
+
+	border: 2px solid #debc36;
+	color: #debc36;
+	height: 100px;
+	width: 100px;
+
+	margin: 20px;
+	padding: 5px;
+	overflow: hidden;
+}
+
+.register-email {
+	display: flex;
+	justify-content: center;
+	flex-wrap: wrap;
+	margin: auto;
+}
+.register-email input {
+	width: 390px;
+}
+.register-email button {
+	width: 120px;
+}
