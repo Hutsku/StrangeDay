@@ -51,7 +51,7 @@ function multer_init() {
         onFileUploadComplete: function (file) {
             console.log('Uploading complete !')
         },
-        onError : function(err, next) {
+        onError: function(err, next) {
             console.log('error', err);
             next(err);
         }
@@ -648,6 +648,7 @@ app.use(function(req, res, next) {
 
 .post('/upload-img', urlencodedParser, function(req, res) {
     // Upload des images sur le serveur
+    console.log('uploading...')
     upload(req, res, function (err) {
         if (err instanceof multer.MulterError) {
             console.log(err)
