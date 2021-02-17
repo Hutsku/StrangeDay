@@ -45,6 +45,12 @@ function multer_init() {
     })
     upload = multer({
         storage: storage,
+        onFileUploadStart: function (file) {
+            console.log('Start uploading file ...')
+        },
+        onFileUploadComplete: function (file) {
+            console.log('Uploading complete !')
+        },
         onError : function(err, next) {
             console.log('error', err);
             next(err);
@@ -207,7 +213,21 @@ function contactEmail(emailFrom, parameter) {
 // ================================================ ROUTES ===============================================
 
 console.log('Création des routes POST et GET')
-app.get('/', function(req, res) {
+app.use(function(req, res, next) {
+    // Main handler, se déclanchent à chaque route
+    let whitelist = ['/reveal', '/newsletter-success', '/submit-newsletter']
+
+    if (!config.reveal) next()
+    else if (whitelist.includes(req.originalUrl)) next() // Si c'est une page speciale, alors on laisse
+    else if (req.session.unlock) next() // Si l'accès est debloqué, tout passe
+    else if (req.originalUrl == '/unlock') {
+        req.session.unlock = true; // On debloque l'accès au site momentanement
+        res.redirect('/mainpage') // Et on redirige vers la page principale
+    }
+    else res.redirect('/reveal') // ... sinon on redirige vers la page de reveal
+})
+
+.get('/', function(req, res) {
     // Renvoit par défaut vers la page principale
     res.redirect('/mainpage');
 })
