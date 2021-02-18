@@ -632,6 +632,7 @@ app.use(function(req, res, next) {
 })
 
 .post('/admin-edit-product', urlencodedParser, function(req, res) {  
+    console.log('edit product')
     // on vérifie que l'utilisateur est bien admin (double verification si jamais)
     if (req.session.admin && checkAdmin(req.session.account.email)) {
         console.log(req.body);
@@ -648,7 +649,6 @@ app.use(function(req, res, next) {
 
 .post('/upload-img', urlencodedParser, function(req, res) {
     // Upload des images sur le serveur
-    console.log('uploading...')
     upload(req, res, function (err) {
         if (err instanceof multer.MulterError) {
             console.log(err)
@@ -656,7 +656,8 @@ app.use(function(req, res, next) {
             console.log(err)
         }
 
-        console.log('uploaded')
+        console.log('File uploaded')
+        res.end()
     });
 })
 

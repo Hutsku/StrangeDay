@@ -35,7 +35,7 @@
                     <div class="img-preview">
                     </div>
                     <label class="btn btn-primary m-0 mt-3" for="files">Ajouter une image</label>
-                    <input class="form-control" type="file" id="files" name="images" accept="image/*" >
+                    <input class="form-control" type="file" id="files" name="images" accept="image/*" multiple>
                     <a href="#" class="btn btn-secondary mt-3" id="clear"> Supprimer </a>
                     <div class="invalid-feedback">Veuillez ajouter au moins une image</div>
                 </div>
@@ -119,7 +119,6 @@
     <script type="text/javascript">
         var fileTypes = [
           'image/jpeg',
-          'image/jpeg',
           'image/png'
         ]
 
@@ -134,7 +133,6 @@
         }
 
         function addImgPreview (file) {
-            console.log(file)
             var path = window.URL.createObjectURL(file); // on créer un lien provisoire pour l'image
             $('.img-preview').append(`<img src="${path}" img-name='${file.name}'></img>`)
         }
@@ -151,10 +149,9 @@
         // Upload la liste des images sur le serveur
         function uploadImgFiles(files) {
             var form = new FormData();
-            console.log("try upload new files");
             console.log(files);
-            for (var i=0; i<files.length; i++) {
-                form.append('file', files[i])
+            for (file of files) {
+                form.append('file', file)
             }
 
             $.ajax({
@@ -170,6 +167,26 @@
                 contentType: false,
                 processData: false,                
             })
+        }
+
+        function uploadImageV2(files){
+            for (file of files) {
+                let form = new FormData();
+                form.append('file', file)
+
+                $.ajax({
+                    method: 'POST',
+                    url: '/upload-img', 
+                    data: form,   
+
+                    enctype: 'multipart/form-data',
+                    contentType: false,
+                    processData: false,           
+                })
+                .done(function( data ) {              
+                    console.log(data);
+                });
+            }
         }
 
         // Préremplis les preview d'image
@@ -275,8 +292,51 @@
                 acc_type.removeClass('is-invalid').addClass('is-valid');
             }
 
-            uploadImgFiles(file_list) // On upload les images sur le serveur en parallèle
-            $.post("/admin-edit-product", {
+            //uploadImgFiles(file_list) // On upload les images sur le serveur en parallèle
+            var form = new FormData();
+            for (file of file_list) {
+                form.append('file', file)
+            }
+
+            $.ajax({
+                type: 'POST',
+                url: '/upload-img', 
+                // Form data
+                enctype: 'multipart/form-data',
+                data: form,//form,
+
+                // Tell jQuery not to process data or worry about content-type
+                // You *must* include these options!
+                cache: false,
+                contentType: false,
+                processData: false,                
+            })
+            .done(function () {
+                $.post("/admin-edit-product", {
+                    id: <%= product.id %>,
+                    image: JSON.stringify(getImgList()),
+                    name: name.val(),
+                    description: description.val(),
+                    price: price.val(),
+                    composition: composition.val(),
+                    size: size.val(),
+                    weight: weight.val(),
+                    acc_type:acc_type.val(),
+                    type: type,
+                    collection: collection.val(),
+                    available: available.val()
+                })
+                .done( function (data) {
+                    if (data == "badInfos") {
+                    }
+                    else {
+                        location.assign('/admin-products-list');
+                    }
+                });    
+            })
+            return false; // on execute pas le submit normal
+
+            /*$.post("/admin-edit-product", {
                 id: <%= product.id %>,
                 image: JSON.stringify(getImgList()),
                 name: name.val(),
@@ -296,9 +356,7 @@
                 else {
                     location.assign('/admin-products-list');
                 }
-            });
-            return false; // on execute pas le submit normal
-         
+            });*/         
         });
 
     </script>
