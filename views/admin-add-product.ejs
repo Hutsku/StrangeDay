@@ -149,27 +149,6 @@
             return list
         }
 
-        // Upload la liste des images sur le serveur
-        function uploadImgFiles(files) {
-            var form = new FormData()
-            for (var i=0; i<files.length; i++) {
-                form.append('file', files[i])
-            }
-
-            $.ajax({
-                type: 'POST',
-                url: '/upload-img', 
-                // Form data
-                data: form,//new FormData(files[i]),
-
-                // Tell jQuery not to process data or worry about content-type
-                // You *must* include these options!
-                cache: false,
-                contentType: false,
-                processData: false,
-            })
-        }
-
         var file_list = []
         // Actualise le cadre de preview d'images
         $('.images input').change(function () {
@@ -295,28 +274,50 @@
                 acc_type.removeClass('is-invalid').addClass('is-valid');
             }
 
-            uploadImgFiles(file_list) // On upload les images sur le serveur en parallèle
+            //uploadImgFiles(file_list) // On upload les images sur le serveur en parallèle
+            var form = new FormData();
+            for (file of file_list) {
+                form.append('file', file)
+            }
 
-            $.post("/admin-add-product", {
-                images: JSON.stringify(getImgList()),
-                name: name.val(),
-                description: description.val(),
-                price: price.val(),
-                composition: composition.val(),
-                size: size.val(),
-                weight: weight.val(),
-                acc_type: acc_type.val(),
-                collection: collection.val(),
-                type: type.val(),
-                available: available.val()
+            // On upload les images sur le serveur
+            $.ajax({
+                type: 'POST',
+                url: '/upload-img', 
+                // Form data
+                enctype: 'multipart/form-data',
+                data: form,//form,
+
+                // Tell jQuery not to process data or worry about content-type
+                // You *must* include these options!
+                cache: false,
+                contentType: false,
+                processData: false,                
             })
-            .done( function (data) {
-                if (data == "badInfos") {
-                }
-                else {
-                    location.assign('/admin-products-list');
-                }
-            });
+            .done(function () {
+                // ... Et on attend que l'upload soit fini pour lancer la 2e requête
+                $.post("/admin-edit-product", {
+                    id: <%= product.id %>,
+                    image: JSON.stringify(getImgList()),
+                    name: name.val(),
+                    description: description.val(),
+                    price: price.val(),
+                    composition: composition.val(),
+                    size: size.val(),
+                    weight: weight.val(),
+                    acc_type:acc_type.val(),
+                    type: type,
+                    collection: collection.val(),
+                    available: available.val()
+                })
+                .done( function (data) {
+                    if (data == "badInfos") {
+                    }
+                    else {
+                        location.assign('/admin-products-list');
+                    }
+                });    
+            })
             return false; // on execute pas le submit normal
          
         });

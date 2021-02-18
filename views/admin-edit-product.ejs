@@ -146,49 +146,6 @@
             return list
         }
 
-        // Upload la liste des images sur le serveur
-        function uploadImgFiles(files) {
-            var form = new FormData();
-            console.log(files);
-            for (file of files) {
-                form.append('file', file)
-            }
-
-            $.ajax({
-                type: 'POST',
-                url: '/upload-img', 
-                // Form data
-                enctype: 'multipart/form-data',
-                data: form,//form,
-
-                // Tell jQuery not to process data or worry about content-type
-                // You *must* include these options!
-                cache: false,
-                contentType: false,
-                processData: false,                
-            })
-        }
-
-        function uploadImageV2(files){
-            for (file of files) {
-                let form = new FormData();
-                form.append('file', file)
-
-                $.ajax({
-                    method: 'POST',
-                    url: '/upload-img', 
-                    data: form,   
-
-                    enctype: 'multipart/form-data',
-                    contentType: false,
-                    processData: false,           
-                })
-                .done(function( data ) {              
-                    console.log(data);
-                });
-            }
-        }
-
         // Préremplis les preview d'image
         var file_list = [];
         `<% for (img of product.image) { %>`
@@ -298,6 +255,7 @@
                 form.append('file', file)
             }
 
+            // On upload les images sur le serveur
             $.ajax({
                 type: 'POST',
                 url: '/upload-img', 
@@ -312,6 +270,7 @@
                 processData: false,                
             })
             .done(function () {
+                // ... Et on attend que l'upload soit fini pour lancer la 2e requête
                 $.post("/admin-edit-product", {
                     id: <%= product.id %>,
                     image: JSON.stringify(getImgList()),
@@ -334,29 +293,7 @@
                     }
                 });    
             })
-            return false; // on execute pas le submit normal
-
-            /*$.post("/admin-edit-product", {
-                id: <%= product.id %>,
-                image: JSON.stringify(getImgList()),
-                name: name.val(),
-                description: description.val(),
-                price: price.val(),
-                composition: composition.val(),
-                size: size.val(),
-                weight: weight.val(),
-                acc_type:acc_type.val(),
-                type: type,
-                collection: collection.val(),
-                available: available.val()
-            })
-            .done( function (data) {
-                if (data == "badInfos") {
-                }
-                else {
-                    location.assign('/admin-products-list');
-                }
-            });*/         
+            return false; // on execute pas le submit normal       
         });
 
     </script>
