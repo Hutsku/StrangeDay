@@ -294,19 +294,19 @@
                 contentType: false,
                 processData: false,                
             })
-            .done(function () {
+            .done( function (data) {
                 // ... Et on attend que l'upload soit fini pour lancer la 2e requête
                 $.post("/admin-add-product", {
-                    image: JSON.stringify(getImgList()),
+                    images: JSON.stringify(getImgList()),
                     name: name.val(),
                     description: description.val(),
                     price: price.val(),
                     composition: composition.val(),
                     size: size.val(),
                     weight: weight.val(),
-                    acc_type:acc_type.val(),
-                    type: type,
+                    acc_type: acc_type.val(),
                     collection: collection.val(),
+                    type: type.val(),
                     available: available.val()
                 })
                 .done( function (data) {
@@ -316,7 +316,7 @@
                         location.assign('/admin-products-list');
                     }
                 });    
-            })
+            });
             return false; // on execute pas le submit normal
          
         });
