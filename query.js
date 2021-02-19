@@ -75,7 +75,7 @@ _editUserPassword = `UPDATE user SET password = ? WHERE id = ?`;
 _editUserAddress  = `UPDATE user SET address1 = ?, address2 = ?, city = ?, country = ?, state = ?, postal_code = ? WHERE id = ?`;
 _editUserInfo     = `UPDATE user SET name = ?, email = ?, tel = ? WHERE id = ?`;
 
-_updateOrder   = `UPDATE \`order\` SET state = ? WHERE id = ?`;
+_updateOrder   = `UPDATE \`order\` SET state = ?, tracking_number = ? WHERE id = ?`;
 _updateProduct = `UPDATE product SET name = ?, description = ?, price = ?, available = ?, type = ?, cover_image = ?, collection = ? WHERE id = ?`;
 _updateClothe  = `UPDATE clothe SET composition = ? WHERE product_id = ?`;
 _updatePrint   = `UPDATE print SET size = ?, weight = ? WHERE product_id = ?`;
@@ -560,8 +560,8 @@ function updateProduct (data) {
 }
 
 // Met à jour une commande selon le status passé en paramètre
-function updateOrder(status, id) {
-    connection.query(_updateOrder, [status, id], function(err, rows, fields) {
+function updateOrder(status, id, trackNumber) {
+    connection.query(_updateOrder, [status, trackNumber, id], function(err, rows, fields) {
         if (err) throw err;
     });
 }

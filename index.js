@@ -454,7 +454,6 @@ app.use(function(req, res, next) {
     // on vérifie que l'utilisateur est bien admin (double verification si jamais)
     if (req.session.admin && checkAdmin(req.session.account.email)) {
         query.getAllOrderUser(function(orders) {
-            console.log(orders)
             res.render('admin-orders-list.ejs', {session: req.session, orders: orders});
         });
     }
@@ -467,6 +466,7 @@ app.use(function(req, res, next) {
 .get('/admin-update-order/:id', function(req, res) {
     // on vérifie que l'utilisateur est bien admin (double verification si jamais)
     if (req.session.admin && checkAdmin(req.session.account.email)) {
+        console.log(req.query.trackNumber)
         query.getOrder(req.params.id, function(order) {
             // on definit le nouveau statut de la commande selon son état précédant
             switch (order.state){
@@ -489,7 +489,7 @@ app.use(function(req, res, next) {
                 });
             }
  
-            query.updateOrder(state, req.params.id);
+            query.updateOrder(state, req.params.id, req.query.trackNumber);
             req.session.alert = "order updated";
             res.redirect('back');
         });
@@ -499,7 +499,6 @@ app.use(function(req, res, next) {
 .get('/admin-remove-order/:id', function(req, res) {
     // on vérifie que l'utilisateur est bien admin (double verification si jamais)
     if (req.session.admin && checkAdmin(req.session.account.email)) {
-
         // On envois un email d'explication à l'utilisateur de la commande
         query.getOrderEmail(req.params.id, function(email) {
             sendEmail('order-removed', email.email);
