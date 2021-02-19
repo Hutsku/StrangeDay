@@ -62,7 +62,7 @@ _addUser     = `INSERT INTO user (name, password, email, tel, address1, address2
                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 _addOrder = `INSERT INTO \`order\` (user_id, date, total_cost, subtotal_cost, shipping_cost, shipping_address, billing_address, payment_method, shipping_method) 
                VALUES (?, NOW(), ?, ?, ?, ?, ?, ?, ?)`;
-_addProduct  = `INSERT INTO product (name, description, price, type, cover_image, collection) VALUES (?, ?, ?, ?, ?, ?)`;
+_addProduct  = `INSERT INTO product (name, description, price, available, type, cover_image, collection) VALUES (?, ?, ?, ?, ?, ?, ?)`;
 _addClothe   = `INSERT INTO clothe (product_id, composition) VALUES (?, ?)`;
 _addPrint    = `INSERT INTO print (product_id, size, weight) VALUES (?, ?, ?)`;
 _addAcc      = `INSERT INTO accessory (product_id, type) VALUES (?, ?)`;
@@ -333,7 +333,7 @@ function getUserNewsletter(user_id, callback) {
 // Ajoute le produit général à la BDD
 function addProduct(data) {
     data.images = JSON.parse(data.images)
-	var queryParam = [data.name, data.description, data.price, data.type, data.images[0], data.collection]
+	var queryParam = [data.name, data.description, data.price, data.available, data.type, data.images[0], data.collection]
 	connection.query(_addProduct, queryParam, function(err, result) {
 	    if (err) throw err;
 	    productId = result.insertId;
