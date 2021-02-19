@@ -281,22 +281,27 @@ app.use(function(req, res, next) {
 .get('/product/:id', function(req, res) {
     // Affiche la page d'un produit, selon l'id indiqué
     query.getProduct(req.params.id, function (product) {
-        // On envoit les données du produit à la page
-        res.render('product.ejs', {
-            id: product.id, 
-            reference: product.id,
-            name: product.name,
-            available: product.available,
-            composition: product.composition,
-            price: product.price,
-            description: product.description,
-            size: product.size,
-            printing: product.printing,
-            category: product.category,
-            type: product.type,
-            img: product.image,
-            session: req.session
-        });        
+        if (!product) {
+            res.redirect('back');
+        }
+        else {
+            // On envoit les données du produit à la page
+            res.render('product.ejs', {
+                id: product.id, 
+                reference: product.id,
+                name: product.name,
+                available: product.available,
+                composition: product.composition,
+                price: product.price,
+                description: product.description,
+                size: product.size,
+                printing: product.printing,
+                category: product.category,
+                type: product.type,
+                img: product.image,
+                session: req.session
+            });  
+        }     
     });
 })
 

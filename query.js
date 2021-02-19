@@ -259,6 +259,12 @@ function getAllOrderUser(callback) {
 function getProduct(id, callback) {
     connection.query(_getProduct, [id], function(err, rows, fields) {
         if (err) throw err;
+
+        if (!rows.length) {
+            callback(false);
+            return false;
+        }
+
         // La requête renvoit une ligne par image différente du produit, on doit donc recomposer en liste
         imageList = []
         for (product of rows) {
@@ -354,7 +360,7 @@ function addProduct(data) {
 		}	
 
 		// On ajoute une par une les images à la BDD
-		for (image of data.images) {
+		for (let image of data.images) {
             // On verifie si les images n'existent pas déjà
             connection.query(`SELECT * FROM image WHERE name = ?`, [image], function(err, rows, fields) {
                 if (err) throw err;
@@ -363,10 +369,10 @@ function addProduct(data) {
                 if (!rows.length) {
         			connection.query(`INSERT INTO image (name) VALUES (?)`, [image], function(err, result) {
         			    if (err) throw err;
-        			    var imageId = result.insertId;
+        			    let imageId = result.insertId;
 
         			    // On lie les images au produit dans la BDD
-        			    var linkImageProduct = `INSERT INTO product_image (product_id, image_id) VALUES (?, ?)`;
+        			    let linkImageProduct = `INSERT INTO product_image (product_id, image_id) VALUES (?, ?)`;
         			    connection.query(linkImageProduct, [productId, imageId], function(err, result) {
         				    if (err) throw err;
         				});
@@ -374,7 +380,7 @@ function addProduct(data) {
                 }
                 else {
                     // On créer le lien entre le produit et l'image             
-                    var linkImageProduct = `INSERT INTO product_image (product_id, image_id) VALUES (?, ?)`;
+                    let linkImageProduct = `INSERT INTO product_image (product_id, image_id) VALUES (?, ?)`;
                     connection.query(linkImageProduct, [productId, rows[0].id], function(err, result) {
                         if (err) throw err;
                     });
@@ -530,7 +536,7 @@ function updateProduct (data) {
 			if (err) throw err;
 
 			// On verifie les images une par une
-			for (image of data.image) {
+			for (let image of data.image) {
 				connection.query(`SELECT * FROM image WHERE name = ?`, [image], function(err, rows, fields) {
 				    if (err) throw err;
 
@@ -540,7 +546,7 @@ function updateProduct (data) {
 						connection.query(`INSERT INTO image (name) VALUES (?)`, [image], function(err, result) {
 						    if (err) throw err;
 						    // On lie l'image au produit dans la BDD
-						    var linkImageProduct = `INSERT INTO product_image (product_id, image_id) VALUES (?, ?)`;
+						    let linkImageProduct = `INSERT INTO product_image (product_id, image_id) VALUES (?, ?)`;
 						    connection.query(linkImageProduct, [data.id, result.insertId], function(err, result) {
 							    if (err) throw err;
 							});
@@ -548,7 +554,7 @@ function updateProduct (data) {
 					} 
 					else {
 					    // On créer le lien entre le produit et l'image			    
-					    var linkImageProduct = `INSERT INTO product_image (product_id, image_id) VALUES (?, ?)`;
+					    let linkImageProduct = `INSERT INTO product_image (product_id, image_id) VALUES (?, ?)`;
 					    connection.query(linkImageProduct, [data.id, rows[0].id], function(err, result) {
 						    if (err) throw err;
 						});
