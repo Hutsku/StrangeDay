@@ -296,7 +296,7 @@
             })
             .done(function () {
                 // ... Et on attend que l'upload soit fini pour lancer la 2e requête
-                $.post("/admin-edit-product", {
+                $.post("/admin-add-product", {
                     id: <%= product.id %>,
                     image: JSON.stringify(getImgList()),
                     name: name.val(),
