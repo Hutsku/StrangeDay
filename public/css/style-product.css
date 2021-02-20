@@ -72,6 +72,9 @@
 	position: relative;
 	flex-direction: row;
 	justify-content: flex-start;
+
+	touch-action: pan-x;
+	overflow-x: scroll;
 }
 .carousel-indicators img {
 	cursor: pointer;
@@ -85,6 +88,8 @@
 	}
 	.carousel-indicators {
 		flex-direction: column;
+		overflow-x: visible;
+		touch-action: none;
 	}
 	.carousel-indicators img {
 	    width: 130px;
