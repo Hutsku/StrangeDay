@@ -97,9 +97,7 @@ a:hover {
 	display: inline-block; /* important */
   	white-space: nowrap;
   	overflow: hidden;
-  	text-overflow: ellipsis;
-
-  	transition: 0.3;
+  	/*text-overflow: ellipsis;*/
 }
 .disclaimer .disclaimer-text span {
 	position: relative;
