@@ -81,6 +81,13 @@ _updateClothe  = `UPDATE clothe SET composition = ? WHERE product_id = ?`;
 _updatePrint   = `UPDATE print SET size = ?, weight = ? WHERE product_id = ?`;
 _updateAcc     = `UPDATE accessory SET type = ? WHERE product_id = ?`;
 
+// Requête de suppression lors de produits manquant
+_sync_order         = `DELETE FROM \`order\` WHERE id NOT IN (
+                           SELECT order_id FROM \`order_content\` oc, product p
+                           WHERE oc.product_id = p.id)`
+_sync_order_content = `DELETE FROM \`order_content\` WHERE order_id NOT IN (
+                           SELECT id FROM \`order\` )`
+
 // ========================================= FONCTION =====================================================
 
 // Renvoit les données d'un utilisateur si les informations données sont correct
@@ -293,8 +300,11 @@ function getOrder(id, callback) {
 			});
         }
 
-        rows[0].product = productList; // On recompose à partir du 1er resultat, par exemple
-        callback(rows[0]);
+        if (rows.length) {
+            rows[0].product = productList; // On recompose à partir du 1er resultat, par exemple
+            callback(rows[0]);
+        }
+        else callback(false, 'badOrder'); // S'il y a eu un problème quelconque
     });
 }
 
@@ -577,7 +587,15 @@ function removeProduct (id) {
 	// On supprime le produit de la BDD
     connection.query(_removeProduct, [id], function(err, rows, fields) {
         if (err) throw err;
+        // On supprime également les liens entre le produit et les commandes liées
+        connection.query(_sync_order, function(err, rows, fields) {
+            if (err) throw err;
+            connection.query(_sync_order_content, function(err, rows, fields) {
+                if (err) throw err;
+            });
+        });
     });
+
     // On supprime les vêtement ou poster dediés
     connection.query(`DELETE FROM clothe WHERE product_id=?`, [id], function(err, rows, fields) {
         if (err) throw err;
@@ -588,6 +606,7 @@ function removeProduct (id) {
     connection.query(`DELETE FROM accessory WHERE product_id=?`, [id], function(err, rows, fields) {
         if (err) throw err;
     });
+    
     // On supprime également les lien entre le produit et leurs images
     connection.query(`DELETE FROM product_image WHERE product_id=?`, [id], function(err, rows, fields) {
         if (err) throw err;

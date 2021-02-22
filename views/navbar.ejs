@@ -217,6 +217,12 @@
             var quoteTitle = 'Attention !';
             break;
 
+        case 'badOrder':
+            var type = 'danger';
+            var quote = "Un problème a eu lieu lors de l'acces à votre commande ... ";
+            var quoteTitle = 'Erreur';
+            break;
+
         } %>
         <div class="notif-container row w-100 justify-content-center">
             <div class="alert alert-<%= type %> alert-dismissible fade show col-8" role="alert">

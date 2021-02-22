@@ -88,11 +88,11 @@ ul.account-link a.header-link:hover {
 }
 
 /* =========== TABLE ORDER ================== */
-.table-order thead th {
+.table-order thead th, .table-history thead th {
     background-color: #f2d875;
     color: black;
     border: solid 2px #debc36;
 }
-.table-order tbody {
+.table-order tbody, .table-history tbody {
     text-transform:none;
 }

@@ -307,7 +307,7 @@ app.use(function(req, res, next) {
 
 .get('/order-detail/:id', function(req, res) {
     // Affiche le détail d'un commande, par son id
-    query.getOrder(req.params.id, function (order) {
+    query.getOrder(req.params.id, function (order, error) {
         // On verifie que l'utilisateur est connecté et que la commande existe
         if (order && req.session.logged) {
             // on vérifie que l'utilisateur est bien admin ou que la commande appartient bien au client
@@ -324,6 +324,7 @@ app.use(function(req, res, next) {
         }
         else {
             // sinon on recharge la page
+            req.session.alert = error;
             res.redirect('back');
         }
     });
@@ -368,11 +369,11 @@ app.use(function(req, res, next) {
     if (req.session.logged) {
         if (req.params.link == "order") {
             // On va chercher toutes les commandes de l'utilisateur
-            query.getUserOrder(req.session.account.id, function(data) {
-                res.render('account.ejs', {session: req.session, link: req.params.link, orders: data});
+            query.getUserOrder(req.session.account.id, function(data, error) {
+                res.render('account.ejs', {session: req.session, link: req.params.link, orders: data});  
             });
         }
-        if (req.params.link == "newsletter") {
+        else if (req.params.link == "newsletter") {
             query.getUserNewsletter(req.session.account.id, function(data) {
                 res.render('account.ejs', {session: req.session, link: req.params.link, newsletter: !!data});
             })
