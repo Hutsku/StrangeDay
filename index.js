@@ -202,7 +202,7 @@ function contactEmail(emailFrom, parameter) {
     email_contact.send({
         template: 'contact',
         message: {
-            to: 'arouxel@strangeday.fr'
+            to: 'contact@strangeday.fr'
         },
         locals: parameter,
     })

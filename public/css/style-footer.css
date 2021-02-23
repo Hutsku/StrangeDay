@@ -30,6 +30,15 @@ i.payment-logo {
 	border-radius: 40%;
 }
 
+.legal-link {
+	color: black;
+	font-size: 13px;
+	margin: 8px;
+}
+.legal-link:hover {
+	text-decoration: none;
+}
+
 #author a, #contact span {
 	color: black;
 	text-decoration: none;
