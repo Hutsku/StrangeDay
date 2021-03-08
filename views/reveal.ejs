@@ -40,12 +40,15 @@
                     </div>
                 </div>
                 <form action="/submit-newsletter" method="post" class="register-email mt-5">
-                    <input type="text" placeholder="Passez votre email !" class="form-control mr-3" name="email">
-                    <button type="submit" class="btn btn-cart" data-dismiss="">Envoyer</button>
+                    <input type="text" placeholder="Passez votre email !" class="form-control mr-md-3" name="email">
+                    <button type="submit" class="btn btn-cart mt-3 mt-md-0" data-dismiss="">Envoyer</button>
                     <div class="invalid-feedback mt-2">Veuillez rentrer un email valide</div>
                 </form>
 	    	</div>
         </main>
+        <footer>
+            <%- include('footer') %>
+        </footer>
     </body>
 
     <!-- Import JS Bootstrap dependencies -->
