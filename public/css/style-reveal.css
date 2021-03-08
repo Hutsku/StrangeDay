@@ -35,10 +35,10 @@ main {
 	margin: auto;
 }
 .register-email input {
-	width: 390px;
+	width: 300px;
 }
 .register-email button {
-	width: 120px;
+	width: 300px;
 }
 
 /* ---- Affichage PC ---- */
@@ -56,5 +56,11 @@ main {
 		width: 100px;
 
 		margin: 20px;
+	}
+	.register-email input {
+		width: 390px;
+	}
+	.register-email button {
+		width: 120px;
 	}
 }
