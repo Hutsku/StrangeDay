@@ -157,8 +157,10 @@
 
         // Change les sub et total des prix en checkant tout les produits
         function updateTotalPrice() {
+            var sub_price = 0;
+            var ship_price = parseFloat($('.price-shipping').text()) || 0
+            console.log(ship_price)
             $('.price-sub-total').text(function () {
-                var sub_price = 0;
                 $('.cart-pannel-main .cart-product-price').each(function () {
                     sub_price = roundPrice(sub_price + parseFloat($(this).text()));
                 });
@@ -166,7 +168,7 @@
             });
 
             $('.price-total').text(function () {
-                var total = roundPrice(parseFloat($('.price-shipping').text()) + parseFloat($('.price-sub-total').text()));
+                var total = roundPrice(ship_price + sub_price);
                 return total+'€';
             });
         }
