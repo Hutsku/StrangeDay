@@ -45,7 +45,7 @@ config.cookies = {
 
 config.debug      = false; // active quelques boutons de test etc.
 config.production = true; // Désactive les paiements
-config.local_test = true; // Fait la distintion entre la version web et locale. Permet d'éviter le vault entre autre.
+config.local_test = false; // Fait la distintion entre la version web et locale. Permet d'éviter le vault entre autre.
 config.reveal     = false; // Active/desactive la page d'attente de reveal du site
 
 module.exports = config;
