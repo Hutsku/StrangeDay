@@ -33,7 +33,7 @@ config.email = {
 	test: false,
 }
 
-var timeCookieDefault = 30 // en minute
+var timeCookieDefault = 180 // en minute (3h)
 var timeCookieStayConnected = 30*24*60 // durée de 30 jours
 config.cookies = { 
     name: 'strangeday',

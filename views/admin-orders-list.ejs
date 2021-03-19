@@ -71,7 +71,7 @@
                                 if (order.state != 'shipped' && !order.preorder) { 
                                     var products = order.product; %>
                                     <tr>
-                                        <td><%= order.name %></td>
+                                        <td><%= order.name %><br/><%= order.email %></td>
                                         <td><%= order.total_cost %>€</td>
                                         
                                         <td style="color:<%= color %>;"><%= text %></td>
@@ -112,7 +112,7 @@
                             <% for (order of orders) { 
                                 if (order.state == 'shipped') { %>
                                     <tr>
-                                        <td><%= order.name %></td>
+                                        <td><%= order.name %><br/><%= order.email %></td>
                                         <td><%= order.total_cost %>€</td>
                                         <td style="text-align: left;">
                                             <% var products = order.product;

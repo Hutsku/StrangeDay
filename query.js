@@ -38,7 +38,7 @@ _getAllAcc = `SELECT p.id, p.name, description, price, available, p.type, cover_
             WHERE a.product_id = p.id`
 
 _getAllOrder   = `SELECT * FROM \`order\``;
-_getAllOrderUser = `SELECT o.id, u.name, total_cost, shipping_address, o.state, p.id as product_id, p.name as product, oc.option, oc.nb
+_getAllOrderUser = `SELECT o.id, u.name, u.email, total_cost, shipping_address, o.state, p.id as product_id, p.name as product, oc.option, oc.nb
 				FROM \`order\` o, user u, order_content oc, product p
 				WHERE o.user_id = u.id AND oc.product_id = p.id AND oc.order_id = o.id`;
 _getUser       = `SELECT * FROM user WHERE id = ?`;
@@ -238,6 +238,7 @@ function getAllOrderUser(callback) {
         		order.product = [{
         			id: order.product_id,
         			name: order.product,
+                    email: order.email,
         			option: order.option,
         			nb: order.nb
         		}]; // on reconstruit sous forme de liste
@@ -251,6 +252,7 @@ function getAllOrderUser(callback) {
         				orderList[i].product.push({
         					id: order.product_id,
         					name: order.product,
+                            email: order.email,
         					option: order.option,
         					nb: order.nb
         				});
