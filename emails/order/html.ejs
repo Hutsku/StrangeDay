@@ -33,20 +33,10 @@
 
         <br/>
         <p style="border-top: 1px solid lightgrey; width:100%;"></p>
-        <table role="presentation" border="0" cellpadding="0" cellspacing="0">
-          <tbody>
-            <tr>
-              <td>
-                <p><b>Sous-total:</b> <%= subtotal_cost %>€<br/> <b>Livraison:</b> <%= shipping_cost %>€</p>
-                <p style="font-weight: bold; text-transform: uppercase; font-size: 15px">Total: <%= total_cost %>€</p>
-              </td>
-              <td style="vertical-align: top">
-                <b> Adresse de livraison: </b>
-                <p><%= shipping_address.string %></p>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <b> Adresse de livraison: </b>
+        <p><%= shipping_address.string %></p>
+        <p><b>Sous-total:</b> <%= subtotal_cost %>€<br/> <b>Livraison:</b> <%= shipping_cost %>€</p>
+        <p style="font-weight: bold; text-transform: uppercase; font-size: 15px">Total: <%= total_cost %>€</p>
 
         <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
           <tbody>

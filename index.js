@@ -139,7 +139,6 @@ if (config.local_test) {
 else {
     vault.read('strangeday/email')
     .then(function(res) {
-        console.log(res.data)
         email_init(res.data);
     }).catch(console.error);
 
@@ -184,7 +183,7 @@ function sendEmail(template, emailTo, parameter) {
         },
         locals: parameter,
     })
-    .then(console.log('Email send'))
+    .then()
     .catch(console.error);
 }
 
@@ -206,7 +205,7 @@ function contactEmail(emailFrom, parameter) {
         },
         locals: parameter,
     })
-    .then(console.log('Email send'))
+    .then()
     .catch(console.error);
 }
 
@@ -309,18 +308,11 @@ app.use(function(req, res, next) {
     // Affiche le détail d'un commande, par son id
     query.getOrder(req.params.id, function (order, error) {
         // On verifie que l'utilisateur est connecté et que la commande existe
-        if (order && req.session.logged) {
-            // on vérifie que l'utilisateur est bien admin ou que la commande appartient bien au client
-            if ((req.session.admin && checkAdmin(req.session.account.email)) || req.session.account.id == order.user_id) {
-                res.render('order-detail.ejs', {
-                    order: order,
-                    session: req.session
-                });
-            }
-            else {
-                // sinon on recharge la page
-                res.redirect('back');
-            }
+        if (order) {
+            res.render('order-detail.ejs', {
+                order: order,
+                session: req.session
+            });
         }
         else {
             // sinon on recharge la page
@@ -472,7 +464,6 @@ app.use(function(req, res, next) {
 .get('/admin-update-order/:id', function(req, res) {
     // on vérifie que l'utilisateur est bien admin (double verification si jamais)
     if (req.session.admin && checkAdmin(req.session.account.email)) {
-        console.log(req.query.trackNumber)
         query.getOrder(req.params.id, function(order) {
             // on definit le nouveau statut de la commande selon son état précédant
             switch (order.state){
@@ -624,8 +615,9 @@ app.use(function(req, res, next) {
 .post('/admin-add-product', urlencodedParser, function(req, res) {    
     // on vérifie que l'utilisateur est bien admin (double verification si jamais)
     if (req.session.admin && checkAdmin(req.session.account.email)) {
-        console.log(req.body);
         query.addProduct(req.body); // On ajoute le produit dans la BDD
+        console.log('-> Article ajouté');
+        console.log(req.body)
 
         req.session.alert = "add product";
         res.redirect('back');
@@ -637,10 +629,8 @@ app.use(function(req, res, next) {
 })
 
 .post('/admin-edit-product', urlencodedParser, function(req, res) {  
-    console.log('edit product')
     // on vérifie que l'utilisateur est bien admin (double verification si jamais)
     if (req.session.admin && checkAdmin(req.session.account.email)) {
-        console.log(req.body);
         query.updateProduct(req.body); // Modifie le produit dans la BDD
 
         req.session.alert = "edit product";
@@ -661,7 +651,7 @@ app.use(function(req, res, next) {
             console.log(err)
         }
 
-        console.log('File uploaded')
+        console.log('-> File uploaded')
         res.end()
     });
 })
@@ -681,7 +671,6 @@ app.use(function(req, res, next) {
     }
 
     req.session.cart = cart.addCart(req.session, product);
-    console.log(req.session.cart)
     res.send(req.session.cart);
 })
 
@@ -690,7 +679,6 @@ app.use(function(req, res, next) {
     if (!req.session.cart) res.redirect('back');
 
     req.session.cart = cart.removeCart(req.session, req.body);
-    console.log(req.session.cart)
     res.send(req.session.cart);
 })
 
@@ -714,7 +702,7 @@ app.use(function(req, res, next) {
 
     // On ajoute la commande à la BDD
     query.addOrder(req.session.cart, function(order, orderId) {
-        console.log(order)
+        console.log(`-> Nouvelle commande passée ! | ${req.session.username} ${order.total_cost}`)
         // on envoit un email de confirmation de commande
         sendEmail('order', req.session.account.email, {
             name: req.session.username,
@@ -744,7 +732,6 @@ app.use(function(req, res, next) {
     query.editUserPassword([id, oldPassword, newPassword], function(error) {
         if (error) {
             req.session.error = "Bad password";
-            console.log("mauvais mot de passe"); // Les hash ne correspondent pas
             res.send(error);    
         }
         else {
@@ -768,7 +755,6 @@ app.use(function(req, res, next) {
     var queryParam = [address1, address2, city, country, state, postal_code, id]
     query.editUserAddress(queryParam, function(error) {
         if (error) {
-            console.log("La modification a échoué");
             res.send(error);
         }
         else {
@@ -781,7 +767,6 @@ app.use(function(req, res, next) {
             req.session.account.state = state;
             req.session.account.country = country;
 
-            console.log("adress changed !");
             res.send('back'); // on recharge la page
         }
     });
@@ -797,7 +782,6 @@ app.use(function(req, res, next) {
     query.editUserInfo([name, email, tel, id], function(error) {
         // Si l'utilisateur a été trouvé
         if (error) {
-            console.log("La modification a échoué");
             res.send(error);
         }
         else {
@@ -808,7 +792,6 @@ app.use(function(req, res, next) {
             req.session.account.email = email;
             req.session.account.tel = tel;
 
-            console.log("infos changed !");
             res.send('ok'); // on recharge la page
         }
     });
@@ -822,7 +805,6 @@ app.use(function(req, res, next) {
     query.editUserNewsLet([newsletter, email], function(result) {
         // on met à jour les cookies
         req.session.alert = "edit account";
-        console.log("newsletter changed !");
         res.send('ok'); // on recharge la page
     });
 })
@@ -874,10 +856,10 @@ app.use(function(req, res, next) {
 
             // On met à jour le panier si jamais
             req.session.cart = cart.refreshCart(req.session);
+            console.log(`-> Nouveau compte inscrit ! ${user.username} ${user.email}`)
             res.redirect('/');
         }
         else {
-            console.log("L'adresse mail est déjà utilisé");
             req.session.alert = "email already used"; // on stock l'erreur dans la seesion
             res.send(error);
         }
