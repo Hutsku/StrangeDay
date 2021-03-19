@@ -20,7 +20,7 @@
 	text-align: center;
 }
 .product-img:hover img {
-	filter: brightness(120%);
+	filter: brightness(100%);
 	transform: scale(1.05);
 }
 .product-name .name, .staff-name .name {
@@ -36,6 +36,22 @@
 .desc {
 	text-transform: none;
 	font-weight: 700;
+}
+
+span.sold-out {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	position:absolute;
+	width: 100px;
+	height: 30px;
+
+	background-color: black;
+	color: white;
+	font-weight: 700;
+	font-size: 13px;
+
+	z-index: 99;
 }
 
 /* PANEL SWITCH */
