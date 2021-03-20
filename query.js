@@ -127,7 +127,6 @@ function signUp(data, callback) {
                 	data.name, hashedPassword, data.email, data.tel, data.address1, data.address2, data.city, 
 			  		data.postalCode, data.state, data.country
 			  	];
-                console.log(data)
                 connection.query(_addUser, queryParam, function(err, result) {
                     if (err) throw err;
 

@@ -226,7 +226,6 @@
             $(this).addClass("active");
 
             var pannel = $(this).attr("target");
-            console.log($("div.payout-left div."+pannel))
             $("div.payout-left div.tab ~ div").removeClass("active");
             $("div.payout-left div."+pannel).addClass("active");
         });
