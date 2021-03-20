@@ -88,6 +88,12 @@ _sync_order         = `DELETE FROM \`order\` WHERE id NOT IN (
 _sync_order_content = `DELETE FROM \`order_content\` WHERE order_id NOT IN (
                            SELECT id FROM \`order\` )`
 
+_getStat = `SELECT * FROM 
+            (SELECT count(*) as nb_user from user) as a ,
+            (SELECT count(*) as nb_nl from newsletter) as b,
+            (SELECT count(*) as nb_order from \`order\`) as c,
+            (SELECT count(*) as nb_product from product) as d`
+
 // ========================================= FONCTION =====================================================
 
 // Renvoit les données d'un utilisateur si les informations données sont correct
@@ -339,6 +345,14 @@ function getUserNewsletter(user_id, callback) {
         if (err) throw err;
         callback(rows[0]);  
     });
+}
+
+// Renvoit des statistiques globales sur le site
+function getStat(callback) {
+    connection.query(_getStat, function(err, rows, fields) {
+        if (err) throw err;
+        callback(rows[0]);  
+    });    
 }
 
 // Ajoute le produit général à la BDD
@@ -649,6 +663,7 @@ module.exports = {
 	getUserOrder: getUserOrder,
 	getUserEmail: getUserEmail,
     getUserNewsletter: getUserNewsletter,
+    getStat: getStat,
 
 	addProduct: addProduct,
 	addOrder: addOrder,

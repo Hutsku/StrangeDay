@@ -3,6 +3,7 @@
 	font-weight: 600;
 }
 
-.description {
+.description span{
 	color: grey;
+	text-transform: none;
 }

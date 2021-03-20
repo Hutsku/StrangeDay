@@ -1,3 +1,8 @@
+h3 {
+	font-size: 1.6rem;
+	font-weight: 600;
+}
+
 .product-list, .lookbook-gallery, .staff-list {
 	display: flex;
 	flex-direction: row;
@@ -36,6 +41,11 @@
 .desc {
 	text-transform: none;
 	font-weight: 700;
+}
+.faq {
+	display: flex;
+	flex-direction: column;
+	text-transform: none;
 }
 
 span.sold-out {

@@ -277,6 +277,11 @@ app.use(function(req, res, next) {
     res.render('kezako.ejs', {session: req.session});
 })
 
+.get('/faq', function(req, res) {
+    // Affiche la liste des articles indiquées
+    res.render('faq.ejs', {session: req.session});
+})
+
 .get('/product/:id', function(req, res) {
     // Affiche la page d'un produit, selon l'id indiqué
     query.getProduct(req.params.id, function (product) {
@@ -506,6 +511,19 @@ app.use(function(req, res, next) {
             res.redirect('back');
         });
     }
+})
+
+.get('/admin-stat', function(req, res) {
+    // on vérifie que l'utilisateur est bien admin (double verification si jamais)
+    if (req.session.admin && checkAdmin(req.session.account.email)) {
+        query.getStat(function(data) {
+            res.render('admin-stat.ejs', {session: req.session, data: data});
+        });
+    }
+    else {
+        // sinon on redirige vers l'écran de connexion
+        res.redirect('/mainpage');
+    } 
 })
 
 // ------------------------ PAYOUT  --------------------------
