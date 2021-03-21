@@ -303,6 +303,7 @@ app.use(function(req, res, next) {
                 category: product.category,
                 type: product.type,
                 img: product.image,
+                collection: product.collection,
                 session: req.session
             });  
         }     
