@@ -454,6 +454,7 @@ function addOrder(cart, callback) {
 function addNewsletter(email, callback) {
     // on vérifie d'abord que l'ancien mdp est valide ...
     connection.query('INSERT INTO newsletter (email) VALUES (?)', [email], function(err, result) {
+        console.log('-> Inscription newsletter ! | '+email)
         if (callback) callback();
     });
 }
