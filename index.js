@@ -904,6 +904,7 @@ app.use(function(req, res, next) {
         sendEmail('unsubscribe', req.session.account.email, {name: req.session.username});
 
         // On efface les cookies
+        console.log('-> Desincription | '+req.session.username+' '+req.session.account.email)
         req.session.username = '';
         req.session.logged = false;
         req.session.admin = false;

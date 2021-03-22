@@ -642,7 +642,8 @@ function removeOrder (id) {
 
 // Supprime un produit de la BDD
 function removeUser (id, callback) {
-    connection.query(_removeOrder, [id], function(err, rows, fields) {
+    console.log(id)
+    connection.query(_removeUser, [id], function(err, rows, fields) {
         if (err) throw err;
         callback();
     });
