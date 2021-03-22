@@ -213,7 +213,7 @@ function contactEmail(emailFrom, parameter) {
 
 console.log('Création des routes POST et GET')
 app.use(function(req, res, next) {
-    // Main handler, se déclanchent à chaque route
+    // Main handler, se déclenche à chaque route
     let whitelist = ['/reveal', '/newsletter-success', '/submit-newsletter']
 
     if (!config.reveal) next()
@@ -227,6 +227,11 @@ app.use(function(req, res, next) {
 })
 
 .get('/', function(req, res) {
+    // Renvoit par défaut vers la page principale
+    res.redirect('/mainpage');
+})
+
+.get('/unlock', function(req, res) {
     // Renvoit par défaut vers la page principale
     res.redirect('/mainpage');
 })
