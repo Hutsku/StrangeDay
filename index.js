@@ -223,7 +223,7 @@ app.use(function(req, res, next) {
         req.session.unlock = true; // On debloque l'accès au site momentanement
         res.redirect('/mainpage') // Et on redirige vers la page principale
     }
-    else res.redirect('/reveal') // ... sinon on redirige vers la page de reveal
+    else res.redirect('/countdown') // ... sinon on redirige vers la page de reveal
 })
 
 .get('/', function(req, res) {
@@ -394,9 +394,9 @@ app.use(function(req, res, next) {
     res.redirect('back');
 })
 
-.get('/reveal', function (req, res) {
+.get('/countdown', function (req, res) {
     // Affiche une page défaut avant que le site soit disponible
-    res.render('reveal.ejs', {session: req.session});
+    res.render('countdown.ejs', {session: req.session});
 })
 
 // ----------------------- ADMIN PAGE ------------------------
