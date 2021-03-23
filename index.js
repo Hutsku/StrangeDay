@@ -296,19 +296,7 @@ app.use(function(req, res, next) {
         else {
             // On envoit les données du produit à la page
             res.render('product.ejs', {
-                id: product.id, 
-                reference: product.id,
-                name: product.name,
-                available: product.available,
-                composition: product.composition,
-                price: product.price,
-                description: product.description,
-                size: product.size,
-                printing: product.printing,
-                category: product.category,
-                type: product.type,
-                img: product.image,
-                collection: product.collection,
+                product: product,
                 session: req.session
             });  
         }     
