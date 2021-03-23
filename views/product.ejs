@@ -63,32 +63,32 @@
 					<!------------------------- MOBILE ONLY ------------------------------->
 	    			<div class="info-product d-md-none d-block">
 	    				<div class="w-100 border-bottom my-4"></div>
-		    			<span class="desc" style="text-transform: none; display: block;">
+		    			<span class="desc mb-3" style="text-transform: none; display: block;">
 		    				<%- nl2br(description) %>
 		    			</span>
-		    			<% if (available == 2) { %>
-		    			<div class="m-0 dis-preco py-3">
-	    					Ce produit est en précommande. Livraison après la date de sortie spécifiée.
-	    				</div>
-	    				<% }
 		    			
-		    			if (type == "clothe") { %>
+		    			<% if (type == "clothe") { %>
 			    			<div class="composition mb-1">
-			    				<span>Composition </span>
+			    				<span class="title">Composition </span>
 			    				<span><%= composition %></span>
+			    			</div>
+		    			<% } else if (type == "accessory") { %>
+			    			<div class="row composition mb-1">
+			    				<span class="title">Type </span>
+			    				<span><%= type %></span>
 			    			</div>
 		    			<% } else if (type == "poster") { %>
 			    			<div class="material mb-1">
-			    				<span>Impression </span>
+			    				<span class="title">Impression </span>
 			    				<span>Impression sur papier <%= printing %></span>
 			    			</div>
 			    			<div class="size mb-1">
-			    				<span>Dimension </span>
+			    				<span class="title">Dimension </span>
 			    				<span>Affiche <%= size %></span>
 			    			</div>
 			    		<% } %>
 		    			<div class="ref mb-1">
-		    				<span>Reference </span>
+		    				<span class="title">Reference </span>
 		    				<span><%= reference %></span>
 		    			</div>
 		    			<a class="size-chart mt-3" href="#" data-toggle="modal" data-target="#sizeChartModal" name="delete-product">Guide des tailles</a>
@@ -109,16 +109,16 @@
 			    			<span class="row desc mb-3" style="text-transform: none; display: block;">
 			    				<%- nl2br(description) %>
 			    			</span>
-			    			<% if (available == 2) { %>
-			    			<span class="row dis-preco mb-3">
-		    					Ce produit est en précommande. Livraison après la date de sortie spécifiée.
-		    				</span>
-		    				<% } 
 
-			    			if (type == "clothe") { %>
+			    			<% if (type == "clothe") { %>
 				    			<div class="row composition mb-1">
 				    				<span class="title">Composition </span>
 				    				<span><%= composition %></span>
+				    			</div>
+			    			<% } else if (type == "accessory") { %>
+				    			<div class="row composition mb-1">
+				    				<span class="title">Type </span>
+				    				<span><%= type %></span>
 				    			</div>
 			    			<% } else if (type == "poster") { %>
 				    			<div class="row material mb-1">

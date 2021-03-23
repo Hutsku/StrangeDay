@@ -492,7 +492,8 @@ app.use(function(req, res, next) {
             if (state == "shipped") {
                 query.getUserEmail(order.user_id, function(email) {
                     sendEmail('order-shipped', email.email, {
-                        order_id: req.params.id
+                        order_id: req.params.id,
+                        track_id: req.query.trackNumber
                     });
                 });
             }
