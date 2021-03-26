@@ -411,7 +411,7 @@
 						// on ajoute la commande à la BDD
 			            $.post("/add-order", {
 			            	billing_address: `${billing_address1} ${billing_address2} ${billing_postal_code} ${billing_city} ${billing_state} ${billing_country} `,
-			            	payment_method: 'card',
+			            	payment_method: 'carte bancaire',
 			            })
 			            .done( function (data) {
 		                    location.assign("/payment-success");

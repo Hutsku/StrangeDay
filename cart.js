@@ -106,7 +106,6 @@ function removeCart(session, data) {
 
 // Permet de convertir un panier envoyé côté client pour le standardiser
 function convertCart(cart) {
-    console.log(cart)
     cart = JSON.parse(cart);
     var new_cart = {
         products: [],

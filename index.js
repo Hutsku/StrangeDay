@@ -174,12 +174,61 @@ function checkAdmin(email) {
     return admin_user.includes(email);
 }
 
+// Génère la facture à joindre avec le mail de reçu
+function createInvoice(parameter) {
+    let user = parameter.user;
+    let customerInfos = `
+    ====== DETAILS CLIENT ======
+    Nom & prenoms: ${user.name}
+    Adresse email: ${user.email}
+    Numéro téléphone: ${user.tel}
+
+    ====== DETAILS LIVRAISON ======
+    Adresse livraison: ${parameter.shipping_address.string}
+    Adresse facturation: ${parameter.billing_address}
+    Methode de livraison: Colissimo
+    `;
+    let orderProducts = `
+    ====== DETAIL COMMANDE ======
+    Date de facturation: ${parameter.date}
+    Numéro de commande: ${parameter.order_id}
+    Mode de paiement: ${parameter.billing_method}
+    `;
+    let orderInfos = `
+    
+    Sous-total: ${parameter.subtotal_cost}€
+    Frais de livraison: ${parameter.shipping_cost}€
+    TOTAL: ${parameter.total_cost}€
+    `;
+    let invoiceInfos = `
+    TVA non applicable en vertu de l'art. 239B du CGI
+    SIRET: 
+    `;
+    
+    // On ajoute à la chaine tout les articles de la commande
+    for (product of parameter.products) {
+        // la mise en forme étrange est normale
+        let textProduct = `
+    ${product.name} ${product.option} (x${product.cart_qty}) ${product.price}€`;
+
+        orderProducts += textProduct;
+    }
+
+    return customerInfos + orderProducts + orderInfos + invoiceInfos;
+}
+
 // Envoit un email avec le template et les paramètres specifiés
 function sendEmail(template, emailTo, parameter) {
     email.send({
         template: template,
         message: {
-            to: emailTo
+            to: emailTo,
+            attachments: [
+                {
+                  filename: 'invoice.txt',
+                  content: createInvoice(parameter)
+                }
+            ]
         },
         locals: parameter,
     })
@@ -383,7 +432,7 @@ app.use(function(req, res, next) {
 })
 
 .get('/test-dev', function (req, res) {
-    sendEmail('subscribe', 'arouxel.trash@outlook.fr', {})
+    createInvoice(req.session.account)
     res.redirect('back');
 })
 
@@ -630,7 +679,6 @@ app.use(function(req, res, next) {
     if (req.session.admin && checkAdmin(req.session.account.email)) {
         query.addProduct(req.body); // On ajoute le produit dans la BDD
         console.log('-> Article ajouté');
-        console.log(req.body)
 
         req.session.alert = "add product";
         res.redirect('back');
@@ -716,8 +764,10 @@ app.use(function(req, res, next) {
     // On ajoute la commande à la BDD
     query.addOrder(req.session.cart, function(order, orderId) {
         console.log(`-> Nouvelle commande passée ! | ${req.session.username} ${order.total_cost}`)
+        let date = new Date()
         // on envoit un email de confirmation de commande
         sendEmail('order', req.session.account.email, {
+            user: req.session.account,
             name: req.session.username,
             products: order.products,
             subtotal_cost: order.subtotal_cost,
@@ -725,6 +775,8 @@ app.use(function(req, res, next) {
             total_cost: order.total_cost,
             shipping_address: order.shipping_address,
             billing_address: order.billing_address,
+            billing_method: req.body.payment_method,
+            date: `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()}`,
             order_id: orderId
         });
 

@@ -641,9 +641,8 @@ function removeOrder (id) {
     });
 }
 
-// Supprime un produit de la BDD
+// Supprime un utilisateur de la BDD
 function removeUser (id, callback) {
-    console.log(id)
     connection.query(_removeUser, [id], function(err, rows, fields) {
         if (err) throw err;
         callback();
