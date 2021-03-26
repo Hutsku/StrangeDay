@@ -263,7 +263,7 @@ function contactEmail(emailFrom, parameter) {
 console.log('Création des routes POST et GET')
 app.use(function(req, res, next) {
     // Main handler, se déclenche à chaque route
-    let whitelist = ['/reveal', '/newsletter-success', '/submit-newsletter']
+    let whitelist = ['/countdown', '/newsletter-success', '/submit-newsletter']
 
     if (!config.reveal) next()
     else if (whitelist.includes(req.originalUrl)) next() // Si c'est une page speciale, alors on laisse
