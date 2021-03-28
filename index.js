@@ -32,7 +32,7 @@ var bodyParser = require("body-parser");
 var multer     = require('multer')
 const Stripe   = require('stripe')
 const Email    = require('email-templates'); // include nodemailer
-var FileSaver  = require('file-saver');
+var fs         = require('fs');
 
 var upload;
 function multer_init() {
@@ -323,8 +323,9 @@ app.use(function(req, res, next) {
 })
 
 .get('/lookbook', function(req, res) {
-    // Affiche la liste des articles indiquées
-    res.render('lookbook.ejs', {session: req.session});
+    // Affiche une liste des images présent dans le dossier lookbook
+    let files = fs.readdirSync('./public/img/lookbook/photomaton');
+    res.render('lookbook.ejs', {session: req.session, photomaton: files});
 })
 
 .get('/kezako', function(req, res) {
