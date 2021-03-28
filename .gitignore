@@ -1,3 +1,5 @@
 node_modules
 local_credentials.js
 *.txt
+package-lock.json
+package.json

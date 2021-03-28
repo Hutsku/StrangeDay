@@ -12,6 +12,7 @@
     "email-templates": "latest",
     "express": "latest",
     "express-session": "^1.17.1",
+    "file-saver": "^2.0.5",
     "multer": "latest",
     "mysql": "latest",
     "mysql2": "^2.2.5",
