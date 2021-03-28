@@ -57,6 +57,7 @@ _getOrderEmail = `SELECT email FROM \`order\` o, user WHERE o.user_id = user.id 
 _getUserOrder  = `SELECT * FROM \`order\` WHERE user_id = ?`;
 _getUserEmail  = `SELECT email FROM user WHERE id = ?`;
 _getUserNewsletter = `SELECT user.email FROM newsletter, user WHERE user.email = newsletter.email AND user.id = ?`;
+_getAllNewsletter  = `SELECT email FROM newsletter`;
 
 _addUser     = `INSERT INTO user (name, password, email, tel, address1, address2, city, postal_code, state, country) 
                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
@@ -348,6 +349,14 @@ function getUserNewsletter(user_id, callback) {
 }
 
 // Renvoit des statistiques globales sur le site
+function getAllNewsletter(callback) {
+    connection.query(_getAllNewsletter, function(err, rows, fields) {
+        if (err) throw err;
+        callback(rows);  
+    });    
+}
+
+// Renvoit des statistiques globales sur le site
 function getStat(callback) {
     connection.query(_getStat, function(err, rows, fields) {
         if (err) throw err;
@@ -394,6 +403,7 @@ function addProduct(data) {
                 if (!rows.length) {
         			connection.query(`INSERT INTO image (name) VALUES (?)`, [image], function(err, result) {
         			    if (err) throw err;
+                        console.log('-> File uploaded')
         			    let imageId = result.insertId;
 
         			    // On lie les images au produit dans la BDD
@@ -568,6 +578,7 @@ function updateProduct (data) {
 
 				    // Si l'image n'existe pas, on l'ajoute à la BDD
 				    if (!rows.length) {
+                        console.log('-> File uploaded')
 						// Sinon on ajoute l'image et le lien
 						connection.query(`INSERT INTO image (name) VALUES (?)`, [image], function(err, result) {
 						    if (err) throw err;
@@ -664,6 +675,7 @@ module.exports = {
 	getUserOrder: getUserOrder,
 	getUserEmail: getUserEmail,
     getUserNewsletter: getUserNewsletter,
+    getAllNewsletter: getAllNewsletter,
     getStat: getStat,
 
 	addProduct: addProduct,

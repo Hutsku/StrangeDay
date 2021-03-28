@@ -30,6 +30,7 @@
                 <span class="my-2">Utilisateurs inscrit: <%= data.nb_user %></span> 
                 <span class="my-2">Inscriptions newsletter: <%= data.nb_nl %></span>
                 <span class="my-2">Commande passées: <%= data.nb_order %></span>
+                <span class="my-2" id="export"> Exporter liste inscrit newsletter </span>
             </div>
         </main>
         <footer>
@@ -37,7 +38,14 @@
         </footer>
     </body>
     
+    <script type="module" src='./scripts/file-saver/src/FileSaver.js'>
+    </script>
     <script type="text/javascript">
+        $("#export").click(function() { 
+            let list = `<%= newsletter %>`;
+            var blob = new Blob([list], {type: "text/plain;charset=utf-8"});
+            saveAs(blob, "SD_export.txt");
+        });
     </script>
 
 </html>

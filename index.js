@@ -32,6 +32,7 @@ var bodyParser = require("body-parser");
 var multer     = require('multer')
 const Stripe   = require('stripe')
 const Email    = require('email-templates'); // include nodemailer
+var FileSaver  = require('file-saver');
 
 var upload;
 function multer_init() {
@@ -561,7 +562,13 @@ app.use(function(req, res, next) {
     // on vérifie que l'utilisateur est bien admin (double verification si jamais)
     if (req.session.admin && checkAdmin(req.session.account.email)) {
         query.getStat(function(data) {
-            res.render('admin-stat.ejs', {session: req.session, data: data});
+            query.getAllNewsletter(function(newsletter) {
+                let string = "";
+                for (email of newsletter) {
+                    string += email.email+'\n';
+                }
+                res.render('admin-stat.ejs', {session: req.session, data: data, newsletter: string});
+            });
         });
     }
     else {
@@ -711,8 +718,6 @@ app.use(function(req, res, next) {
         } else if (err) {
             console.log(err)
         }
-
-        console.log('-> File uploaded')
         res.end()
     });
 })

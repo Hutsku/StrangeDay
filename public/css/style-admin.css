@@ -30,6 +30,14 @@
 	font-weight: 600;
 }
 
+#export {
+	cursor: pointer;
+	transition: 0.2s;
+}
+#export:hover {
+	color: #f2d875;
+}
+
 /* -------- ORDER LIST ----------- */
 
 div.orders-list-content div.tab {
