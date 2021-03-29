@@ -3,19 +3,7 @@
 
 console.log('Initalisation du site web ...')
 var config = require('./config.js');
-
-// Si le serveur tourne en local, récupère les cred d'un fichier local. (pas de requête vault)
-var path_stripe = 'stripe'; 
-var path_paypal = 'paypal';
-if (config.local_test) {
-    console.log('/!\\ LE SITE EST EN VERSION TEST LOCAL /!\\');
-    var cred = require('./local_credentials.js');
-}
-if (!config.production) {
-    console.log("/!\\ LE SITE N'EST PAS EN PRODUCTION /!\\ - Les payements sont désactivés ");
-    var path_stripe = 'stripe_test';
-    var path_paypal = 'paypal_test';
-}
+var fs     = require('fs');
 
 // get new instance of the client
 console.log('Configuration de vault');
@@ -32,7 +20,6 @@ var bodyParser = require("body-parser");
 var multer     = require('multer')
 const Stripe   = require('stripe')
 const Email    = require('email-templates'); // include nodemailer
-var fs         = require('fs');
 
 var upload;
 function multer_init() {
@@ -127,9 +114,21 @@ function app_init () {
 
 // ---------------------- LAUNCH INIT -------------------
 
-// Si on est en test local, on prend les id sur le fichier. Sinon, on utilise vault
+var path_stripe = 'stripe'; 
+var path_paypal = 'paypal';
+if (!config.production) {
+    console.log("/!\\ LE SITE N'EST PAS EN PRODUCTION /!\\ - Les payements sont désactivés ");
+    var path_stripe = 'stripe_test';
+    var path_paypal = 'paypal_test';
+}
+
+// Si on est en test local, on importe le fichier cred local. Sinon, on utilise vault
 var secret_stripe, secret_paypal;
-if (config.local_test) {
+if (fs.existsSync('./local_credentials.js')) {
+    console.log('/!\\ LE SITE EST EN VERSION TEST LOCAL /!\\');
+    let cred = require('./local_credentials.js');
+    config.reveal = false; // si on est en local, on debloque le site pour que ce soit pratique
+
     email_init(cred.email);
     query.init(cred.mysql);
     stripe_init(cred[path_stripe]);
@@ -171,6 +170,7 @@ app_init();
 
 // ============================================= GLOBAL FUNCTIONS ========================================
 
+// verifie si l'email appartient à un compte admin
 function checkAdmin(email) {
     return admin_user.includes(email);
 }
