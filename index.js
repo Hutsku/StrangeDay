@@ -1,6 +1,9 @@
 
 // ============================================= INITALIZATION ============================================
 
+let date = new Date()
+let date_string = `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
+console.log(`==================== ${date_string} ====================`)
 console.log('Initalisation du site web ...')
 var config = require('./config.js');
 var fs     = require('fs');

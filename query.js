@@ -5,15 +5,18 @@ var mysql      = require('mysql2');
 var connection;
 function init (cred) {
     // Créer la connection avec la BDD mysql.
-    connection = mysql.createConnection({
+    connection = mysql.createPool({
+        connectionLimit : 20,
         host     : 'localhost',
         user     : cred.user,
         password : cred.password,
         database : 'strange_day'
     });
-    connection.connect(function(err) {
-      if (err) throw err;
-      console.log("> BDD MySQL connecté.");
+    // On se connecte à une connexion du pool pour voir si la liaison se passe bien
+    connection.getConnection(function(err, con) {
+        if (err) throw err;
+        console.log("> BDD MySQL connecté.");
+        con.release(); // on libère manuellement la connexion
     });
 };
 
