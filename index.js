@@ -50,7 +50,7 @@ function multer_init() {
     console.log("> Multer configuré.");
 };
 
-var email;
+var emailObject;
 var transporter;
 function email_init (cred) {
     // setup transporter (mailtrap for test, gmail for production)
@@ -67,7 +67,7 @@ function email_init (cred) {
     if (config.email.test) transporter = transport_mailtrap;
 
     // Build-up the email object (pour les email venant du site)
-    email = new Email({
+    emailObject = new Email({
         views: config.email.views,
         message: {
             from: config.email.from
@@ -236,7 +236,7 @@ function sendEmail(template, emailTo, parameter) {
     }
 
     // On envoit le mail
-    email.send({
+    emailObject.send({
         template: template,
         message: {
             to: emailTo,
@@ -934,7 +934,7 @@ app.use(function(req, res, next) {
             req.session.account = user;
             req.session.logged = true;
             req.session.alert = "signup";
-            req.session.admin = checkAdmin(email);
+            req.session.admin = checkAdmin(user.email);
 
             // On met à jour le panier si jamais
             req.session.cart = cart.refreshCart(req.session);
