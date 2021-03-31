@@ -445,7 +445,7 @@ app.use(function(req, res, next) {
 })
 
 .get('/test-dev', function (req, res) {
-    createInvoice(req.session.account)
+    sendEmail('subscribe', 'arouxel@outlook.fr', {name: 'armel'});
     res.redirect('back');
 })
 
@@ -929,7 +929,7 @@ app.use(function(req, res, next) {
     query.signUp(req.body, function(user, error) {
         if (user) {
             // on envoit un email de confirmation
-            sendEmail('subscribe', user.email, {name: user.username});
+            sendEmail('subscribe', user.email, {name: user.name});
             req.session.username = user.name;
             req.session.account = user;
             req.session.logged = true;
@@ -938,7 +938,7 @@ app.use(function(req, res, next) {
 
             // On met à jour le panier si jamais
             req.session.cart = cart.refreshCart(req.session);
-            console.log(`-> Nouveau compte inscrit ! ${user.username} ${user.email}`)
+            console.log(`-> Nouveau compte inscrit ! ${user.name} ${user.email}`)
             res.redirect('/');
         }
         else {
