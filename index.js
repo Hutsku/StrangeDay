@@ -2,7 +2,7 @@
 // ============================================= INITALIZATION ============================================
 
 let date = new Date()
-let date_string = `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
+let date_string = `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()} ${date.getHours()+2}:${date.getMinutes()}:${date.getSeconds()}`
 console.log(`==================== ${date_string} ====================`)
 console.log('Initalisation du site web ...')
 var config = require('./config.js');
@@ -131,6 +131,7 @@ if (fs.existsSync('./local_credentials.js')) {
     console.log('/!\\ LE SITE EST EN VERSION TEST LOCAL /!\\');
     let cred = require('./local_credentials.js');
     config.reveal = false; // si on est en local, on debloque le site pour que ce soit pratique
+    config.production = false; // On desactive les paiements sur la version locale
 
     email_init(cred.email);
     query.init(cred.mysql);
@@ -223,16 +224,23 @@ function createInvoice(parameter) {
 
 // Envoit un email avec le template et les paramètres specifiés
 function sendEmail(template, emailTo, parameter) {
+    // Si le mail est celui d'une commande, on joint le reçu
+    let attachments;
+    if (template == "order") {
+        attachments = [
+            {
+              filename: 'invoice.txt',
+              content: createInvoice(parameter)
+            }
+        ];
+    }
+
+    // On envoit le mail
     email.send({
         template: template,
         message: {
             to: emailTo,
-            attachments: [
-                {
-                  filename: 'invoice.txt',
-                  content: createInvoice(parameter)
-                }
-            ]
+            attachments: attachments
         },
         locals: parameter,
     })
@@ -309,7 +317,7 @@ app.use(function(req, res, next) {
 
 .get('/subscribe', function(req, res) {
     // Affiche la page d'inscription, de création de compte
-    if (req.session.logged) res.render('/', {session: req.session});
+    if (req.session.logged) res.redirect('/');
     else res.render('subscribe.ejs', {session: req.session});
 })
 
