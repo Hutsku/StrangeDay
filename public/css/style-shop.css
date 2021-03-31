@@ -14,6 +14,11 @@ h3 {
 .staff-list {
 	justify-content: center;
 }
+.honor {
+	font-size: 13px;
+	text-transform: none;
+	text-align: center;
+}
 
 .product-img, .lookbook-img, .staff-img {
 	overflow: hidden;
