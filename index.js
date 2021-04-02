@@ -207,7 +207,7 @@ function createInvoice(parameter) {
     `;
     let invoiceInfos = `
     TVA non applicable en vertu de l'art. 239B du CGI
-    SIRET: 
+    SIRET: en cours d'immatriculation ...
     `;
     
     // On ajoute à la chaine tout les articles de la commande
