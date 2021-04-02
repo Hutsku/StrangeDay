@@ -33,10 +33,19 @@ h3 {
 	filter: brightness(100%);
 	transform: scale(1.05);
 }
+.staff-name {
+	display: flex;
+	flex-direction: column;
+}
 .product-name .name, .staff-name .name {
 	font-size: 18px;
 	font-weight: 700;
 	color: black;
+}
+.staff-name .link {
+	font-size: 15px;
+	font-weight: 700;
+	text-transform: none;
 }
 .product-name .collection {
 	font-size: 16px;
