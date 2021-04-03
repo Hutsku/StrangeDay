@@ -6,8 +6,9 @@ function roundPrice(x) {
 
 // Renvoit le frais de port selon le pays et code postal (Colissimo)
 function getShippingCost(country, postal_code) {
-    // Si le client habite à Plaisir, frais gratuit
-    if (postal_code == '78370') return 0;
+    // Si le client habite à Plaisir, élancourt ou aux clayes, frais gratuit
+    let free = ['78370', '78990', '78340']
+    if (free.indexOf(postal_code) >= 0) return 0;
     
     // On définie à l'avance les prix (250mg)
     var metroCost = 4.95;
