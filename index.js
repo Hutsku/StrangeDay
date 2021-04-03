@@ -593,6 +593,12 @@ app.use(function(req, res, next) {
 
 .get('/payout-infos', function(req, res) {
     // Si le client n'a pas de panier, on le renvoit à cet page
+    if (!req.session.cart) {
+        // Si le client n'a pas de panier, on le renvoit à cet page
+        res.redirect('/cart');
+    }
+
+    // Si le client a un panier vide, on le renvoit à cet page
     if (!req.session.cart.products.length) {
         res.redirect('/cart');
         return false;
