@@ -74,7 +74,7 @@
                 <div class="detail">
                     <label class="title my-2"> Détail </label>
                     <span class="row col">Date de facturation - <span class="info"> <%= order.date.getDate() %>/<%=order.date.getMonth()+1%>/<%= order.date.getFullYear() %></span></span>
-                    <span class="row col">Méthode de facturation - <span class="info">  <%= order.billing_method %></span></span>
+                    <span class="row col">Méthode de facturation - <span class="info">  <%= order.payment_method %></span></span>
                     <span class="row col">Statut - <span class="info"> <%= order.state %></span></span>
                 </div>
             </div>
