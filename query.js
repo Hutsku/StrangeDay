@@ -9,7 +9,7 @@ function init (cred) {
         connectionLimit : 20,
         host     : 'localhost',
         user     : cred.user,
-        password : cred.password,
+        password : cred.pass,
         database : 'strange_day'
     });
     // On se connecte à une connexion du pool pour voir si la liaison se passe bien
