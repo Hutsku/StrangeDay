@@ -153,11 +153,11 @@
 				    			<% if (product.type == "clothe") { %>
 				    				<select class="custom-select size col-7 mb-3" <% if (!product.available) { %> disabled=true <% } %>>
 								        <option selected disabled>Sélectionnez la taille</option>
-		    							<option value="S" class="attached enabled">S</option>
-				    					<option value="M" class="attached enabled">M</option>
-				    					<option value="L" class="attached enabled">L</option>
-				    					<option value="XL" class="attached enabled">XL</option>
-				    					<option value="XXL" class="attached enabled">XXL</option>
+		    							<option value="S" class="attached enabled" <% if (!product.s) { %> disabled <% } %>>S</option>
+				    					<option value="M" class="attached enabled" <% if (!product.m) { %> disabled <% } %>>M</option>
+				    					<option value="L" class="attached enabled" <% if (!product.l) { %> disabled <% } %>>L</option>
+				    					<option value="XL" class="attached enabled" <% if (!product.xl) { %> disabled <% } %>>XL</option>
+				    					<option value="XXL" class="attached enabled" <% if (!product.xxl) { %> disabled <% } %>>XXL</option>
 							      	</select>
 							    <% }
 
@@ -203,11 +203,11 @@
 	    			<% if (product.type == "clothe") { %>
 	    				<select class="custom-select size col-7">
 					        <option selected disabled>Sélectionnez la taille</option>
-							<option value="S" class="attached enabled">S</option>
-	    					<option value="M" class="attached enabled">M</option>
-	    					<option value="L" class="attached enabled">L</option>
-	    					<option value="XL" class="attached enabled">XL</option>
-	    					<option value="XL" class="attached enabled">XXL</option>
+							<option value="S" class="attached enabled" <% if (!product.s) { %> disabled <% } %>>S</option>
+	    					<option value="M" class="attached enabled" <% if (!product.m) { %> disabled <% } %>>M</option>
+	    					<option value="L" class="attached enabled" <% if (!product.l) { %> disabled <% } %>>L</option>
+	    					<option value="XL" class="attached enabled" <% if (!product.xl) { %> disabled <% } %>>XL</option>
+	    					<option value="XXL" class="attached enabled" <% if (!product.xxl) { %> disabled <% } %>>XXL</option>
 				      	</select>
 				    <% } %>
 					<small class="storage-info <%= class_available %> ml-2"><i class="fas fa-box"></i> <%= text_available %></small>

@@ -247,9 +247,9 @@ function sendEmail(template, emailTo, parameter) {
     .then()
     .catch(console.error);
 }
-
+// Email pour communiquer avec le site (via le formulaire)
 function contactEmail(emailFrom, parameter) {
-    // Email pour communiquer avec le site (via le formulaire)
+    
     var email_contact = new Email({
         views: config.email.views,
         message: {
@@ -268,6 +268,31 @@ function contactEmail(emailFrom, parameter) {
     })
     .then()
     .catch(console.error);
+}
+// Email notification vers les comptes mails strangeday
+function logEmail(parameter) {
+    // On envoit le mail
+    emailObject.send({
+        template: 'log-order',
+        message: {
+            to: 'contact@strangeday.fr',
+        },
+        locals: parameter,
+    })
+    .then()
+    .catch(console.error);
+}
+
+// Fonction mettant à jour la base de données si des conversions de données ou autre sont necessaires
+function updateDatabase() {
+    /* UPDATE order_content oc
+    SET name = (SELECT name
+            FROM product
+            WHERE id = oc.product_id),
+    price = (SELECT price
+            FROM product
+            WHERE id = oc.product_id)*/
+    return;
 }
 
 // ================================================ ROUTES ===============================================
@@ -403,7 +428,6 @@ app.use(function(req, res, next) {
 .get('/mainpage', function(req, res) {
     // Affiche la page principale (avec tout les produits)
     query.getAllProduct(function(products) {
-
         // On envoit les données du produit à la page
         res.render('mainpage.ejs', {
             products: products, 
@@ -459,7 +483,7 @@ app.use(function(req, res, next) {
 .get('/admin-products-list', function(req, res) {
     // on vérifie que l'utilisateur est bien admin (double verification si jamais)
     if (req.session.admin && checkAdmin(req.session.account.email)) {
-        query.getAllProduct(function(products) {
+        query.getAllProductSimple(function(products) {
             res.render('admin-products-list.ejs', {session: req.session, products: products});
         });
     }
@@ -789,7 +813,7 @@ app.use(function(req, res, next) {
         console.log(`-> Nouvelle commande passée ! | ${req.session.username} ${order.total_cost}`)
         let date = new Date()
         // on envoit un email de confirmation de commande
-        sendEmail('order', req.session.account.email, {
+        let parameter = {
             user: req.session.account,
             name: req.session.username,
             products: order.products,
@@ -801,7 +825,9 @@ app.use(function(req, res, next) {
             billing_method: req.body.payment_method,
             date: `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()}`,
             order_id: orderId
-        });
+        }
+        sendEmail('order', req.session.account.email, parameter);
+        logEmail(parameter) // Email notif vers strangeday
 
         req.session.alert = "add order";
         req.session.cart = 0;// on vide le panier

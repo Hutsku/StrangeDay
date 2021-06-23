@@ -29,33 +29,53 @@ function roundPrice(x) {
 
 _getAllUser    = `SELECT * FROM user`;
 _getAllBaseProduct = `SELECT * FROM product`;
-_getAllProduct = `SELECT p.id, p.name, description, price, available, p.type, cover_image, collection, composition, size, weight, a.type as acc_type FROM product p
+_getAllProductSimple = `SELECT p.id, p.name, description, price, available, p.type, cover_image, collection, composition, s, m, l, xl, xxl, size, weight, a.type as acc_type FROM product p
+            LEFT JOIN accessory a ON a.product_id = p.id
+            LEFT JOIN clothe ON clothe.product_id = p.id
+            LEFT JOIN print ON print.product_id = p.id`;
+_getAllProduct = `SELECT p.id, p.name, description, price, available, p.type, image.name as image, composition, s, m, l, xl, xxl, collection, size, weight, a.type as acc_type FROM product p
+            INNER JOIN product_image pi ON pi.product_id = p.id
+            INNER JOIN image ON image.id = pi.image_id
             LEFT JOIN accessory a ON a.product_id = p.id
             LEFT JOIN clothe ON clothe.product_id = p.id
 			LEFT JOIN print ON print.product_id = p.id`;
-_getAllClothe = `SELECT p.id, p.name, description, price, available, type, cover_image, collection, composition FROM product p, clothe
-            WHERE clothe.product_id = p.id`
-_getAllPrint = `SELECT p.id, p.name, description, price, available, type, cover_image, collection, size, weight FROM product p, print
-            WHERE print.product_id = p.id`
-_getAllAcc = `SELECT p.id, p.name, description, price, available, p.type, cover_image, collection, a.type as acc_type FROM product p, accessory a
-            WHERE a.product_id = p.id`
+_getAllClothe = `SELECT p.id, p.name, description, price, available, type, image.name as image, collection, composition, s, m, l, xl, xxl FROM product p
+            INNER JOIN clothe
+            INNER JOIN product_image pi ON pi.product_id = p.id
+            INNER JOIN image ON image.id = pi.image_id
+            WHERE clothe.product_id = p.id`;
+_getAllPrint = `SELECT p.id, p.name, description, price, available, type, image.name as image, collection, size, weight FROM product p
+            INNER JOIN print
+            INNER JOIN product_image pi ON pi.product_id = p.id
+            INNER JOIN image ON image.id = pi.image_id
+            WHERE print.product_id = p.id`;
+_getAllAcc = `SELECT p.id, p.name, description, price, available, p.type, image.name as image, collection, a.type as acc_type FROM product p
+            INNER JOIN accessory a
+            INNER JOIN product_image pi ON pi.product_id = p.id
+            INNER JOIN image ON image.id = pi.image_id
+            WHERE a.product_id = p.id`;
 
 _getAllOrder   = `SELECT * FROM \`order\``;
-_getAllOrderUser = `SELECT o.id, u.name, u.email, total_cost, shipping_address, o.state, p.id as product_id, p.name as product, oc.option, oc.nb
-				FROM \`order\` o, user u, order_content oc, product p
-				WHERE o.user_id = u.id AND oc.product_id = p.id AND oc.order_id = o.id`;
+_getAllOrderUser = `SELECT o.id, u.name, u.email, total_cost, shipping_address, o.state, p.id as product_id, oc.name as product, oc.option, oc.nb, oc.price
+				FROM \`order\` o
+                INNER JOIN user u
+                INNER JOIN order_content oc ON oc.order_id = o.id 
+                LEFT JOIN product p ON oc.product_id = p.id
+                WHERE o.user_id = u.id`;
 _getUser       = `SELECT * FROM user WHERE id = ?`;
 _getUserFromEmail = `SELECT * FROM user WHERE email = ?`;
-_getProduct = `SELECT p.id, p.name, description, price, available, p.type, image.name as image, composition, collection, size, weight, a.type as acc_type FROM product p
+_getProduct = `SELECT p.id, p.name, description, price, available, p.type, image.name as image, composition, s, m, l, xl, xxl, collection, size, weight, a.type as acc_type FROM product p
 			INNER JOIN product_image pi ON pi.product_id = p.id
 			INNER JOIN image ON image.id = pi.image_id
 			LEFT JOIN clothe ON clothe.product_id = p.id
 			LEFT JOIN print ON print.product_id = p.id
             LEFT JOIN accessory a ON a.product_id = p.id
 			WHERE p.id = ?`;
-_getOrder      = `SELECT o.id, user_id, date, subtotal_cost, shipping_cost, total_cost, billing_address, shipping_address, payment_method, shipping_method, state, p.id as product_id, p.name as product, oc.option, oc.nb, p.price as product_price, cover_image 
-			FROM \`order\` o, order_content oc, product p 
-			WHERE o.id = ? AND oc.product_id = p.id AND oc.order_id = o.id`;
+_getOrder      = `SELECT o.id, user_id, date, subtotal_cost, shipping_cost, total_cost, billing_address, shipping_address, payment_method, shipping_method, state, p.id as product_id, oc.name as product, oc.option, oc.nb, oc.price as product_price, cover_image 
+			FROM \`order\` o
+            INNER JOIN order_content oc ON oc.order_id = o.id 
+            LEFT JOIN product p ON oc.product_id = p.id
+            WHERE o.id = ?`;
 _getOrderEmail = `SELECT email FROM \`order\` o, user WHERE o.user_id = user.id AND o.id = ?`;
 _getUserOrder  = `SELECT * FROM \`order\` WHERE user_id = ?`;
 _getUserEmail  = `SELECT email FROM user WHERE id = ?`;
@@ -67,7 +87,7 @@ _addUser     = `INSERT INTO user (name, password, email, tel, address1, address2
 _addOrder = `INSERT INTO \`order\` (user_id, date, total_cost, subtotal_cost, shipping_cost, shipping_address, billing_address, payment_method, shipping_method) 
                VALUES (?, NOW(), ?, ?, ?, ?, ?, ?, ?)`;
 _addProduct  = `INSERT INTO product (name, description, price, available, type, cover_image, collection) VALUES (?, ?, ?, ?, ?, ?, ?)`;
-_addClothe   = `INSERT INTO clothe (product_id, composition) VALUES (?, ?)`;
+_addClothe   = `INSERT INTO clothe (product_id, composition, s, m, l, xl, xxl) VALUES (?, ?, ?, ?, ?, ?, ?)`;
 _addPrint    = `INSERT INTO print (product_id, size, weight) VALUES (?, ?, ?)`;
 _addAcc      = `INSERT INTO accessory (product_id, type) VALUES (?, ?)`;
 
@@ -81,7 +101,7 @@ _editUserInfo     = `UPDATE user SET name = ?, email = ?, tel = ? WHERE id = ?`;
 
 _updateOrder   = `UPDATE \`order\` SET state = ?, tracking_number = ? WHERE id = ?`;
 _updateProduct = `UPDATE product SET name = ?, description = ?, price = ?, available = ?, type = ?, cover_image = ?, collection = ? WHERE id = ?`;
-_updateClothe  = `UPDATE clothe SET composition = ? WHERE product_id = ?`;
+_updateClothe  = `UPDATE clothe SET composition = ?, s = ?, m = ?, l = ?, xl = ?, xxl = ? WHERE product_id = ?`;
 _updatePrint   = `UPDATE print SET size = ?, weight = ? WHERE product_id = ?`;
 _updateAcc     = `UPDATE accessory SET type = ? WHERE product_id = ?`;
 
@@ -202,7 +222,7 @@ function getAllUser(callback) {
     });
 }
 
-// Renvoit une liste de tout les produits (avec leur informations)
+// Renvoit une liste de tout les produits (avec leurs informations et images)
 function getAllProduct(callback, type) {
     switch (type) {
         case 'all': query = _getAllProduct;
@@ -220,6 +240,41 @@ function getAllProduct(callback, type) {
         default: query = _getAllProduct;
     }
     connection.query(query, function(err, rows, fields) {
+        if (err) throw err;
+
+        if (!rows.length) {
+            callback(false);
+            return false;
+        }
+
+        // On trie d'abord par produit les lignes envoyées
+        let productList = [];
+        for (product of rows) {
+            let checked = false;
+            for (new_product of productList) {
+                // Si le produit est déjà présent, on ajoute simplement l'image
+                if (new_product.id == product.id) {
+                    new_product.image.push(product.image)
+                    checked = true;
+                    break;
+                }
+            }
+
+            // Si le produit est nouveau dans la liste, on l'ajoute
+            if (!checked) {
+                let image = product.image;
+                product.image = [image];
+                productList.push(product);
+            }
+        }
+
+        callback(productList);
+    });
+}
+
+// Renvoit une liste de tout les produits (avec seulement l'image principale)
+function getAllProductSimple(callback) {
+    connection.query(_getAllProductSimple, function(err, rows, fields) {
         if (err) throw err;
         callback(rows);
     });
@@ -378,7 +433,7 @@ function addProduct(data) {
 	    // Ajoute le champ Clothe ou Poster sur la BDD
 		switch (data.type) {
 			case 'clothe':
-				connection.query(_addClothe, [productId, data.composition], function(err, result) {
+				connection.query(_addClothe, [productId, data.composition, data.s, data.m, data.l, data.xl, data.xxl], function(err, result) {
 				    if (err) throw err;
 				});
 				break;
@@ -447,11 +502,11 @@ function addOrder(cart, callback) {
 
     		// On construit la query de liaison entre produit et commande
     		var queryParam = [];
-			var linkOrderContent = `INSERT INTO order_content (order_id, product_id, \`option\`, nb) VALUES `;
+			var linkOrderContent = `INSERT INTO order_content (order_id, product_id, \`option\`, nb, name, price) VALUES `;
 			for (i=0; i<cart.products.length; i++) {
 				if (i) linkOrderContent += `,`;
-				linkOrderContent += `(?, ?, ?, ?)`; // Ajoute le nom à la requête 
-				queryParam.push(orderId, cart.products[i].id, cart.products[i].option, cart.products[i].cart_qty)
+				linkOrderContent += `(?, ?, ?, ?, ?, ?)`; // Ajoute le nom à la requête 
+				queryParam.push(orderId, cart.products[i].id, cart.products[i].option, cart.products[i].cart_qty, cart.products[i].name, cart.products[i].price)
 			}
 
 			// On lie les produits avec la commande
@@ -552,7 +607,7 @@ function updateProduct (data) {
 		switch (data.type) {
 			case 'clothe':
 
-				connection.query(_updateClothe, [data.composition, data.id], function(err, result) {
+				connection.query(_updateClothe, [data.composition, data.s, data.m, data.l, data.xl, data.xxl, data.id], function(err, result) {
 				    if (err) throw err;
 				});
 				break;
@@ -670,6 +725,7 @@ module.exports = {
 
 	getAllUser: getAllUser,
 	getAllProduct: getAllProduct,
+    getAllProductSimple: getAllProductSimple,
 	getAllOrder: getAllOrder,
 	getAllOrderUser: getAllOrderUser,
 	getProduct: getProduct,

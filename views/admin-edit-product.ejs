@@ -40,7 +40,7 @@
                     <div class="invalid-feedback">Veuillez ajouter au moins une image</div>
                 </div>
                 <div class="d-flex flex-wrap">
-                    <div class="pr-sm-4">
+                    <div class="col-md-4 col-12">
                         <div class="name">
                             <label class="title my-2"> Nom </label>
                             <input type="text" placeholder="Nom" class="form-control col" name="name" value="<%= product.name %>">
@@ -52,23 +52,26 @@
                             <div class="invalid-feedback">Veuillez rentrer une description</div>
                         </div>
                     </div>
-                    <div class="pr-sm-4">
+                    <div class="col-md-4 col-12">
                         <div class="price">
                             <label class="title my-2"> Prix </label>
                             <input type="text" placeholder="12.99" class="form-control col" name="price" value="<%= product.price %>">
                             <div class="invalid-feedback">Veuillez rentrer un prix valide (ex: 12.99)</div>
                         </div>
-                        <!--<div class="available">
-                            <label class="title my-2"> Type </label>
-                            <br/>
-                            <label class="checkbox-inline"><input type="radio" name="type" value="clothe" id="t1" <% if (product.type=="clothe") { %> checked <% } %> > Vêtement </label>
-                            <label class="checkbox-inline ml-3"><input type="radio" name="type" value="print" id="t2" <% if (product.type=="print") { %> checked <% } %> > Affiche </label>
-                        </div>-->
 
                         <div class="type-clothe <% if (product.type!='clothe') { %> hide <% } %>">
                             <div class="composition">
                                 <label class="title my-2"> Composition </label>
                                 <input type="text" placeholder="Composition du vêtement" class="form-control col" name="composition" value="<%= product.composition %>">
+                            </div>
+                            <div class="sizes">
+                                <label class="title my-2"> Tailles disponibles </label>
+                                <br/>
+                                <label class="checkbox-inline"><input type="checkbox" id="size-s" value="1" <% if (product.s) { %> checked <% } %>> S </label>
+                                <label class="checkbox-inline ml-4"><input type="checkbox" id="size-m" value="1" <% if (product.m) { %> checked <% } %>> M </label>
+                                <label class="checkbox-inline ml-4"><input type="checkbox" id="size-l" value="1" value="1" <% if (product.l) { %> checked <% } %>> L </label>
+                                <label class="checkbox-inline ml-4"><input type="checkbox" id="size-xl" value="1" <% if (product.xl) { %> checked <% } %>> XL </label>
+                                <label class="checkbox-inline ml-4"><input type="checkbox" id="size-xxl" value="1" <% if (product.xxl) { %> checked <% } %>> 2XL </label>
                             </div>
                         </div>
                         <div class="type-poster <% if (product.type!='print') { %> hide <% } %>">
@@ -89,7 +92,7 @@
                             </div>
                         </div>
                     </div>
-                    <div>
+                    <div class="col-md-4 col-12">
                        <div class="collection">
                             <label class="title my-2"> Collection/Capsule </label>
                             <br/>
@@ -106,7 +109,7 @@
                         </div>
                     </div>
                 </div>
-                <form action="/admin-edit-product" method="post">
+                <form class="text-center" action="/admin-edit-product" method="post">
                     <button class="btn btn-success my-4" type="submit"> Modifier le produit </button>
                 </form>
             </div>
@@ -278,6 +281,11 @@
                     description: description.val(),
                     price: price.val(),
                     composition: composition.val(),
+                    s:   $('input#size-s:checked').val(),
+                    m:   $('input#size-m:checked').val(),
+                    l:   $('input#size-l:checked').val(),
+                    xl:  $('input#size-xl:checked').val(),
+                    xxl: $('input#size-xxl:checked').val(),
                     size: size.val(),
                     weight: weight.val(),
                     acc_type:acc_type.val(),

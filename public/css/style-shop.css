@@ -26,13 +26,34 @@ h3 {
 }
 .product-img img, .lookbook-img img, .staff-img img {
 	filter: none;
-	transition: 0.5s;
+	transition: 1s;
 	text-align: center;
+}
+
+/* On aligne les images les unes sur les autres */
+
+div.product-img {
+	position: relative;
+}
+div.product-img img {
+	position: absolute;
+	left: 0;
+	top: 0;
+}
+div.product-img img.main {
+	position: relative;
 }
 .product-img:hover img {
 	filter: brightness(100%);
 	transform: scale(1.05);
 }
+
+.hidden {
+	opacity: 0;
+}
+
+/* ----------------------------------------- */
+
 .staff-name {
 	display: flex;
 	flex-direction: column;

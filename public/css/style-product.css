@@ -14,6 +14,10 @@
 	background-color: #fff9e7;
 }
 
+select.size option:disabled {
+	color: lightgrey;
+}
+
 /* ==================== RESPONSIVE TEXT ======================= */
 
 .sticky-top .title-product, .sticky-top .price-product {

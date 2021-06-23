@@ -38,6 +38,16 @@
 	color: #f2d875;
 }
 
+#c1 {
+	width: 400px;
+}
+#c2 {
+	width: 400px;
+}
+#c3 {
+	width: 400px;
+}
+
 /* -------- ORDER LIST ----------- */
 
 div.orders-list-content div.tab {

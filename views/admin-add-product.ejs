@@ -40,7 +40,7 @@
                     <div class="invalid-feedback">Veuillez ajouter au moins une image</div>
                 </div>
                 <div class="d-flex flex-wrap ">
-                    <div class="pr-sm-4">
+                    <div class="col-md-4 col-12">
                         <div class="name">
                             <label class="title my-2"> Nom </label>
                             <input type="text" placeholder="Nom" class="form-control col" name="name">
@@ -48,11 +48,11 @@
                         </div>
                         <div class="description">
                             <label class="title my-2"> Description </label>
-                            <textarea class="form-control col" placeholder="Ajouter une description ici ..." rows="7" name="description"></textarea>
+                            <textarea class="form-control col" placeholder="Ajouter une description ici ..." rows="10" name="description"></textarea>
                             <div class="invalid-feedback">Veuillez rentrer une description</div>
                         </div>
                     </div>
-                    <div class="pr-sm-4">
+                    <div class="col-md-4 col-12">
                         <div class="price">
                             <label class="title my-2"> Prix </label>
                             <input type="text" placeholder="12.99" class="form-control col" name="price">
@@ -67,9 +67,18 @@
                         </div>
 
                         <div class="type-clothe">
-                            <div class="size">
+                            <div class="compposition">
                                 <label class="title my-2"> Composition </label>
                                 <input type="text" placeholder="Composition du vêtement" class="form-control col" name="composition">
+                            </div>
+                            <div class="sizes">
+                                <label class="title my-2"> Tailles disponibles </label>
+                                <br/>
+                                <label class="checkbox-inline"><input type="checkbox" id="size-s" value="1" checked> S </label>
+                                <label class="checkbox-inline ml-4"><input type="checkbox" id="size-m" value="1" checked> M </label>
+                                <label class="checkbox-inline ml-4"><input type="checkbox" id="size-l" value="1" checked> L </label>
+                                <label class="checkbox-inline ml-4"><input type="checkbox" id="size-xl" value="1" checked> XL </label>
+                                <label class="checkbox-inline ml-4"><input type="checkbox" id="size-xxl" value="1" checked> 2XL </label>
                             </div>
                         </div>
                         <div class="type-poster hide">
@@ -90,7 +99,7 @@
                             </div>
                         </div>
                     </div>
-                    <div>
+                    <div class="col-md-4 col-12">
                         <div class="collection">
                             <label class="title my-2"> Collection/Capsule </label>
                             <br/>
@@ -107,7 +116,7 @@
                         </div>
                     </div>
                 </div>
-                <form action="/admin-add-product" method="post">
+                <form class="text-center" action="/admin-add-product" method="post">
                     <button class="btn btn-success my-4" type="submit"> Ajouter le produit </button>
                 </form>
             </div>
@@ -302,6 +311,11 @@
                     description: description.val(),
                     price: price.val(),
                     composition: composition.val(),
+                    s:   $('input#size-s:checked').val(),
+                    m:   $('input#size-m:checked').val(),
+                    l:   $('input#size-l:checked').val(),
+                    xl:  $('input#size-xl:checked').val(),
+                    xxl: $('input#size-xxl:checked').val(),
                     size: size.val(),
                     weight: weight.val(),
                     acc_type: acc_type.val(),

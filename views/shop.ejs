@@ -37,7 +37,8 @@
                 <h1><%= title %></h1>
             </div>
             <div class="container product-list">
-                <% for (product of products) { %>
+                <% if (products.length) {
+                for (product of products) { %>
                     <div class="product col-md-4 p-5">
                         <div class="product-img text-center">
                             <% if (!product.available) { %>
@@ -45,7 +46,11 @@
                             <% } %>
                             
                             <a class="product-img" href="/product/<%= product.id %>">
-                                <img class="w-100" src="/img/<%= product.cover_image %>">
+                                <% let first_image = true;
+                                for (image of product.image) { %>
+                                    <img class="w-100 <% if (!first_image) { %> hidden <% } else { %> main <% } %>" src="/img/<%= image %>">
+                                <% first_image = false;
+                                } %>
                             </a>
                         </div>
                         <div class="product-name p-2">
@@ -60,11 +65,36 @@
                             </div>
                         </div>
                     </div>
-                <% } %>
+                <% }} %>
             </div>
         </main>
         <footer>
             <%- include('footer') %>
         </footer>
     </body>
+
+    <script type="text/javascript">
+        // On fait defiler les iamges sur l'apercu du produit
+        let eventHook, element, index;
+        $('div.product-img').hover(function(){
+            element = $(this);
+            // Si le produit a bien plus d'une image, on les fait defiler
+            if (element.find('img').length > 1) {
+                index = 1;
+                eventHook = setInterval(function(){
+                    element.find('img').addClass('hidden');
+                    element.find('img').eq(index).removeClass('hidden');
+                    if (index+1 >= element.find('img').length) index=0;
+                    else index++;
+                }, 2500);               
+            }
+
+        }, function () {
+            // On enlève la callback et on remet l'image de base
+            clearInterval(eventHook);
+            element.find('img').addClass('hidden');
+            element.find('img').first().removeClass('hidden');
+        });
+    </script>
+
 </html>

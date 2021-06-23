@@ -28,27 +28,26 @@
                 <h1>Lookbook</h1>
             </div>
             <div class="lookbook-content">
-                <!--<div class="tab mb-3">
+                <div class="tab mb-3">
                     <ul class="tab-switch list-inline">
                         <li class="list-inline-item active" target="photomaton">
-                            Capsule Photomaton                          
+                            Photomaton                          
                         </li>
+                        <!--<li class="list-inline-item" target="summertrip">
+                            Summer Roadtrip                          
+                        </li>-->
                     </ul>
-                </div>-->
-                <div class="container desc mb-5">
-                    Les photomatons sont des objets fascinants. Ils sont à la fois extrêmement rétro et totalement dans l'air du temps. Ils peuvent à la fois servir pour des documents officiels ou simplement pour immortaliser un moment entre amis. C'est tout ça qui nous a donné envie de dédier la première capsule de vêtements Strange Day aux photomatons. En effet, l'ADN même de Strange Day est d'utiliser des éléments du passé et d'essayer de les remettre au goût du jour et de les réinterpréter à notre manière. <br/>
-                    <br/>
-                    Toutes les photos ont été prises par Alexandrine Shenouda (<a href="https://instagram.com/alexandrinesnd" target="_blank">@alexandrinesnd</a>) à Fotoautomat, au 53 rue des Trois Frères, 75018, Paris.<br/>
-                    <br/>
-                    Merci à Joana (<a href="https://instagram.com/jo_rib" target="_blank">@jo_rib</a>) et Macky (<a href="https://www.instagram.com/liljaara" target="_blank">@liljaara</a>) d'avoir posé pour cette capsule.
                 </div>
                 <div class="lookbook-gallery d-flex" id="photomaton">
+                    <div class="container desc mb-3">
+                        Toutes les photos ont été prises par Alexandrine Shenouda (<a href="https://instagram.com/alexandrinesnd" target="_blank">@alexandrinesnd</a>) à Fotoautomat, au 53 rue des Trois Frères, 75018, Paris.<br/>
+                        Merci à Joana (<a href="https://instagram.com/jo_rib" target="_blank">@jo_rib</a>) et à Macky (<a href="https://www.instagram.com/liljaara" target="_blank">@liljaara</a>) pour avoir posé pour cette capsule.
+                    </div>
                     <% for (image of photomaton) { %>
                         <div class="lookbook-img col-md-4 p-0">
                             <img class="w-100" src="/img/lookbook/photomaton/<%= image %>">
                         </div>
                     <% } %>
-
                 </div>
             </div>
         </main>

@@ -16,9 +16,6 @@
 	opacity: 1;
 	transition: 1s;
 }
-.hidden-shop.hidden {
-	opacity: 0;
-}
 
 @media (max-width: 768px) { 
 	.left-pannel, .right-pannel {
