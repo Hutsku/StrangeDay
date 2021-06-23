@@ -429,7 +429,6 @@ app.use(function(req, res, next) {
     // Affiche la page principale (avec tout les produits)
     query.getAllProduct(function(products) {
         // On envoit les données du produit à la page
-        console.log(products)
         res.render('mainpage.ejs', {
             products: products, 
             session: req.session
