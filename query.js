@@ -33,12 +33,13 @@ _getAllProductSimple = `SELECT p.id, p.name, description, price, available, p.ty
             LEFT JOIN accessory a ON a.product_id = p.id
             LEFT JOIN clothe ON clothe.product_id = p.id
             LEFT JOIN print ON print.product_id = p.id`;
-_getAllProduct = `SELECT p.id, p.name, description, price, available, p.type, image.name as image, composition, s, m, l, xl, xxl, collection, size, weight, a.type as acc_type FROM product p
+_getAllProduct = `SELECT p.id, p.name, description, price, available, p.type, image.name as image, position as image_pos, composition, s, m, l, xl, xxl, collection, size, weight, a.type as acc_type FROM product p
             INNER JOIN product_image pi ON pi.product_id = p.id
             INNER JOIN image ON image.id = pi.image_id
             LEFT JOIN accessory a ON a.product_id = p.id
             LEFT JOIN clothe ON clothe.product_id = p.id
-			LEFT JOIN print ON print.product_id = p.id`;
+			LEFT JOIN print ON print.product_id = p.id
+            ORDER BY id, image_pos`;
 _getAllClothe = `SELECT p.id, p.name, description, price, available, type, image.name as image, collection, composition, s, m, l, xl, xxl FROM product p
             INNER JOIN clothe
             INNER JOIN product_image pi ON pi.product_id = p.id
@@ -64,13 +65,14 @@ _getAllOrderUser = `SELECT o.id, u.name, u.email, total_cost, shipping_address, 
                 WHERE o.user_id = u.id`;
 _getUser       = `SELECT * FROM user WHERE id = ?`;
 _getUserFromEmail = `SELECT * FROM user WHERE email = ?`;
-_getProduct = `SELECT p.id, p.name, description, price, available, p.type, image.name as image, composition, s, m, l, xl, xxl, collection, size, weight, a.type as acc_type FROM product p
+_getProduct = `SELECT p.id, p.name, description, price, available, p.type, image.name as image, position as image_pos, composition, s, m, l, xl, xxl, collection, size, weight, a.type as acc_type FROM product p
 			INNER JOIN product_image pi ON pi.product_id = p.id
 			INNER JOIN image ON image.id = pi.image_id
 			LEFT JOIN clothe ON clothe.product_id = p.id
 			LEFT JOIN print ON print.product_id = p.id
             LEFT JOIN accessory a ON a.product_id = p.id
-			WHERE p.id = ?`;
+			WHERE p.id = ?
+            ORDER BY image_pos`;
 _getOrder      = `SELECT o.id, user_id, date, subtotal_cost, shipping_cost, total_cost, billing_address, shipping_address, payment_method, shipping_method, state, p.id as product_id, oc.name as product, oc.option, oc.nb, oc.price as product_price, cover_image 
 			FROM \`order\` o
             INNER JOIN order_content oc ON oc.order_id = o.id 
@@ -630,6 +632,7 @@ function updateProduct (data) {
 			if (err) throw err;
 
 			// On verifie les images une par une
+            let image_pos = 0; // on stock la position de l'image dans la liste
 			for (let image of data.image) {
 				connection.query(`SELECT * FROM image WHERE name = ?`, [image], function(err, rows, fields) {
 				    if (err) throw err;
@@ -641,18 +644,20 @@ function updateProduct (data) {
 						connection.query(`INSERT INTO image (name) VALUES (?)`, [image], function(err, result) {
 						    if (err) throw err;
 						    // On lie l'image au produit dans la BDD
-						    let linkImageProduct = `INSERT INTO product_image (product_id, image_id) VALUES (?, ?)`;
-						    connection.query(linkImageProduct, [data.id, result.insertId], function(err, result) {
+						    let linkImageProduct = `INSERT INTO product_image (product_id, image_id, position) VALUES (?, ?, ?)`;
+						    connection.query(linkImageProduct, [data.id, result.insertId, image_pos], function(err, result) {
 							    if (err) throw err;
 							});
+                            image_pos++;
 						});
 					} 
 					else {
 					    // On créer le lien entre le produit et l'image			    
-					    let linkImageProduct = `INSERT INTO product_image (product_id, image_id) VALUES (?, ?)`;
-					    connection.query(linkImageProduct, [data.id, rows[0].id], function(err, result) {
+					    let linkImageProduct = `INSERT INTO product_image (product_id, image_id, position) VALUES (?, ?, ?)`;
+					    connection.query(linkImageProduct, [data.id, rows[0].id, image_pos], function(err, result) {
 						    if (err) throw err;
 						});
+                        image_pos++;
 					}
 				});
 			}
