@@ -106,6 +106,7 @@
                             <select class="custom-select" name="collection">
                                 <option selected value="Aucune" class="attached enabled">Aucune</option>
                                 <option value="Capsule Photomaton" class="attached enabled">Capsule Photomaton</option>
+                                <option value="Capsule Photomaton" class="attached enabled">Capsule Summer Roadtrip</option>
                             </select>
                         </div>
                         <div class="available">
@@ -133,6 +134,32 @@
           'image/png'
         ]
 
+        // (re)créer les events liés au clic de déplacement ou suppression des images
+        function moveArray(start, end) {
+            let element = file_list[start];
+            file_list.splice(start, 1)
+            file_list.splice(end, 0, element)
+            console.log(file_list)
+        }
+        function bindImageControl() {
+            $( ".image-container a").unbind();
+            $('a.carousel-control-prev').click(function () {
+                let item = $(this).parent();
+                moveArray(item.index(), item.index()-1 <= 0 ? 0 : item.index()-1)
+                item.prev().before(item);
+            })
+            $('a.carousel-control-next').click(function () {
+                let item = $(this).parent();
+                moveArray(item.index(), item.index()+1)
+                item.next().after(item);
+            })
+            $('a.carousel-control-remove').click(function () {
+                let item = $(this).parent();
+                file_list.splice(item.index(), 1)
+                item.remove();
+            })
+        }
+
         // prend un fichier en paramètre et verifie qu'il est bien du type autorisé
         function validFileType(file) {
             for(var i = 0; i < fileTypes.length; i++) {
@@ -144,9 +171,24 @@
         }
 
         function addImgPreview (file) {
-            console.log(file)
-            var path = window.URL.createObjectURL(file); // on créer un lien provisoire pour l'image
-            $('.img-preview').append(`<img src="${path}" img-name='${file.name}'></img>`)
+            let path = window.URL.createObjectURL(file); // on créer un lien provisoire pour l'image
+            $('.img-preview').append(`
+                <div class="image-container mx-2">
+                    <img src="${path}" img-name='${file.name}'></img>
+                    <a class="carousel-control-prev" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                    <a class="carousel-control-remove py-1" role="button">
+                        <span aria-hidden="true">Supprimer</span>
+                    </a>
+                </div>`)
+
+            bindImageControl()
         }
 
         function getImgList() {
@@ -172,9 +214,10 @@
             }
         });
 
-        // Actualise le cadre de preview d'images
+        // Efface toutes les images
         $('.images #clear').click(function () {
             $('.images .img-preview').empty()
+            file_list = []
         })
 
         // Change les champs à remplir selon le type
