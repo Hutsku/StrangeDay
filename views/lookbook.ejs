@@ -30,18 +30,29 @@
             <div class="lookbook-content">
                 <div class="tab mb-3">
                     <ul class="tab-switch list-inline">
-                        <li class="list-inline-item active" target="photomaton">
+                        <li class="list-inline-item active" target="summertrip">
+                            Summer Roadtrip                          
+                        </li>
+                        <li class="list-inline-item" target="photomaton">
                             Photomaton                          
                         </li>
-                        <!--<li class="list-inline-item" target="summertrip">
-                            Summer Roadtrip                          
-                        </li>-->
                     </ul>
                 </div>
-                <div class="lookbook-gallery d-flex" id="photomaton">
+                <div class="lookbook-gallery d-flex" id="summertrip">
                     <div class="w-100 text-center desc mb-3">
-                        Photos: Alexandrine Shenouda (<a href="https://instagram.com/alexandrinesnd" target="_blank">@alexandrinesnd</a>) à Fotoautomat, au 53 rue des Trois Frères, 75018, Paris.<br/>
-                        Modèles: Joana (<a href="https://instagram.com/jo_rib" target="_blank">@jo_rib</a>) et Macky (<a href="https://www.instagram.com/liljaara" target="_blank">@liljaara</a>)
+                        Photos: <a href="https://instagram.com/alexandrinesnd" target="_blank">Alexandrine Shenouda</a><br/>
+                        Modèles: <a href="https://instagram.com/moi_et_dug" target="_blank">Héloise</a>, <a href="https://www.instagram.com/carla_tlse" target="_blank">Carla</a>, <a href="https://www.instagram.com/loic_hrp" target="_blank">Loïc</a> et <a href="https://www.instagram.com/colin_blondel" target="_blank">Colin</a>
+                    </div>
+                    <% for (image of summer_roadtrip) { %>
+                        <div class="lookbook-img col-md-4 p-0">
+                            <img class="w-100" src="/img/lookbook/summer roadtrip/<%= image %>">
+                        </div>
+                    <% } %>
+                </div>
+                <div class="lookbook-gallery" id="photomaton">
+                    <div class="w-100 text-center desc mb-3">
+                        Photos: <a href="https://instagram.com/alexandrinesnd" target="_blank">Alexandrine Shenouda</a> à Fotoautomat, au 53 rue des Trois Frères, 75018, Paris.<br/>
+                        Modèles: <a href="https://instagram.com/jo_rib" target="_blank">Joana</a> et <a href="https://www.instagram.com/liljaara" target="_blank">Macky</a>
                     </div>
                     <% for (image of photomaton) { %>
                         <div class="lookbook-img col-md-4 p-0">

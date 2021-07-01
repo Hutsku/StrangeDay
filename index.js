@@ -302,7 +302,7 @@ app.use(function(req, res, next) {
     // Main handler, se déclenche à chaque route
     let whitelist = ['/countdown', '/newsletter-success', '/submit-newsletter']
 
-    if (!config.reveal) next()
+    if (!config.countdown) next()
     else if (whitelist.includes(req.originalUrl)) next() // Si c'est une page speciale, alors on laisse
     else if (req.session.unlock) next() // Si l'accès est debloqué, tout passe
     else if (req.originalUrl == '/unlock') {
@@ -360,8 +360,9 @@ app.use(function(req, res, next) {
 
 .get('/lookbook', function(req, res) {
     // Affiche une liste des images présent dans le dossier lookbook
-    let files = fs.readdirSync('./public/img/lookbook/photomaton');
-    res.render('lookbook.ejs', {session: req.session, photomaton: files});
+    let files_1 = fs.readdirSync('./public/img/lookbook/photomaton');
+    let files_2 = fs.readdirSync('./public/img/lookbook/summer roadtrip');
+    res.render('lookbook.ejs', {session: req.session, photomaton: files_1, summer_roadtrip: files_2});
 })
 
 .get('/kezako', function(req, res) {
