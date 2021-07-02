@@ -457,8 +457,8 @@ function addProduct(data) {
 		}	
 
 		// On ajoute une par une les images à la BDD
-        for (let image_pos=0; image_pos<data.image.length; image_pos++) {
-            let image = data.image[image_pos];
+        for (let image_pos=0; image_pos<data.images.length; image_pos++) {
+            let image = data.images[image_pos];
             // On verifie si les images n'existent pas déjà
             connection.query(`SELECT * FROM image WHERE name = ?`, [image], function(err, rows, fields) {
                 if (err) throw err;
