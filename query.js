@@ -454,8 +454,8 @@ function addProduct(data) {
 		}	
 
 		// On ajoute une par une les images à la BDD
-        let image_pos = 0;
-		for (let image of data.images) {
+        for (let image_pos=0; image_pos<data.image.length; image_pos++) {
+            let image = data.image[image_pos];
             // On verifie si les images n'existent pas déjà
             connection.query(`SELECT * FROM image WHERE name = ?`, [image], function(err, rows, fields) {
                 if (err) throw err;
@@ -472,7 +472,6 @@ function addProduct(data) {
         			    connection.query(linkImageProduct, [productId, imageId, image_pos], function(err, result) {
         				    if (err) throw err;
         				});
-                        image_pos++;
         			});
                 }
                 else {
@@ -481,7 +480,6 @@ function addProduct(data) {
                     connection.query(linkImageProduct, [productId, rows[0].id, image_pos], function(err, result) {
                         if (err) throw err;
                     });
-                    image_pos++;
                 }
             });
 		}
@@ -635,8 +633,8 @@ function updateProduct (data) {
 			if (err) throw err;
 
 			// On verifie les images une par une
-            let image_pos = 0; // on stock la position de l'image dans la liste
-			for (let image of data.image) {
+			for (let image_pos=0; image_pos<data.image.length; image_pos++) {
+                let image = data.image[image_pos];
 				connection.query(`SELECT * FROM image WHERE name = ?`, [image], function(err, rows, fields) {
 				    if (err) throw err;
 
@@ -651,7 +649,6 @@ function updateProduct (data) {
 						    connection.query(linkImageProduct, [data.id, result.insertId, image_pos], function(err, result) {
 							    if (err) throw err;
 							});
-                            image_pos++;
 						});
 					} 
 					else {
@@ -660,7 +657,6 @@ function updateProduct (data) {
 					    connection.query(linkImageProduct, [data.id, rows[0].id, image_pos], function(err, result) {
 						    if (err) throw err;
 						});
-                        image_pos++;
 					}
 				});
 			}
