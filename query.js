@@ -39,25 +39,25 @@ _getAllProduct = `SELECT p.id, p.name, description, price, available, p.type, im
             LEFT JOIN accessory a ON a.product_id = p.id
             LEFT JOIN clothe ON clothe.product_id = p.id
 			LEFT JOIN print ON print.product_id = p.id
-            ORDER BY id, image_pos`;
+            ORDER BY id DESC, image_pos`;
 _getAllClothe = `SELECT p.id, p.name, description, price, available, p.type, image.name as image, position as image_pos, collection, composition, s, m, l, xl, xxl FROM product p
             INNER JOIN clothe
             INNER JOIN product_image pi ON pi.product_id = p.id
             INNER JOIN image ON image.id = pi.image_id
             WHERE clothe.product_id = p.id
-            ORDER BY id, image_pos`;
+            ORDER BY id DESC, image_pos`;
 _getAllPrint = `SELECT p.id, p.name, description, price, available, p.type, image.name as image, position as image_pos, collection, size, weight FROM product p
             INNER JOIN print
             INNER JOIN product_image pi ON pi.product_id = p.id
             INNER JOIN image ON image.id = pi.image_id
             WHERE print.product_id = p.id
-            ORDER BY id, image_pos`;
+            ORDER BY id DESC, image_pos`;
 _getAllAcc = `SELECT p.id, p.name, description, price, available, p.type, image.name as image, position as image_pos, collection, a.type as acc_type FROM product p
             INNER JOIN accessory a
             INNER JOIN product_image pi ON pi.product_id = p.id
             INNER JOIN image ON image.id = pi.image_id
             WHERE a.product_id = p.id
-            ORDER BY id, image_pos`;
+            ORDER BY id DESC, image_pos`;
 
 _getAllOrder   = `SELECT * FROM \`order\``;
 _getAllOrderUser = `SELECT o.id, u.name, u.email, total_cost, shipping_address, o.state, p.id as product_id, oc.name as product, oc.option, oc.nb, oc.price
