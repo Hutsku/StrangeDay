@@ -41,7 +41,8 @@
                     <h1> Tous les produits </h1>
                 </div>
                 <div class="container product-list">
-                    <% for (product of products) { %>
+                    <% if (products.length) {
+                    for (product of products) { %>
                         <div class="product col-md-4 p-5">
                             <div class="product-img text-center">
                                 <% if (!product.available) { %>
@@ -67,7 +68,7 @@
                                 </div>
                             </div>
                         </div>
-                    <% } %>
+                    <% } }%>
                 </div>                
             </div>
         </main>
