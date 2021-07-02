@@ -454,6 +454,7 @@ function addProduct(data) {
 		}	
 
 		// On ajoute une par une les images à la BDD
+        let image_pos = 0;
 		for (let image of data.images) {
             // On verifie si les images n'existent pas déjà
             connection.query(`SELECT * FROM image WHERE name = ?`, [image], function(err, rows, fields) {
@@ -467,18 +468,20 @@ function addProduct(data) {
         			    let imageId = result.insertId;
 
         			    // On lie les images au produit dans la BDD
-        			    let linkImageProduct = `INSERT INTO product_image (product_id, image_id) VALUES (?, ?)`;
-        			    connection.query(linkImageProduct, [productId, imageId], function(err, result) {
+        			    let linkImageProduct = `INSERT INTO product_image (product_id, image_id, position) VALUES (?, ?, ?)`;
+        			    connection.query(linkImageProduct, [productId, imageId, image_pos], function(err, result) {
         				    if (err) throw err;
         				});
+                        image_pos++;
         			});
                 }
                 else {
                     // On créer le lien entre le produit et l'image             
-                    let linkImageProduct = `INSERT INTO product_image (product_id, image_id) VALUES (?, ?)`;
-                    connection.query(linkImageProduct, [productId, rows[0].id], function(err, result) {
+                    let linkImageProduct = `INSERT INTO product_image (product_id, image_id, position) VALUES (?, ?, ?)`;
+                    connection.query(linkImageProduct, [productId, rows[0].id, image_pos], function(err, result) {
                         if (err) throw err;
                     });
+                    image_pos++;
                 }
             });
 		}
