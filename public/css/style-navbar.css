@@ -25,6 +25,10 @@ a:hover {
 	color: rgb(126, 106, 27);
 }
 
+small {
+	text-transform: none;
+}
+
 .head-title h1, .head-title h2 {
 	text-align: center;
 	font-weight: 700;

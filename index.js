@@ -479,6 +479,16 @@ app.use(function(req, res, next) {
     res.render('countdown.ejs', {session: req.session});
 })
 
+.get('/forgot-password', function (req, res) {
+    // Affiche une page défaut avant que le site soit disponible
+    res.render('forgot-password.ejs', {session: req.session});
+})
+
+.get('/reset-success', function (req, res) {
+    // Affiche une page défaut avant que le site soit disponible
+    res.render('reset-success.ejs', {session: req.session});
+})
+
 // ----------------------- ADMIN PAGE ------------------------
 
 .get('/admin-products-list', function(req, res) {
@@ -922,6 +932,20 @@ app.use(function(req, res, next) {
         req.session.alert = "edit account";
         res.send('ok'); // on recharge la page
     });
+})
+
+.post('/reset-password', urlencodedParser, function (req, res) {
+    // Génère un nouveau mot de passe provisoire envoyé à l'adresse email indiquée
+    let email = req.body.email;
+    let new_mdp = (Math.floor(Math.random() * (999 - 100) + 100)).toString(); // on génère un mdp type int xxx (ex: 568)
+
+    // On envoit la requête de modification dans la BDD
+    query.resetUserPassword([email, new_mdp], function(result) {
+        // On envoit le mail avec le nouveau mdp inscrit dedans
+        sendEmail('reset-password', email, {mdp: new_mdp})
+        console.log(new_mdp)
+    });
+    res.redirect('/reset-success');
 })
 
 // ---------------------------- AUTRES ---------------------------
