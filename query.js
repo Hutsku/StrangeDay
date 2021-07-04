@@ -605,14 +605,18 @@ function editUserPassword([user_id, oldPassword, newPassword], callback) {
 // Change l'ancien mot de passe par un nouveau, après verification
 function resetUserPassword([email, newPassword], callback) {
     getUserFromEmail(email, function(user) {
-        // On hash le nouveau mdp
-        bcrypt.hash(newPassword, 10, function(err, hashedPassword) {                        
-            // On change le mot de passe del'utilisateur
-            connection.query(_editUserPassword, [hashedPassword, user.id], function(err, rows, fields) {
-                if (err) throw err;
-                callback();
+        if (user) {
+            // On hash le nouveau mdp
+            bcrypt.hash(newPassword, 10, function(err, hashedPassword) {                        
+                // On change le mot de passe del'utilisateur
+                connection.query(_editUserPassword, [hashedPassword, user.id], function(err, rows, fields) {
+                    if (err) throw err;
+                    callback();
+                });
             });
-        });
+        } else {
+            callback('no user')
+        }
     });
 }
 

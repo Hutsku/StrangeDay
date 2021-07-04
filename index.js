@@ -940,10 +940,9 @@ app.use(function(req, res, next) {
     let new_mdp = (Math.floor(Math.random() * (999 - 100) + 100)).toString(); // on génère un mdp type int xxx (ex: 568)
 
     // On envoit la requête de modification dans la BDD
-    query.resetUserPassword([email, new_mdp], function(result) {
+    query.resetUserPassword([email, new_mdp], function(error) {
         // On envoit le mail avec le nouveau mdp inscrit dedans
-        sendEmail('reset-password', email, {mdp: new_mdp})
-        console.log(new_mdp)
+        if (!error) sendEmail('reset-password', email, {mdp: new_mdp})
     });
     res.redirect('/reset-success');
 })
