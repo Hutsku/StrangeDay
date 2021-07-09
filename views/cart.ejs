@@ -70,10 +70,13 @@
     			<!---------------------------------------------------------------------->
 
                 <% 
-                var subtot = session.cart.subtotal_cost+'€';
-                var ship = session.cart.shipping_cost+'€';
-                var tot = session.cart.total_cost+'€';
-                if (!parseInt(ship)) ship = 'Gratuite';
+                let subtot = session.cart.subtotal_cost+'€';
+                let ship = session.cart.shipping_cost+'€';
+                let tot = session.cart.total_cost+'€';
+                if (!parseInt(ship)) {
+                    ship = 'Gratuite';
+                    tot = subtot;
+                }
                 if (!session.cart.products.length) { 
                     subtot = "-";
                     ship = "-";

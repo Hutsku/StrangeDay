@@ -196,7 +196,17 @@ function checkCart(cart, callback) {
             }
         }
 
-        // On met à jour les prix totaux du panier
+        // On prend en compte les remises possible sur les produits
+        let tshirt = [30, 41, 42, 43, 44];
+        let totbag = [31 , 37];
+        let check1 = false;
+        let check2 = false;
+        for (product of cart.products) {
+            if (tshirt.includes(product.id)) check1 = true;
+            if (totbag.includes(product.id)) check2 = true;
+        }
+        if (check1 && check2) cart.shipping_cost = 0;
+
         cart.subtotal_cost = subtotal_cost;
         cart.total_cost = roundPrice(subtotal_cost + cart.shipping_cost);
         callback(cart);
