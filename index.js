@@ -207,7 +207,7 @@ function createInvoice(parameter) {
     `;
     let invoiceInfos = `
     TVA non applicable en vertu de l'art. 239B du CGI
-    SIRET: en cours d'immatriculation ...
+    La société Strange Day" est immatriculée à la chambre de métiers et de l'artisanat de Versailles sous le numéro 901 289 975
     `;
     
     // On ajoute à la chaine tout les articles de la commande
