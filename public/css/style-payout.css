@@ -50,13 +50,13 @@ div.line {
 	top: 130px;*/
 }
 .product-payout.sticky-bottom {
-	background-color: #fff9e7;
+	background-color: var(--sticky-bottom);
 }
 
 /* --------------------------------- PANNEL ---------------------------------- */
 
 div.payout-left {
-	background-color: white;
+	background-color: var(--payout-frame);
 	padding: 0;
 	/*min-height: 90vh;*/
 }
@@ -73,7 +73,7 @@ div.payout-left ul.tab-switch {
 	max-width: 450px;
 }
 div.payout-left ul.tab-switch li {
-	border-bottom: 5px solid white;
+	border-bottom: 5px solid var(--payout-frame);
 	margin: 0;
 	width: 45%;	
 	height: 50px;
@@ -113,7 +113,7 @@ div.payout-left .title {
 }
 
 div.shipping-address-new, div.billing-address-new, div.paypal-payment, div.card-payment {
-	background-color: #fff9e7;
+	background-color: var(--payout-form);
 }
 
 img.payment-logo-paypal {
@@ -147,6 +147,7 @@ button#submit-payment {
 }
 
 /* ---------------------------------- CART RECAP ------------------------------- */
+
 .cart-recap .title {
 	font-size: 12px;
 	font-weight: 700;
@@ -171,6 +172,9 @@ button#submit-payment {
 
 /* ----------------------------- RADIO BUTTON ----------------------------*/
 
+.radio-payout {
+	background-color: var(--payout-menu);
+}
 .radio-payout input:hover, .radio-payout label:hover {
 	cursor: pointer;
 }
@@ -217,7 +221,7 @@ button#submit-payment {
 	width: 100%;
 	height: 100%;
 
-	background-color: rgb(154, 129, 33);
+	background-color: var(--button1);
 }
 
 .loader {

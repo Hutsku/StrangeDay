@@ -72,6 +72,7 @@
                 <% 
                 let subtot = session.cart.subtotal_cost+'€';
                 let ship = session.cart.shipping_cost+'€';
+                let vouch = session.cart.voucher_promo ? session.cart.voucher_promo+'%':0;
                 let tot = session.cart.total_cost+'€';
                 if (!parseInt(ship)) {
                     ship = 'Gratuite';
@@ -97,6 +98,12 @@
 		    				<span class="title col-5">LIVRAISON <span class="detail">(estimée)</span></span>
 		    				<span class="price price-shipping"><%= ship %></span>
 		    			</div>
+                        <% if (vouch) { %>
+                        <div class="row py-3">
+                            <span class="title col-5">COUPON <span class="detail">(<%= session.cart.voucher_code %>)</span></span>
+                            <span class="price price-voucher" voucher_name="<%= session.cart.voucher_code %>"><%= vouch %></span>
+                        </div>
+                        <% } %>
 		    			<div class="w-100 border-bottom my-3"></div>
 		    			<div class="row pb-4">
 			    			<span class="title total col-5">TOTAL <span class="detail">(TTC)</span></span>
@@ -113,10 +120,17 @@
     		    					Passer au paiement
     		    				</button>
                             </form>
-		    				<a href="/mainpage" class="btn btn-log" role="button" name="add-cart">
-		    					Continuer les achats
-		    				</a>
 	    				</div>
+                        <div class="voucher">
+                            <form action="/valid-voucher" method="post">
+                                <label class="title my-2"> Code promo ? </label>
+                                <div class="row m-0">
+                                    <input type="text" placeholder="Rentrez-le ici !" class="form-control col-8" name="voucher">
+                                    <button class="btn btn-log ml-2 col" type="submit" name="valid-voucher">Valider</button>
+                                    <div class="invalid-feedback">Le code promo n'est pas valide ...</div>
+                                </div>
+                            </form>
+                        </div>
 	    			</div>
 	    		</div>
 
@@ -146,21 +160,24 @@
         </footer>
     </body>
 
-	<script src="scripts/bootstrap-input-spinner/src/bootstrap-input-spinner.js"></script>
+	<script src="./scripts/bootstrap-input-spinner/src/bootstrap-input-spinner.js"></script>
 	<script>
 	    $("input[type='number']").inputSpinner()
 	</script>
 
     <script type="text/javascript">
+        updateTotalPrice()
+
         // Arrondis les opérations de float
         function roundPrice(x) {
-            return parseFloat(x.toFixed(10));
+            return parseFloat(x.toFixed(2));
         }
 
         // Change les sub et total des prix en checkant tout les produits
         function updateTotalPrice() {
-            var sub_price = 0;
-            var ship_price = parseFloat($('.price-shipping').text()) || 0
+            let sub_price  = 0;
+            let ship_price = parseFloat($('.price-shipping').text()) || 0
+            let promo      = parseFloat($('.price-voucher').text()) || 0
             $('.price-sub-total').text(function () {
                 $('.cart-pannel-main .cart-product-price').each(function () {
                     sub_price = roundPrice(sub_price + parseFloat($(this).text()));
@@ -169,7 +186,9 @@
             });
 
             $('.price-total').text(function () {
-                var total = roundPrice(ship_price + sub_price);
+                let reduc = roundPrice(promo * (sub_price + ship_price) / 100)
+                console.log(ship_price)
+                let total = roundPrice(ship_price + sub_price - reduc);
                 return total+'€';
             });
         }
@@ -181,7 +200,9 @@
                 subtotal_cost: $('.price-sub-total').text(),
                 shipping_cost: <%= session.cart.shipping_cost %>,
                 total_cost: $('.price-total').text(),
-                nb_products: 0
+                nb_products: 0,
+                voucher_code: $('.price-voucher').attr('voucher_name'),
+                voucher_promo: $('.price-voucher').text()
             }
             $('.cart-pannel-main .cart-product').each(function () {
                 var product = $(this);
@@ -240,6 +261,26 @@
             return false;
          });
             
+        // Valide un coupon
+        $('form[action="/valid-voucher"]').submit(function () {
+            let voucherCode = $('input[name="voucher"]').val();
+            if (!voucherCode) {
+                $('input[name="voucher"]').removeClass('is-valid').addClass('is-invalid');
+                return false;
+            } else {
+                $('input[name="voucher"]').removeClass('is-invalid').addClass('is-valid');
+            }
+
+            $.post("/valid-voucher", {
+                code: voucherCode
+            }).done( function (data) {
+                console.log(data)
+                if (data == "badCode") $('input[name="voucher"]').removeClass('is-valid').addClass('is-invalid');
+                else location.reload();
+            });
+            return false;
+        });
+
         // Valide le panier
         $('form[action="/valid-cart"]').submit(function () {
             // on construit un nouveau panier final et on l'envoie
@@ -258,7 +299,7 @@
 
         // Valide le panier et passe au payement
         $('form[action="/payout"]').submit(function () {
-            var cgvInput = $('input[name="cgv"]:checked');
+            let cgvInput = $('input[name="cgv"]:checked');
 
             if (!cgvInput.val()) {
                 $('input[name="cgv"]').removeClass('is-valid').addClass('is-invalid');
@@ -279,5 +320,6 @@
             });
             return false;
         });
+
 	</script>
 </html>

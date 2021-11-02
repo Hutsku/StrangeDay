@@ -100,8 +100,17 @@
                                 <option value="Aucune" class="attached enabled">Aucune</option>
                                 <option value="Capsule Photomaton" class="attached enabled">Capsule Photomaton</option>
                                 <option value="Capsule Summer Roadtrip" class="attached enabled">Capsule Summer Roadtrip</option>
+                                <option value="Capsule Summer Roadtrip" class="attached enabled">Capsule Insomnie</option>
                             </select>
                         </div>
+                        <!--<div class="stock">
+                            <label class="title my-2"> Stock </label>
+                            <br/>
+                            <span style="text-transform: none;">Laisser vide si pas de stock limite</span>
+                            <div class="product-stock offset-md-0 offset-3 col-4 pt-2">
+                                <input type="number" value="" min="1" max="99" step="1"/>
+                            </div>
+                        </div>-->
                         <div class="available">
                             <label class="title my-2"> Disponible </label>
                             <br/>
@@ -120,6 +129,11 @@
         </footer>
     </body>
     
+    <script src="/scripts/bootstrap-input-spinner/src/bootstrap-input-spinner.js"></script>
+    <script>
+        $("input[type='number']").inputSpinner()
+    </script>
+
     <script type="text/javascript">
         var fileTypes = [
           'image/jpeg',

@@ -8,7 +8,7 @@
     </button>
 
     <a class="navbar-brand" href="/">
-        <img class="" src="/img/logoSD.png">
+        <img class="" src="/img/logo_neon.png">
     </a>
 
     <!--
@@ -226,6 +226,12 @@
             var type = 'danger';
             var quote = "Un problème a eu lieu lors de l'acces à votre commande ... ";
             var quoteTitle = 'Erreur';
+            break;
+
+        case 'voucher already used':
+            var type = 'danger';
+            var quote = "Vous avez déjà atteint le nombre maximum d'utilisation de ce coupon ...";
+            var quoteTitle = 'Coupon invalide';
             break;
 
         } %>

@@ -21,6 +21,7 @@
 	    
 	    <p><b>Sous-total</b>: <%= subtotal_cost %>€<br/>
 	    <b>Frais de livraison</b>: <%= shipping_cost %>€<br/>
+	    <% if (voucher_code) { %> <b>Code promo</b>: <%= voucher_code %> <%- reduc.toFixed(2) %>€<br/> <% } %>
 	    <b>TOTAL</b>: <%= total_cost %>€</p>
 	</div>
 </body>

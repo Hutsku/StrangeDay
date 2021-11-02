@@ -22,37 +22,37 @@ function init (cred) {
 
 // Arrondis les operations de float
 function roundPrice(x) {
-    return parseFloat(x.toFixed(10));
+    return parseFloat(x.toFixed(2));
 }
 
 // ============================================= QUERY ===================================================
 
 _getAllUser    = `SELECT * FROM user`;
 _getAllBaseProduct = `SELECT * FROM product`;
-_getAllProductSimple = `SELECT p.id, p.name, description, price, available, p.type, cover_image, collection, composition, s, m, l, xl, xxl, size, weight, a.type as acc_type FROM product p
+_getAllProductSimple = `SELECT p.id, p.name, description, price, available, p.type, cover_image, collection, composition, s, m, l, xl, xxl, size, weight, a.type as acc_type, stock FROM product p
             LEFT JOIN accessory a ON a.product_id = p.id
             LEFT JOIN clothe ON clothe.product_id = p.id
             LEFT JOIN print ON print.product_id = p.id`;
-_getAllProduct = `SELECT p.id, p.name, description, price, available, p.type, image.name as image, position as image_pos, composition, s, m, l, xl, xxl, collection, size, weight, a.type as acc_type FROM product p
+_getAllProduct = `SELECT p.id, p.name, description, price, available, p.type, image.name as image, position as image_pos, composition, s, m, l, xl, xxl, collection, size, weight, a.type as acc_type, stock FROM product p
             INNER JOIN product_image pi ON pi.product_id = p.id
             INNER JOIN image ON image.id = pi.image_id
             LEFT JOIN accessory a ON a.product_id = p.id
             LEFT JOIN clothe ON clothe.product_id = p.id
 			LEFT JOIN print ON print.product_id = p.id
             ORDER BY id DESC, image_pos`;
-_getAllClothe = `SELECT p.id, p.name, description, price, available, p.type, image.name as image, position as image_pos, collection, composition, s, m, l, xl, xxl FROM product p
+_getAllClothe = `SELECT p.id, p.name, description, price, available, p.type, image.name as image, position as image_pos, collection, composition, s, m, l, xl, xxl, stock FROM product p
             INNER JOIN clothe
             INNER JOIN product_image pi ON pi.product_id = p.id
             INNER JOIN image ON image.id = pi.image_id
             WHERE clothe.product_id = p.id
             ORDER BY id DESC, image_pos`;
-_getAllPrint = `SELECT p.id, p.name, description, price, available, p.type, image.name as image, position as image_pos, collection, size, weight FROM product p
+_getAllPrint = `SELECT p.id, p.name, description, price, available, p.type, image.name as image, position as image_pos, collection, size, weight, stock FROM product p
             INNER JOIN print
             INNER JOIN product_image pi ON pi.product_id = p.id
             INNER JOIN image ON image.id = pi.image_id
             WHERE print.product_id = p.id
             ORDER BY id DESC, image_pos`;
-_getAllAcc = `SELECT p.id, p.name, description, price, available, p.type, image.name as image, position as image_pos, collection, a.type as acc_type FROM product p
+_getAllAcc = `SELECT p.id, p.name, description, price, available, p.type, image.name as image, position as image_pos, collection, a.type as acc_type, stock FROM product p
             INNER JOIN accessory a
             INNER JOIN product_image pi ON pi.product_id = p.id
             INNER JOIN image ON image.id = pi.image_id
@@ -60,7 +60,7 @@ _getAllAcc = `SELECT p.id, p.name, description, price, available, p.type, image.
             ORDER BY id DESC, image_pos`;
 
 _getAllOrder   = `SELECT * FROM \`order\``;
-_getAllOrderUser = `SELECT o.id, u.name, u.email, total_cost, shipping_address, o.state, p.id as product_id, oc.name as product, oc.option, oc.nb, oc.price
+_getAllOrderUser = `SELECT o.id, u.name, u.email, total_cost, shipping_address, o.state, p.id as product_id, oc.name as product, oc.option, oc.nb, oc.price, voucher
 				FROM \`order\` o
                 INNER JOIN user u
                 INNER JOIN order_content oc ON oc.order_id = o.id 
@@ -68,7 +68,7 @@ _getAllOrderUser = `SELECT o.id, u.name, u.email, total_cost, shipping_address, 
                 WHERE o.user_id = u.id`;
 _getUser       = `SELECT * FROM user WHERE id = ?`;
 _getUserFromEmail = `SELECT * FROM user WHERE email = ?`;
-_getProduct = `SELECT p.id, p.name, description, price, available, p.type, image.name as image, position as image_pos, composition, s, m, l, xl, xxl, collection, size, weight, a.type as acc_type FROM product p
+_getProduct = `SELECT p.id, p.name, description, price, available, p.type, image.name as image, position as image_pos, composition, s, m, l, xl, xxl, collection, size, weight, a.type as acc_type, stock FROM product p
 			INNER JOIN product_image pi ON pi.product_id = p.id
 			INNER JOIN image ON image.id = pi.image_id
 			LEFT JOIN clothe ON clothe.product_id = p.id
@@ -76,7 +76,7 @@ _getProduct = `SELECT p.id, p.name, description, price, available, p.type, image
             LEFT JOIN accessory a ON a.product_id = p.id
 			WHERE p.id = ?
             ORDER BY image_pos`;
-_getOrder      = `SELECT o.id, user_id, date, subtotal_cost, shipping_cost, total_cost, billing_address, shipping_address, payment_method, shipping_method, state, p.id as product_id, oc.name as product, oc.option, oc.nb, oc.price as product_price, cover_image 
+_getOrder      = `SELECT o.id, user_id, date, subtotal_cost, shipping_cost, total_cost, billing_address, shipping_address, payment_method, shipping_method, state, p.id as product_id, oc.name as product, oc.option, oc.nb, oc.price as product_price, cover_image, voucher 
 			FROM \`order\` o
             INNER JOIN order_content oc ON oc.order_id = o.id 
             LEFT JOIN product p ON oc.product_id = p.id
@@ -86,11 +86,14 @@ _getUserOrder  = `SELECT * FROM \`order\` WHERE user_id = ?`;
 _getUserEmail  = `SELECT email FROM user WHERE id = ?`;
 _getUserNewsletter = `SELECT user.email FROM newsletter, user WHERE user.email = newsletter.email AND user.id = ?`;
 _getAllNewsletter  = `SELECT email FROM newsletter`;
+_getVoucher    = `SELECT * from voucher WHERE code = ?`;
 
-_addUser     = `INSERT INTO user (name, password, email, tel, address1, address2, city, postal_code, state, country) 
+_checkVoucherUser = `SELECT * FROM voucher v, user_voucher uv WHERE v.code = uv.code AND uv.user_id = ? AND v.code = ?`
+
+_addUser  = `INSERT INTO user (name, password, email, tel, address1, address2, city, postal_code, state, country) 
                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-_addOrder = `INSERT INTO \`order\` (user_id, date, total_cost, subtotal_cost, shipping_cost, shipping_address, billing_address, payment_method, shipping_method) 
-               VALUES (?, NOW(), ?, ?, ?, ?, ?, ?, ?)`;
+_addOrder = `INSERT INTO \`order\` (user_id, date, total_cost, subtotal_cost, shipping_cost, shipping_address, billing_address, payment_method, shipping_method, voucher) 
+               VALUES (?, NOW(), ?, ?, ?, ?, ?, ?, ?, ?)`;
 _addProduct  = `INSERT INTO product (name, description, price, available, type, cover_image, collection) VALUES (?, ?, ?, ?, ?, ?, ?)`;
 _addClothe   = `INSERT INTO clothe (product_id, composition, s, m, l, xl, xxl) VALUES (?, ?, ?, ?, ?, ?, ?)`;
 _addPrint    = `INSERT INTO print (product_id, size, weight) VALUES (?, ?, ?)`;
@@ -197,7 +200,7 @@ function checkCart(cart, callback) {
         }
 
         // On prend en compte les remises possible sur les produits
-        let tshirt = [30, 41, 42, 43, 44];
+        /*let tshirt = [30, 41, 42, 43, 44];
         let totbag = [31 , 37];
         let check1 = false;
         let check2 = false;
@@ -205,11 +208,43 @@ function checkCart(cart, callback) {
             if (tshirt.includes(product.id)) check1 = true;
             if (totbag.includes(product.id)) check2 = true;
         }
-        if (check1 && check2) cart.shipping_cost = 0;
+        if (check1 && check2) cart.shipping_cost = 0;*/
 
-        cart.subtotal_cost = subtotal_cost;
-        cart.total_cost = roundPrice(subtotal_cost + cart.shipping_cost);
-        callback(cart);
+        // Si un coupon de promo est appliqué, on va verifier son montant et sa validité
+        if (cart.voucher_code) {
+            checkVoucher(cart.voucher_code, function(voucher, error) {
+                checkVoucherUser([cart.user_id, cart.voucher_code], function(data) {
+                    let reduc = 0;
+                    if (!data) reduc = roundPrice(cart.voucher_promo * (subtotal_cost + cart.shipping_cost) / 100);
+
+                    cart.subtotal_cost = subtotal_cost;
+                    cart.reduc = reduc;
+                    cart.total_cost = roundPrice(subtotal_cost + cart.shipping_cost - reduc);
+                    callback(cart); 
+                })
+            })
+        } else {
+            cart.subtotal_cost = subtotal_cost;
+            cart.total_cost = roundPrice(subtotal_cost + cart.shipping_cost);
+            callback(cart);            
+        }
+    });
+}
+
+// Verifie la validité d'un code promo
+function checkVoucher(code, callback) {
+    connection.query(_getVoucher, [code], function(err, rows, fields) {
+        if (err) throw err;
+        callback(rows[0]);
+    });
+}
+
+// Verifie la validité d'un code promo
+function checkVoucherUser([id_user, code], callback) {
+    // On vérifie si le coupon a atteint sa limite max d'utilisation par l'utilisateur
+    connection.query(_checkVoucherUser, [id_user, code], function(err, rows, fields) {
+        if (err) throw err;
+        callback(rows[0]);
     });
 }
 
@@ -510,7 +545,7 @@ function addOrder(cart, callback) {
         // On ajoute la commande à la BDD
         var queryParam = [
         	cart.user_id, cart.total_cost, cart.subtotal_cost, cart.shipping_cost, cart.shipping_address.string, 
-			cart.billing_address, cart.payment_method, cart.shipping_method
+			cart.billing_address, cart.payment_method, cart.shipping_method, cart.voucher_code
 		];
         connection.query(_addOrder, queryParam, function(err, result) {
             if (err) throw err;
@@ -530,6 +565,15 @@ function addOrder(cart, callback) {
 	            if (err) throw err;
 	            callback(cart, orderId); // on termine avec la callback
 	        });
+
+            // On met à jour l'utilisation des coupons
+            if (cart.voucher_code) {
+                var linkUserVoucher = `INSERT INTO user_voucher (code, user_id) VALUES (?, ?)`;
+                connection.query(linkUserVoucher, [cart.voucher_code, cart.user_id], function(err, result) {
+                    if (err) throw err;
+                });                
+            }
+
         });
     });
 }
@@ -757,6 +801,8 @@ module.exports = {
 	login: login,
 	signUp: signUp,
 	checkCart: checkCart,
+    checkVoucher: checkVoucher,
+    checkVoucherUser: checkVoucherUser,
 
 	getAllUser: getAllUser,
 	getAllProduct: getAllProduct,

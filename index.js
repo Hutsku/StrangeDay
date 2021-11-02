@@ -205,6 +205,15 @@ function createInvoice(parameter) {
     Frais de livraison: ${parameter.shipping_cost}€
     TOTAL: ${parameter.total_cost}€
     `;
+    if (parameter.voucher_code) {
+    let orderInfos = `
+    
+    Sous-total: ${parameter.subtotal_cost}€
+    Frais de livraison: ${parameter.shipping_cost}€
+    Code promo: ${parameter.voucher_code} -${parameter.reduc}€
+    TOTAL: ${parameter.total_cost}€
+    `;    
+    }
     let invoiceInfos = `
     TVA non applicable en vertu de l'art. 239B du CGI
     La société Strange Day" est immatriculée à la chambre de métiers et de l'artisanat de Versailles sous le numéro 901 289 975
@@ -396,6 +405,7 @@ app.use(function(req, res, next) {
     query.getOrder(req.params.id, function (order, error) {
         // On verifie que l'utilisateur est connecté et que la commande existe
         if (order) {
+            console.log(order)
             res.render('order-detail.ejs', {
                 order: order,
                 session: req.session
@@ -416,13 +426,15 @@ app.use(function(req, res, next) {
             products: [],
             nb_products: 0,
             subtotal_cost: 0,
-            shipping_cost: 4.95, // valeur par défaut si non connecté
-            total_cost: 4.95,
+            shipping_cost: 0, // valeur par défaut si non connecté
+            total_cost: 0,
         }
     }
+
     if (req.session.account) {
         req.session.cart.shipping_cost = cart.getShippingCost(req.session.account.country, req.session.account.postal_code);
     }
+
     res.render('cart.ejs', {session: req.session});
 })
 
@@ -813,6 +825,38 @@ app.use(function(req, res, next) {
     res.send('ok')
 })
 
+.post('/valid-voucher', urlencodedParser, function(req, res) {
+    // Vérifie la validité d'un code promo
+    query.checkVoucher(req.body.code, function(voucher, error) {
+        // Si le code promo existe bien
+        if (voucher) {
+            // Vérifie si l'utilisateur (si connecté) est bien valide pour ce code promo
+            if (req.session.logged) {
+                query.checkVoucherUser([req.session.account.id, req.body.code], function(data, error) {
+                    
+                    // Si coupon invalide ...
+                    if (data) {
+                        req.session.alert = 'voucher already used';
+                        res.send(req.session.alert);
+                    } else {
+                        req.session.cart.voucher_code = voucher.code;
+                        req.session.cart.voucher_promo = voucher.value;
+                        res.send(data); 
+                    }
+                });
+            } else {
+                req.session.cart.voucher_code = voucher.code
+                req.session.cart.voucher_promo = voucher.value
+                res.send(voucher);
+            }
+        } 
+        else {
+            console.log('debug')
+            res.send('badCode');
+        }
+    }); 
+})
+
 .post('/add-order', urlencodedParser, function(req, res) {
     // On met à jour les infos
     req.session.cart.payment_method = req.body.payment_method;
@@ -830,6 +874,8 @@ app.use(function(req, res, next) {
             products: order.products,
             subtotal_cost: order.subtotal_cost,
             shipping_cost: order.shipping_cost,
+            voucher_code: order.voucher_code,
+            reduc: order.total_cost - (order.subtotal_cost + order.shipping_cost),
             total_cost: order.total_cost,
             shipping_address: order.shipping_address,
             billing_address: order.billing_address,
@@ -972,7 +1018,22 @@ app.use(function(req, res, next) {
 
             // On met à jour le panier si jamais
             req.session.cart = cart.refreshCart(req.session);
-            res.redirect('/');
+
+            // Si un coupon est actif, on verifie sa validité avec l'user
+            if (req.session.cart.voucher_code) {
+                query.checkVoucherUser([user.id, req.session.cart.voucher_code], function(data, error) {
+                    // Si coupon invalide ...
+                    if (data) {
+                        req.session.cart.voucher_code = '';
+                        req.session.cart.voucher_promo = 0;
+                        req.session.cart.reduc = 0;
+                        req.session.alert = 'voucher already used';
+                    }
+                    res.redirect('/');
+                });
+            } else {
+                res.redirect('/');
+            }            
         } 
         else {
             req.session.error = error;

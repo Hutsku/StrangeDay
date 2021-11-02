@@ -65,7 +65,7 @@ ul.account-link a.header-link:hover {
 }
 
 .link-title {
-	background-color: #f2d875;
+	background-color: var(--table-header);
 	color: black;
 	display: block;
 	text-transform: uppercase;
@@ -89,9 +89,9 @@ ul.account-link a.header-link:hover {
 
 /* =========== TABLE ORDER ================== */
 .table-order thead th, .table-history thead th {
-    background-color: #f2d875;
+    background-color: var(--table-header);
     color: black;
-    border: solid 2px #debc36;
+    border: solid 2px var(--table-header);
 }
 .table-order tbody, .table-history tbody {
     text-transform:none;

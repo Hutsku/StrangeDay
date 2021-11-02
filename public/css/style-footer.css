@@ -1,6 +1,6 @@
 footer {
 	/*background: linear-gradient(#fff9e7, #f2d875);*/
-	background-color: #fff9e7;
+	background-color: var(--main-bg);
 	height: 250px;
 }
 

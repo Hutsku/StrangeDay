@@ -1,11 +1,13 @@
 
 // Arrondis les operations de float
 function roundPrice(x) {
-    return parseFloat(x.toFixed(10));
+    return parseFloat(x.toFixed(2));
 }
 
 // Renvoit le frais de port selon le pays et code postal (Colissimo)
 function getShippingCost(country, postal_code) {
+    //return 0; // Pour l'instant on met les frais de port à 0. On va voir si on continue comme ça
+
     // Si le client habite à Plaisir, élancourt ou aux clayes, frais gratuit
     let free = ['78370', '78990', '78340']
     if (free.indexOf(postal_code) >= 0) return 0;
@@ -57,6 +59,8 @@ function addCart(session, product) {
         cart = {
             products: [],
             nb_products: 0,
+            voucher_code: '',
+            voucher_promo: 0,
             subtotal_cost: 0,
             shipping_cost: 4.95, // valeur par défaut si non connecté
             total_cost: 4.95,
@@ -108,15 +112,18 @@ function removeCart(session, data) {
 // Permet de convertir un panier envoyé côté client pour le standardiser
 function convertCart(cart) {
     cart = JSON.parse(cart);
-    var new_cart = {
+    let new_cart = {
         products: [],
+        voucher_code: cart.voucher_code,
+        voucher_promo: parseFloat(cart.voucher_promo),
         subtotal_cost: parseFloat(cart.subtotal_cost),
         shipping_cost: parseFloat(cart.shipping_cost),
         total_cost: parseFloat(cart.total_cost),
         nb_products: parseFloat(cart.nb_products)
     }
+    new_cart.reduc = roundPrice(new_cart.voucher_promo * (new_cart.subtotal_cost + new_cart.shipping_cost) / 100);
 
-    // On converti chaque produit du panier
+    // On convertit chaque produit du panier
     for (product of cart.products) {
         new_cart.products.push({
             id: parseInt(product.id),
@@ -128,7 +135,6 @@ function convertCart(cart) {
             image: product.img
         });
     }
-
     return new_cart;
 }
 
@@ -148,7 +154,7 @@ function validShipping(cart, data) {
             string: `${data.address1} ${data.address2} ${data.postal_code} ${data.city} ${data.state} ${data.country}`
         }
         cart.shipping_cost = getShippingCost(data.country, data.postal_code);
-        cart.total_cost = roundPrice(cart.subtotal_cost + cart.shipping_cost);
+        cart.total_cost = roundPrice(cart.subtotal_cost + cart.shipping_cost - cart.reduc);
     }
     return cart;
 }

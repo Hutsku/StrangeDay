@@ -1,3 +1,12 @@
+.product-stock .input-group button {
+	min-width: 0 !important; 
+	border: none; 
+}
+
+.product-stock .input-group input {
+	padding: 0; 
+}
+
 .product-img img {
 	width: 100px;
 }

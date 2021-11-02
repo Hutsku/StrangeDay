@@ -63,6 +63,9 @@
                     </div>
                     <span class="row col">Sous-total - <span class="info"> <%= order.subtotal_cost %>€</span></span>
                     <span class="row col">Frais de port - <span class="info"> <%= order.shipping_cost %>€</span></span>
+                    <% if (order.voucher) { %> 
+                    <span class="row col">Code promo - <span class="info"> <%= order.voucher %> -<%- ((parseFloat(order.subtotal_cost) + parseFloat(order.shipping_cost)) - parseFloat(order.total_cost)).toFixed(2) %>€</span></span>
+                    <% } %>
                     <span class="row col">Montant total - <span class="info"> <%= order.total_cost %>€</span></span>
                 </div>
                 <div class="address">
