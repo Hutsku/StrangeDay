@@ -45,6 +45,6 @@ config.cookies = {
 
 config.debug      = false; // active quelques boutons de test etc.
 config.production = true; // Active les paiements
-config.countdown  = false; // Active/desactive la page d'attente de reveal du site
+config.countdown  = true; // Active/desactive la page d'attente de reveal du site
 
 module.exports = config;
