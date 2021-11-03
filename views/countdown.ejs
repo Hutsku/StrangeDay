@@ -20,7 +20,7 @@
     <body>
         <main>
     		<div class="main-pannel container-fluid text-center">
-                <img class="main-logo" src="/img/logo_neon.png">
+                <a href="/"><img class="main-logo" src="/img/logo_neon.png"></a>
                 <div class="py-5 py-md-0" id="countdown">
                     <div>
                         <div class="days"></div>
@@ -58,28 +58,34 @@
 
     <script type="text/javascript">
         // Date de sortie prévue
-        var countDownDate = new Date("Nov 5, 2021 18:00:00").getTime(); // 18h paris
+        let countDownDate = new Date("Nov 5, 2021 18:00:00").getTime(); // 18h paris
         function updateCountdown() {
             // Get today's date and time
-            var now = new Date().getTime();
+            let now = new Date().getTime();
 
             // Find the distance between now and the count down date
-            var distance = countDownDate - now;
-
-            // Time calculations for days, hours, minutes and seconds
-            $('.days').text(Math.floor(distance / (1000 * 60 * 60 * 24)));
-            $('.hours').text(Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)));
-            $('.minutes').text(Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)));
-            $('.seconds').text(Math.floor((distance % (1000 * 60)) / 1000));
-
+            let distance = countDownDate - now;
+            if (distance <= 0) {
+                // Time calculations for days, hours, minutes and seconds
+                $('.days').text(0);
+                $('.hours').text(0);
+                $('.minutes').text(0);
+                $('.seconds').text(0);   
+            } else {
+                 // Time calculations for days, hours, minutes and seconds
+                $('.days').text(Math.floor(distance / (1000 * 60 * 60 * 24)));
+                $('.hours').text(Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)));
+                $('.minutes').text(Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)));
+                $('.seconds').text(Math.floor((distance % (1000 * 60)) / 1000));               
+            }
         }
         updateCountdown();
 
         // Update the count down every 1 second
         setInterval(updateCountdown, 1000);
 
-        var emailInput = $('.register-email input[name="email"]');
-        var regexEmail = new RegExp(`[\\w.+-]{1,64}@([a-zA-Z\\d-]{2,252}\\.[\\w\\.]{2,6})`);
+        let emailInput = $('.register-email input[name="email"]');
+        let regexEmail = new RegExp(`[\\w.+-]{1,64}@([a-zA-Z\\d-]{2,252}\\.[\\w\\.]{2,6})`);
         $('form[action="/submit-newsletter"]').submit(function () {
             // On check les erreurs et on ajoute la classe en consequant
             if (!emailInput.val()) {

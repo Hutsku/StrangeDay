@@ -304,12 +304,22 @@ function updateDatabase() {
     return;
 }
 
+// Vérification automatique de la fin du décompte, si activé
+function checkCountdown() {
+    let countDownDate = new Date("Nov 5, 2021 18:00:00").getTime() 
+    let now = new Date().getTime();
+
+    // Si le décompte est fini, on le desactive automatiquemet
+    if (countDownDate - now <= 0) config.countdown = false;
+}
+
 // ================================================ ROUTES ===============================================
 
 console.log('Création des routes POST et GET')
 app.use(function(req, res, next) {
     // Main handler, se déclenche à chaque route
     let whitelist = ['/countdown', '/newsletter-success', '/submit-newsletter']
+    if (config.countdown) checkCountdown(); // verification du décompte
 
     if (!config.countdown) next()
     else if (whitelist.includes(req.originalUrl)) next() // Si c'est une page speciale, alors on laisse
