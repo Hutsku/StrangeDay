@@ -29,7 +29,7 @@
     				<div class="cart-pannel-main container">
                         <span class="title row mb-4"> Contenu du panier </span>
                         <% for (product of session.cart.products) {  %>
-                            <div class="cart-product row align-items-center" product_id="<%= product.id %>" product_option="<%= product.option %>" product_available="<%= product.available %>">
+                            <div class="cart-product row align-items-center" product_id="<%= product.id %>" product_option="<%= product.option %>" product_available="<%= product.available %>" product_weight="<%= product.weight %>">
                             	<div class="cart-product-img p-2 col-3">
                             		<img class="w-100" src="/img/<%= product.image %>">
                             	</div>
@@ -201,8 +201,9 @@
                 shipping_cost: <%= session.cart.shipping_cost %>,
                 total_cost: $('.price-total').text(),
                 nb_products: 0,
+                weight: 0,
                 voucher_code: $('.price-voucher').attr('voucher_name'),
-                voucher_promo: $('.price-voucher').text()
+                voucher_promo: $('.price-voucher').text(),
             }
             $('.cart-pannel-main .cart-product').each(function () {
                 var product = $(this);
@@ -211,10 +212,12 @@
                     option: product.attr('product_option'), 
                     name: product.find('.cart-product-name').attr('product_name'),
                     price: product.find('.cart-product-price').attr('product_price'),
+                    weight: parseInt(product.attr('product_weight')),
                     cart_qty: product.find('.cart-product-qty input').val(),
                     img: product.find('img').attr('src').split('/')[2],
                     available: product.attr('product_available')
                 });
+                new_cart.weight += parseInt(product.attr('product_weight')) * parseInt(product.find('.cart-product-qty input').val())
                 new_cart.nb_products += parseInt(product.find('.cart-product-qty input').val());
             });
             return JSON.stringify(new_cart);

@@ -232,41 +232,47 @@
 
         /* ============================= FRAIS DE PORT DYNAMIQUE ======================= */
 
-        var shippingCost = <%= session.cart.shipping_cost %>;
+        let shippingCost = <%= session.cart.shipping_cost %>;
+        let weight = <%= session.cart.weight %>;
+        console.log(weight)
 
         // Renvoit le frais de port selon le pays et code postal (Colissimo)
-        function getShippingCost(country, postal_code) {
+        function getShippingCost(country, postal_code, weight) {
             // Si le client habite à Plaisir, élancourt ou aux clayes, frais gratuit
             let free = ['78370', '78990', '78340']
             if (free.indexOf(postal_code) >= 0) return 0;
- 
-            // On définie à l'avance les prix (250mg)
-            var metroCost = 4.95;
-            var domtomCost = 9.60;
-            var euroCost = 12.55;
-            var inter1Cost = 17.00;
-            var inter2Cost = 24.85;
+            
+            // On définie à l'avance les prix
+            let metroCost  = [4.95, 6.45, 7.35, 7.99];     // (250mg, 500, 750, 1Kg)
+            let domtomCost = [11.80, 11.80, 11.90, 11.90]; // (500mg, 1Kg)
+            let euroCost   = [12.90, 12.90, 15.95, 15.95]; // (500mg, 1Kg)
+            let inter1Cost = [19.20, 19.20, 22.90, 22.90]; // (500mg, 1Kg)
+            let inter2Cost = [28.10, 28.10, 31.25, 31.25]; // (500mg, 1Kg)
+
+            // On définit l'indice de prix selon le poid du colis
+            let fdp_index = Math.trunc(parseFloat(weight-1) / 250);
 
             // On définit les differentes zones
-            var euro = ['DE', 'AT', 'BE', 'BG', 'CY', 'HR', 'DK', 'ES', 'EE', 'FI', 'FR', 'GR', 'HU', 'IE', 'IT', 'LT', 
+            let euro = ['DE', 'AT', 'BE', 'BG', 'CY', 'HR', 'DK', 'ES', 'EE', 'FI', 'FR', 'GR', 'HU', 'IE', 'IT', 'LT', 
             'LV', 'LU', 'MT', 'NL', 'PL', 'PT', 'RO', 'SK', 'SI', 'SE', 'CZ', 'CH', 'SM', 'LI']; // UE + suisse etc
-            var inter1 = ['NO', 'BA', 'HR', 'MK', 'ME', 'RS', 'AL', 'DZ', 'MA', 'TN', 'LY', 'MR'] // Europe Est + Norvège + Maghreb
+            let inter1 = ['NO', 'BA', 'HR', 'MK', 'ME', 'RS', 'AL', 'DZ', 'MA', 'TN', 'LY', 'MR'] // Europe Est + Norvège + Maghreb
 
             // Si le client est en france ...
             if (country == 'FR') {
-                if (['97', '98'].indexOf(postal_code.slice(0, 2)) >= 0) return domtomCost;
-                else return metroCost;
+                if (['97', '98'].indexOf(postal_code.slice(0, 2)) >= 0) return domtomCost[fdp_index];
+                else return metroCost[fdp_index];
                 
             }
-            else if (['MC', 'AD'].indexOf(country) >= 0) return metroCost; // Si Andorre ou Monaco
-            else if (euro.indexOf(country) >= 0) return euroCost; // Si UE + Suisse et autres
-            else if (inter1.indexOf(country) >= 0) return inter1Cost; // Si EU Est + Maghreb + Norvège
-            else return inter2Cost; // Sinon -> international
+            else if (['MC', 'AD'].indexOf(country) >= 0) return metroCost[fdp_index]; // Si Andorre ou Monaco
+            else if (euro.indexOf(country) >= 0) return euroCost[fdp_index]; // Si UE + Suisse et autres
+            else if (inter1.indexOf(country) >= 0) return inter1Cost[fdp_index]; // Si EU Est + Maghreb + Norvège
+            else return inter2Cost[fdp_index]; // Sinon -> international
         }
+
         // Met par défaut la valeur et l'affichage des frais de port
         function defaultShippingCost() {
             shippingCost = <%= session.cart.shipping_cost %>;
-            totalCost = parseFloat((shippingCost + <%= session.cart.subtotal_cost %>).toFixed(10));
+            totalCost = parseFloat((shippingCost + <%= session.cart.subtotal_cost %>).toFixed(2));
             $('span.price-shipping').text(`${shippingCost}€`);
             if (!shippingCost) $('span.price-shipping').text(`Gratuite`);
 
@@ -279,8 +285,8 @@
         function newShippingCost() {
             var country = $('select[name="country"]').val();
             var postal_code = $('input[name="postal-code"]').val();
-            shippingCost = getShippingCost(country, postal_code);
-            totalCost = parseFloat((shippingCost + <%= session.cart.subtotal_cost %>).toFixed(10));
+            shippingCost = getShippingCost(country, postal_code, weight);
+            totalCost = parseFloat((shippingCost + <%= session.cart.subtotal_cost %>).toFixed(2));
             $('span.price-shipping').text(`${shippingCost}€`);
             if (!shippingCost) $('span.price-shipping').text(`Gratuite`);
 

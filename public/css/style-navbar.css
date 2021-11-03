@@ -58,9 +58,10 @@
 
 	--border-focus: rgb(48, 97, 215);
 
-	--navbar-bg: #324075;
-	--navbar-text: white;
-	--navbar-text-hover: rgb(255, 255, 255, 0.5);
+	--navbar-bg: #212b4f;
+	--navbar-text: rgb(255, 255, 255, 0.7);
+	--navbar-text-hover: rgb(255, 255, 255, 0.8);
+	--navbar-text-focus: rgb(255, 255, 255, 1);
 
 	--modal-header: #324075;
 	--modal-body: white;
@@ -173,11 +174,14 @@ small {
 	background-color: var(--navbar-bg);
 }
 
-.navbar-light .navbar-nav .nav-link {
+.navbar-dark .navbar-nav .nav-link {
     color: var(--navbar-text);
 }
-.navbar-light .navbar-nav .nav-link:hover {
+.navbar-dark .navbar-nav .nav-link:hover {
     color: var(--navbar-text-hover);
+}
+.navbar-dark .navbar-nav .nav-link:focus {
+    color: var(--navbar-text-focus);
 }
 
 .navbar.shadow {
@@ -194,11 +198,21 @@ small {
 
 /* ============================ DIVERS ============================ */
 
-/* SHOP DROPDOWN */
+/* MOBILE DROPDOWN */
 @media (max-width: 768px) { 
-	#shopDropdownMenuLink + .dropdown-menu, #accountDropdownMenuLink + .dropdown-menu,  #infoDropdownMenuLink + .dropdown-menu{
+	#shopDropdownMenuLink + .dropdown-menu, 
+	#accountDropdownMenuLink + .dropdown-menu, 
+	#infoDropdownMenuLink + .dropdown-menu {
 		background-color: transparent;
 		border: none;	
+	}
+	#shopDropdownMenuLink + .dropdown-menu .dropdown-item, 
+	#accountDropdownMenuLink + .dropdown-menu .dropdown-item,  
+	#infoDropdownMenuLink + .dropdown-menu .dropdown-item {
+		color: var(--navbar-text);
+	}
+	.dropdown-item:hover, .dropdown-item:active, .dropdown-item:focus {
+		background-color: transparent;
 	}
 }
 
@@ -215,6 +229,7 @@ li.nav-item {
 	background-color: var(--modal-header);
 }
 .modal-body, .modal-footer {
+	color: black;
 	background-color: var(--modal-body);
 }
 .modal-footer {

@@ -371,7 +371,8 @@ app.use(function(req, res, next) {
     // Affiche une liste des images présent dans le dossier lookbook
     let files_1 = fs.readdirSync('./public/img/lookbook/photomaton');
     let files_2 = fs.readdirSync('./public/img/lookbook/summer roadtrip');
-    res.render('lookbook.ejs', {session: req.session, photomaton: files_1, summer_roadtrip: files_2});
+    let files_3 = fs.readdirSync('./public/img/lookbook/insomnie');
+    res.render('lookbook.ejs', {session: req.session, photomaton: files_1, summer_roadtrip: files_2, insomnie: files_3});
 })
 
 .get('/kezako', function(req, res) {
@@ -428,13 +429,16 @@ app.use(function(req, res, next) {
             subtotal_cost: 0,
             shipping_cost: 0, // valeur par défaut si non connecté
             total_cost: 0,
+            weight: 0
         }
     }
 
     if (req.session.account) {
-        req.session.cart.shipping_cost = cart.getShippingCost(req.session.account.country, req.session.account.postal_code);
+        req.session.cart.shipping_cost = cart.getShippingCost(req.session.account.country, req.session.account.postal_code, req.session.cart.weight);
+    } else {
+        req.session.cart.shipping_cost = cart.getShippingCost('FR', '75000', req.session.cart.weight);
     }
-
+    console.log(req.session.cart)
     res.render('cart.ejs', {session: req.session});
 })
 
@@ -520,6 +524,7 @@ app.use(function(req, res, next) {
     // on vérifie que l'utilisateur est bien admin (double verification si jamais)
     if (req.session.admin && checkAdmin(req.session.account.email)) {
         query.getProduct(req.params.id, function(product) {
+            console.log(product)
             res.render('admin-edit-product.ejs', {
                 product: product,
                 session: req.session
@@ -529,7 +534,7 @@ app.use(function(req, res, next) {
     else {
         // sinon on redirige vers l'écran de connexion
         res.redirect('/admin-products-list');
-    } 
+    }
 })
 
 .get('/admin-add-product', function(req, res) {
@@ -796,9 +801,10 @@ app.use(function(req, res, next) {
         name: req.body.name,
         available: parseInt(req.body.available),
         price: parseFloat(req.body.price),
+        weight: parseInt(req.body.weight),
         option: req.body.option,
         cart_qty: parseInt(req.body.cart_qty),
-        image: req.body.img
+        image: req.body.img,
     }
 
     req.session.cart = cart.addCart(req.session, product);
@@ -810,12 +816,19 @@ app.use(function(req, res, next) {
     if (!req.session.cart) res.redirect('back');
 
     req.session.cart = cart.removeCart(req.session, req.body);
+    console.log(req.session.cart)
     res.send(req.session.cart);
 })
 
 .post('/valid-cart', urlencodedParser, function(req, res) {
     // on remplace le panier par celui envoyé (en le convertissant)
     req.session.cart = cart.convertCart(req.body.cart)
+    // On paramètre les frais de port si connecté
+    if (req.session.logged) {
+        req.session.cart.shipping_cost = cart.getShippingCost(req.session.account.country, req.session.account.postal_code, req.session.cart.weight); // On récupère les frais de port estimés
+    } else {
+        req.session.cart.shipping_cost = cart.getShippingCost('FR', '75000', req.session.cart.weight);
+    }
     res.send('ok')
 })
 
@@ -841,6 +854,7 @@ app.use(function(req, res, next) {
                     } else {
                         req.session.cart.voucher_code = voucher.code;
                         req.session.cart.voucher_promo = voucher.value;
+                        console.log(`-> Coupon utilisé : ${voucher.code}`)
                         res.send(data); 
                     }
                 });

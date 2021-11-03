@@ -30,7 +30,7 @@ config.email = {
 	from: 'Strange Day <contact@strangeday.fr>',
 	send: true,
 	preview: false,
-	test: true,
+	test: false,
 }
 
 var timeCookieDefault = 180 // en minute (3h)
@@ -44,7 +44,7 @@ config.cookies = {
 }
 
 config.debug      = false; // active quelques boutons de test etc.
-config.production = false; // Active les paiements
+config.production = true; // Active les paiements
 config.countdown  = false; // Active/desactive la page d'attente de reveal du site
 
 module.exports = config;

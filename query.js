@@ -1,6 +1,7 @@
 
 var bcrypt     = require('bcryptjs');
 var mysql      = require('mysql2');
+let cart_module = require('./cart.js');
 
 var connection;
 function init (cred) {
@@ -28,35 +29,37 @@ function roundPrice(x) {
 // ============================================= QUERY ===================================================
 
 _getAllUser    = `SELECT * FROM user`;
-_getAllBaseProduct = `SELECT * FROM product`;
+_getAllBaseProduct = `SELECT * FROM product WHERE visible = 1`;
 _getAllProductSimple = `SELECT p.id, p.name, description, price, available, p.type, cover_image, collection, composition, s, m, l, xl, xxl, size, weight, a.type as acc_type, stock FROM product p
             LEFT JOIN accessory a ON a.product_id = p.id
             LEFT JOIN clothe ON clothe.product_id = p.id
-            LEFT JOIN print ON print.product_id = p.id`;
+            LEFT JOIN print ON print.product_id = p.id
+            WHERE p.visible = 1`;
 _getAllProduct = `SELECT p.id, p.name, description, price, available, p.type, image.name as image, position as image_pos, composition, s, m, l, xl, xxl, collection, size, weight, a.type as acc_type, stock FROM product p
             INNER JOIN product_image pi ON pi.product_id = p.id
             INNER JOIN image ON image.id = pi.image_id
             LEFT JOIN accessory a ON a.product_id = p.id
             LEFT JOIN clothe ON clothe.product_id = p.id
 			LEFT JOIN print ON print.product_id = p.id
+            WHERE p.visible = 1
             ORDER BY id DESC, image_pos`;
 _getAllClothe = `SELECT p.id, p.name, description, price, available, p.type, image.name as image, position as image_pos, collection, composition, s, m, l, xl, xxl, stock FROM product p
             INNER JOIN clothe
             INNER JOIN product_image pi ON pi.product_id = p.id
             INNER JOIN image ON image.id = pi.image_id
-            WHERE clothe.product_id = p.id
+            WHERE clothe.product_id = p.id AND p.visible = 1
             ORDER BY id DESC, image_pos`;
 _getAllPrint = `SELECT p.id, p.name, description, price, available, p.type, image.name as image, position as image_pos, collection, size, weight, stock FROM product p
             INNER JOIN print
             INNER JOIN product_image pi ON pi.product_id = p.id
             INNER JOIN image ON image.id = pi.image_id
-            WHERE print.product_id = p.id
+            WHERE print.product_id = p.id AND p.visible = 1
             ORDER BY id DESC, image_pos`;
 _getAllAcc = `SELECT p.id, p.name, description, price, available, p.type, image.name as image, position as image_pos, collection, a.type as acc_type, stock FROM product p
             INNER JOIN accessory a
             INNER JOIN product_image pi ON pi.product_id = p.id
             INNER JOIN image ON image.id = pi.image_id
-            WHERE a.product_id = p.id
+            WHERE a.product_id = p.id AND p.visible = 1
             ORDER BY id DESC, image_pos`;
 
 _getAllOrder   = `SELECT * FROM \`order\``;
@@ -94,12 +97,12 @@ _addUser  = `INSERT INTO user (name, password, email, tel, address1, address2, c
                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 _addOrder = `INSERT INTO \`order\` (user_id, date, total_cost, subtotal_cost, shipping_cost, shipping_address, billing_address, payment_method, shipping_method, voucher) 
                VALUES (?, NOW(), ?, ?, ?, ?, ?, ?, ?, ?)`;
-_addProduct  = `INSERT INTO product (name, description, price, available, type, cover_image, collection) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+_addProduct  = `INSERT INTO product (name, description, price, weight, available, type, cover_image, collection) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
 _addClothe   = `INSERT INTO clothe (product_id, composition, s, m, l, xl, xxl) VALUES (?, ?, ?, ?, ?, ?, ?)`;
-_addPrint    = `INSERT INTO print (product_id, size, weight) VALUES (?, ?, ?)`;
+_addPrint    = `INSERT INTO print (product_id, size, printing) VALUES (?, ?, ?)`;
 _addAcc      = `INSERT INTO accessory (product_id, type) VALUES (?, ?)`;
 
-_removeProduct = `DELETE FROM product WHERE id = ?`;
+_removeProduct = `UPDATE product SET visible = 0 WHERE id = ?`;
 _removeOrder   = `DELETE FROM \`order\` WHERE id = ?`;
 _removeUser    = `DELETE FROM user WHERE id = ?`;
 
@@ -108,9 +111,9 @@ _editUserAddress  = `UPDATE user SET address1 = ?, address2 = ?, city = ?, count
 _editUserInfo     = `UPDATE user SET name = ?, email = ?, tel = ? WHERE id = ?`;
 
 _updateOrder   = `UPDATE \`order\` SET state = ?, tracking_number = ? WHERE id = ?`;
-_updateProduct = `UPDATE product SET name = ?, description = ?, price = ?, available = ?, type = ?, cover_image = ?, collection = ? WHERE id = ?`;
+_updateProduct = `UPDATE product SET name = ?, description = ?, price = ?, weight = ?, available = ?, type = ?, cover_image = ?, collection = ? WHERE id = ?`;
 _updateClothe  = `UPDATE clothe SET composition = ?, s = ?, m = ?, l = ?, xl = ?, xxl = ? WHERE product_id = ?`;
-_updatePrint   = `UPDATE print SET size = ?, weight = ? WHERE product_id = ?`;
+_updatePrint   = `UPDATE print SET size = ?, printing = ? WHERE product_id = ?`;
 _updateAcc     = `UPDATE accessory SET type = ? WHERE product_id = ?`;
 
 // Requête de suppression lors de produits manquant
@@ -187,13 +190,16 @@ function signUp(data, callback) {
 // Verifie les données du panier avec la base de données (correction des prix)
 function checkCart(cart, callback) {
     // On calcule le prix totale depuis la DB (pour plus de securité)
-    var subtotal_cost = 0;
+    let subtotal_cost = 0;
+    let total_weight  = 0;
     connection.query(_getAllBaseProduct, function(err, products, fields) {
         if (err) throw err;
         for (product of products) {
             for (cart_product of cart.products) {
                 if (cart_product.id == product.id) {
                     subtotal_cost = roundPrice(subtotal_cost + cart_product.cart_qty * product.price); // On refait le prix total
+                    total_weight += product.weight * cart_product.cart_qty;
+                    cart_product.weight = product.weight;
                     cart_product.price = product.price; // On corrige le panier
                 }
             }
@@ -210,6 +216,10 @@ function checkCart(cart, callback) {
         }
         if (check1 && check2) cart.shipping_cost = 0;*/
 
+        cart.subtotal_cost = subtotal_cost;
+        cart.weight = total_weight;
+        cart.shipping_cost = cart_module.getShippingCost(cart.shipping_address.country, cart.shipping_address.postal_code, cart.weight);
+
         // Si un coupon de promo est appliqué, on va verifier son montant et sa validité
         if (cart.voucher_code) {
             checkVoucher(cart.voucher_code, function(voucher, error) {
@@ -217,14 +227,12 @@ function checkCart(cart, callback) {
                     let reduc = 0;
                     if (!data) reduc = roundPrice(cart.voucher_promo * (subtotal_cost + cart.shipping_cost) / 100);
 
-                    cart.subtotal_cost = subtotal_cost;
                     cart.reduc = reduc;
                     cart.total_cost = roundPrice(subtotal_cost + cart.shipping_cost - reduc);
                     callback(cart); 
                 })
             })
         } else {
-            cart.subtotal_cost = subtotal_cost;
             cart.total_cost = roundPrice(subtotal_cost + cart.shipping_cost);
             callback(cart);            
         }
@@ -475,7 +483,7 @@ function getStat(callback) {
 // Ajoute le produit général à la BDD
 function addProduct(data) {
     data.images = JSON.parse(data.images)
-	var queryParam = [data.name, data.description, data.price, data.available, data.type, data.images[0], data.collection]
+	var queryParam = [data.name, data.description, data.price, data.weight, data.available, data.type, data.images[0], data.collection]
 	connection.query(_addProduct, queryParam, function(err, result) {
 	    if (err) throw err;
 	    productId = result.insertId;
@@ -489,7 +497,7 @@ function addProduct(data) {
 				break;
 
 			case 'print':
-				connection.query(_addPrint, [productId, data.size, data.weight], function(err, result) {
+				connection.query(_addPrint, [productId, data.size, data.printing], function(err, result) {
 				    if (err) throw err;
 				});
 				break;
@@ -677,7 +685,7 @@ function resetUserPassword([email, newPassword], callback) {
 // Modifie le produit général à la BDD
 function updateProduct (data) {
     data.image = JSON.parse(data.image)
-	var queryParam = [data.name, data.description, data.price, data.available, data.type, data.image[0], data.collection, data.id]
+	var queryParam = [data.name, data.description, data.price, data.weight, data.available, data.type, data.image[0], data.collection, data.id]
 	connection.query(_updateProduct, queryParam, function(err, result) {
 	    if (err) throw err;
 
@@ -691,7 +699,7 @@ function updateProduct (data) {
 				break;
 
 			case 'print':
-				connection.query(_updatePrint, [data.size, data.weight, data.id], function(err, result) {
+				connection.query(_updatePrint, [data.size, data.printing, data.id], function(err, result) {
 				    if (err) throw err;
 				});
 				break;
@@ -752,14 +760,15 @@ function removeProduct (id) {
     connection.query(_removeProduct, [id], function(err, rows, fields) {
         if (err) throw err;
         // On supprime également les liens entre le produit et les commandes liées
-        connection.query(_sync_order, function(err, rows, fields) {
+        /*connection.query(_sync_order, function(err, rows, fields) {
             if (err) throw err;
             connection.query(_sync_order_content, function(err, rows, fields) {
                 if (err) throw err;
             });
-        });
+        }); */
     });
 
+    /*
     // On supprime les vêtement ou poster dediés
     connection.query(`DELETE FROM clothe WHERE product_id=?`, [id], function(err, rows, fields) {
         if (err) throw err;
@@ -774,7 +783,7 @@ function removeProduct (id) {
     // On supprime également les lien entre le produit et leurs images
     connection.query(`DELETE FROM product_image WHERE product_id=?`, [id], function(err, rows, fields) {
         if (err) throw err;
-    });
+    });*/
 }
 
 // Supprime un produit de la BDD

@@ -5,44 +5,45 @@ function roundPrice(x) {
 }
 
 // Renvoit le frais de port selon le pays et code postal (Colissimo)
-function getShippingCost(country, postal_code) {
-    //return 0; // Pour l'instant on met les frais de port à 0. On va voir si on continue comme ça
-
+function getShippingCost(country, postal_code, weight) {
     // Si le client habite à Plaisir, élancourt ou aux clayes, frais gratuit
     let free = ['78370', '78990', '78340']
     if (free.indexOf(postal_code) >= 0) return 0;
     
-    // On définie à l'avance les prix (250mg)
-    var metroCost = 4.95;
-    var domtomCost = 9.60;
-    var euroCost = 12.55;
-    var inter1Cost = 17.00;
-    var inter2Cost = 24.85;
+    // On définie à l'avance les prix
+    let metroCost  = [4.95, 6.45, 7.35, 7.99];     // (250mg, 500, 750, 1Kg)
+    let domtomCost = [11.80, 11.80, 11.90, 11.90]; // (500mg, 1Kg)
+    let euroCost   = [12.90, 12.90, 15.95, 15.95]; // (500mg, 1Kg)
+    let inter1Cost = [19.20, 19.20, 22.90, 22.90]; // (500mg, 1Kg)
+    let inter2Cost = [28.10, 28.10, 31.25, 31.25]; // (500mg, 1Kg)
+
+    // On définit l'indice de prix selon le poid du colis
+    let fdp_index = Math.trunc(parseFloat(weight-1) / 250);
 
     // On définit les differentes zones
-    var euro = ['DE', 'AT', 'BE', 'BG', 'CY', 'HR', 'DK', 'ES', 'EE', 'FI', 'FR', 'GR', 'HU', 'IE', 'IT', 'LT', 
+    let euro = ['DE', 'AT', 'BE', 'BG', 'CY', 'HR', 'DK', 'ES', 'EE', 'FI', 'FR', 'GR', 'HU', 'IE', 'IT', 'LT', 
     'LV', 'LU', 'MT', 'NL', 'PL', 'PT', 'RO', 'SK', 'SI', 'SE', 'CZ', 'CH', 'SM', 'LI']; // UE + suisse etc
-    var inter1 = ['NO', 'BA', 'HR', 'MK', 'ME', 'RS', 'AL', 'DZ', 'MA', 'TN', 'LY', 'MR'] // Europe Est + Norvège + Maghreb
+    let inter1 = ['NO', 'BA', 'HR', 'MK', 'ME', 'RS', 'AL', 'DZ', 'MA', 'TN', 'LY', 'MR'] // Europe Est + Norvège + Maghreb
 
     // Si le client est en france ...
     if (country == 'FR') {
-        if (['97', '98'].indexOf(postal_code.slice(0, 2)) >= 0) return domtomCost;
-        else return metroCost;
+        if (['97', '98'].indexOf(postal_code.slice(0, 2)) >= 0) return domtomCost[fdp_index];
+        else return metroCost[fdp_index];
         
     }
-    else if (['MC', 'AD'].indexOf(country) >= 0) return metroCost; // Si Andorre ou Monaco
-    else if (euro.indexOf(country) >= 0) return euroCost; // Si UE + Suisse et autres
-    else if (inter1.indexOf(country) >= 0) return inter1Cost; // Si EU Est + Maghreb + Norvège
-    else return inter2Cost; // Sinon -> international
+    else if (['MC', 'AD'].indexOf(country) >= 0) return metroCost[fdp_index]; // Si Andorre ou Monaco
+    else if (euro.indexOf(country) >= 0) return euroCost[fdp_index]; // Si UE + Suisse et autres
+    else if (inter1.indexOf(country) >= 0) return inter1Cost[fdp_index]; // Si EU Est + Maghreb + Norvège
+    else return inter2Cost[fdp_index]; // Sinon -> international
 }
 
 // Met à jour le panier selon le statut de l'utilisateur
 function refreshCart(session) {
     if (session.cart) {
         if (session.logged) {
-            session.cart.shipping_cost = getShippingCost(session.account.country, session.account.postal_code); // On récupère les frais de port estimés
+            session.cart.shipping_cost = getShippingCost(session.account.country, session.account.postal_code, session.cart.weight); // On récupère les frais de port estimés
         } else {
-            session.cart.shipping_cost = 4.95;
+            session.cart.shipping_cost = getShippingCost('FR', '75000', session.cart.weight);
         }
         session.cart.total_cost = roundPrice(session.cart.shipping_cost + session.cart.subtotal_cost);
         return session.cart;
@@ -59,17 +60,13 @@ function addCart(session, product) {
         cart = {
             products: [],
             nb_products: 0,
+            weight: 0,
             voucher_code: '',
             voucher_promo: 0,
             subtotal_cost: 0,
             shipping_cost: 4.95, // valeur par défaut si non connecté
             total_cost: 4.95,
         }
-    }
-
-    // On paramètre les frais de port si connecté
-    if (session.logged) {
-        cart.shipping_cost = getShippingCost(session.account.country, session.account.postal_code); // On récupère les frais de port estimés
     }
 
     // Si le produit est déjà dans le panier, on l'incremente
@@ -85,6 +82,15 @@ function addCart(session, product) {
     // Si le produit n'est pas déjà dans le panier, on l'ajoute
     if (!match) cart.products.push(product); 
     cart.nb_products += 1;
+    cart.weight += product.weight;
+
+    // On paramètre les frais de port si connecté
+    if (session.logged) {
+        cart.shipping_cost = getShippingCost(session.account.country, session.account.postal_code, cart.weight); // On récupère les frais de port estimés
+    } else {
+        cart.shipping_cost = getShippingCost('FR', '75000', cart.weight);
+    }
+
     cart.subtotal_cost = roundPrice(cart.subtotal_cost + product.price * product.cart_qty);
     cart.total_cost = roundPrice(cart.subtotal_cost + cart.shipping_cost);
 
@@ -99,6 +105,15 @@ function removeCart(session, data) {
         if (cart.products[i].id == data.id && cart.products[i].option == data.option) {
             // On met à jour les données du panier
             cart.nb_products -= cart.products[i].cart_qty;
+            cart.weight -= cart.products[i].weight * cart.products[i].cart_qty;
+
+            // On paramètre les frais de port si connecté
+            if (session.logged) {
+                cart.shipping_cost = getShippingCost(session.account.country, session.account.postal_code, cart.weight); // On récupère les frais de port estimés
+            } else {
+                cart.shipping_cost = getShippingCost('FR', '75000', cart.weight);
+            }
+
             cart.subtotal_cost = roundPrice(cart.subtotal_cost - cart.products[i].cart_qty * cart.products[i].price);
             cart.total_cost = roundPrice(cart.shipping_cost + cart.subtotal_cost);
 
@@ -119,17 +134,20 @@ function convertCart(cart) {
         subtotal_cost: parseFloat(cart.subtotal_cost),
         shipping_cost: parseFloat(cart.shipping_cost),
         total_cost: parseFloat(cart.total_cost),
-        nb_products: parseFloat(cart.nb_products)
+        nb_products: parseFloat(cart.nb_products),
+        weight: parseInt(cart.weight)
     }
     new_cart.reduc = roundPrice(new_cart.voucher_promo * (new_cart.subtotal_cost + new_cart.shipping_cost) / 100);
 
     // On convertit chaque produit du panier
     for (product of cart.products) {
+        console.log(product.weight)
         new_cart.products.push({
             id: parseInt(product.id),
             name: product.name,
             available: parseInt(product.available),
             price: parseFloat(product.price),
+            weight: parseInt(product.weight),
             option: product.option,
             cart_qty: parseInt(product.cart_qty),
             image: product.img
@@ -153,7 +171,7 @@ function validShipping(cart, data) {
             postal_code: data.postal_code,
             string: `${data.address1} ${data.address2} ${data.postal_code} ${data.city} ${data.state} ${data.country}`
         }
-        cart.shipping_cost = getShippingCost(data.country, data.postal_code);
+        cart.shipping_cost = getShippingCost(data.country, data.postal_code, cart.weight);
         cart.total_cost = roundPrice(cart.subtotal_cost + cart.shipping_cost - cart.reduc);
     }
     return cart;
