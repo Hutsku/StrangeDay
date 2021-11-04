@@ -416,7 +416,6 @@ app.use(function(req, res, next) {
     query.getOrder(req.params.id, function (order, error) {
         // On verifie que l'utilisateur est connecté et que la commande existe
         if (order) {
-            console.log(order)
             res.render('order-detail.ejs', {
                 order: order,
                 session: req.session
@@ -448,17 +447,22 @@ app.use(function(req, res, next) {
     } else {
         req.session.cart.shipping_cost = cart.getShippingCost('FR', '75000', req.session.cart.weight);
     }
-    console.log(req.session.cart)
     res.render('cart.ejs', {session: req.session});
 })
 
 .get('/mainpage', function(req, res) {
+    // Créer une liste des images présent dans le dossier mainpage
+    let files_pc = fs.readdirSync('./public/img/mainpage/pc');
+    let files_mobile = fs.readdirSync('./public/img/mainpage/mobile');
+
     // Affiche la page principale (avec tout les produits)
     query.getAllProduct(function(products) {
         // On envoit les données du produit à la page
         res.render('mainpage.ejs', {
             products: products, 
-            session: req.session
+            session: req.session,
+            main_pc: files_pc,
+            main_mobile: files_mobile
         });
     });
 })
@@ -534,7 +538,6 @@ app.use(function(req, res, next) {
     // on vérifie que l'utilisateur est bien admin (double verification si jamais)
     if (req.session.admin && checkAdmin(req.session.account.email)) {
         query.getProduct(req.params.id, function(product) {
-            console.log(product)
             res.render('admin-edit-product.ejs', {
                 product: product,
                 session: req.session
@@ -826,7 +829,6 @@ app.use(function(req, res, next) {
     if (!req.session.cart) res.redirect('back');
 
     req.session.cart = cart.removeCart(req.session, req.body);
-    console.log(req.session.cart)
     res.send(req.session.cart);
 })
 
@@ -875,7 +877,6 @@ app.use(function(req, res, next) {
             }
         } 
         else {
-            console.log('debug')
             res.send('badCode');
         }
     }); 

@@ -141,7 +141,6 @@ function convertCart(cart) {
 
     // On convertit chaque produit du panier
     for (product of cart.products) {
-        console.log(product.weight)
         new_cart.products.push({
             id: parseInt(product.id),
             name: product.name,
