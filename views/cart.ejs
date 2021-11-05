@@ -198,7 +198,7 @@
             var new_cart = {
                 products: [],
                 subtotal_cost: $('.price-sub-total').text(),
-                shipping_cost: <%= session.cart.shipping_cost %>,
+                shipping_cost: parseFloat('<%= session.cart.shipping_cost %>') || 0,
                 total_cost: $('.price-total').text(),
                 nb_products: 0,
                 weight: 0,
