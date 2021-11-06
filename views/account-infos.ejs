@@ -30,7 +30,7 @@
     var nameInput = $('.account-input input[name="name"]');
     var emailInput = $('.account-input input[name="email"]');
     var telInput = $('.account-input input[name="tel"]');
-    var regex = new RegExp("[0-9]{10}");
+    var regexTel = new RegExp("^([0-9]{10})$");
     var regexEmail = new RegExp(`[\\w.+-]{1,64}@([a-zA-Z\\d-]{2,252}\\.[\\w\\.]{2,6})`);
 
     nameInput.val("<%- session.account.name %>");
@@ -59,7 +59,7 @@
         if (!telInput.val()) {
             telInput.removeClass('is-valid').addClass('is-invalid');
             return false;
-        } else if (!telInput.val().match(regex)) {
+        } else if (!telInput.val().match(regexTel)) {
             telInput.removeClass('is-valid').addClass('is-invalid');
             return false;
         }

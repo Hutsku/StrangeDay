@@ -169,8 +169,10 @@ function signUp(data, callback) {
 			  		data.postalCode, data.state, data.country
 			  	];
                 connection.query(_addUser, queryParam, function(err, result) {
-                    if (err) throw err;
-
+                    if (err) {
+                        console.log(data.tel)
+                        throw err;
+                    }
                     // On renvoit les informations de compte en même temps
                     connection.query(_getUser, [result.insertId], function(err, rows, fields) {
                     	callback(rows[0]);
@@ -610,7 +612,10 @@ function editUserInfo([name, email, tel, id], callback) {
         if (user && (user.id != id)) callback('badEmail');
         else {
             connection.query(_editUserInfo, [name, email, tel, id], function(err, rows, fields) {
-                if (err) throw err;
+                if (err) {
+                    console.log(tel)
+                    throw err;
+                }
                 callback();     
             });
         }
