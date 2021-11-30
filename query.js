@@ -89,9 +89,10 @@ _getUserOrder  = `SELECT * FROM \`order\` WHERE user_id = ?`;
 _getUserEmail  = `SELECT email FROM user WHERE id = ?`;
 _getUserNewsletter = `SELECT user.email FROM newsletter, user WHERE user.email = newsletter.email AND user.id = ?`;
 _getAllNewsletter  = `SELECT email FROM newsletter`;
-_getVoucher    = `SELECT * from voucher WHERE code = ?`;
+_getVoucher    = `SELECT * from voucher WHERE code = ? AND nb != 0`;
 
 _checkVoucherUser = `SELECT * FROM voucher v, user_voucher uv WHERE v.code = uv.code AND uv.user_id = ? AND v.code = ?`
+_useVoucher    = `UPDATE voucher SET nb = ? WHERE code = ?`;
 
 _addUser  = `INSERT INTO user (name, password, email, tel, address1, address2, city, postal_code, state, country) 
                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
@@ -253,6 +254,14 @@ function checkVoucher(code, callback) {
 function checkVoucherUser([id_user, code], callback) {
     // On vérifie si le coupon a atteint sa limite max d'utilisation par l'utilisateur
     connection.query(_checkVoucherUser, [id_user, code], function(err, rows, fields) {
+        if (err) throw err;
+        callback(rows[0]);
+    });
+}
+
+// Si le coupon est limité, change son nombre son utilisation
+function useVoucher([code, nb], callback) {
+    connection.query(_useVoucher, [nb, code], function(err, rows, fields) {
         if (err) throw err;
         callback(rows[0]);
     });
@@ -578,12 +587,21 @@ function addOrder(cart, callback) {
 
             // On met à jour l'utilisation des coupons
             if (cart.voucher_code) {
-                var linkUserVoucher = `INSERT INTO user_voucher (code, user_id) VALUES (?, ?)`;
-                connection.query(linkUserVoucher, [cart.voucher_code, cart.user_id], function(err, result) {
-                    if (err) throw err;
-                });                
-            }
+                checkVoucher(cart.voucher_code, function(voucher, error) {
+                    // Si le coupon a une utilisation limité, on décremente
+                    if (voucher.nb > 0) {
+                        useVoucher([voucher.code, voucher.nb-1], function(err, result) {
+                            if (err) throw err;
+                        });     
+                    }
 
+                    // On lie le coupon avec la personne (1 utilisation par personne)
+                    var linkUserVoucher = `INSERT INTO user_voucher (code, user_id) VALUES (?, ?)`;
+                    connection.query(linkUserVoucher, [voucher.code, cart.user_id], function(err, result) {
+                        if (err) throw err;
+                    }); 
+                });
+            }
         });
     });
 }
