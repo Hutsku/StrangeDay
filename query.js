@@ -30,12 +30,12 @@ function roundPrice(x) {
 
 _getAllUser    = `SELECT * FROM user`;
 _getAllBaseProduct = `SELECT * FROM product WHERE visible = 1`;
-_getAllProductSimple = `SELECT p.id, p.name, description, price, available, p.type, cover_image, collection, composition, s, m, l, xl, xxl, size, weight, a.type as acc_type, stock FROM product p
+_getAllProductSimple = `SELECT p.id, p.name, description, price, available, p.type, cover_image, collection, composition, clothe.type as clothe_type, s, m, l, xl, xxl, size, weight, a.type as acc_type, stock FROM product p
             LEFT JOIN accessory a ON a.product_id = p.id
             LEFT JOIN clothe ON clothe.product_id = p.id
             LEFT JOIN print ON print.product_id = p.id
             WHERE p.visible = 1`;
-_getAllProduct = `SELECT p.id, p.name, description, price, available, p.type, image.name as image, position as image_pos, composition, s, m, l, xl, xxl, collection, size, weight, a.type as acc_type, stock FROM product p
+_getAllProduct = `SELECT p.id, p.name, description, price, available, p.type, image.name as image, position as image_pos, composition, clothe.type as clothe_type, s, m, l, xl, xxl, collection, size, weight, a.type as acc_type, stock FROM product p
             INNER JOIN product_image pi ON pi.product_id = p.id
             INNER JOIN image ON image.id = pi.image_id
             LEFT JOIN accessory a ON a.product_id = p.id
@@ -43,7 +43,7 @@ _getAllProduct = `SELECT p.id, p.name, description, price, available, p.type, im
 			LEFT JOIN print ON print.product_id = p.id
             WHERE p.visible = 1
             ORDER BY id DESC, image_pos`;
-_getAllClothe = `SELECT p.id, p.name, description, price, available, p.type, image.name as image, position as image_pos, collection, composition, s, m, l, xl, xxl, stock FROM product p
+_getAllClothe = `SELECT p.id, p.name, description, price, available, p.type, image.name as image, position as image_pos, collection, composition, clothe.type as clothe_type, s, m, l, xl, xxl, stock FROM product p
             INNER JOIN clothe
             INNER JOIN product_image pi ON pi.product_id = p.id
             INNER JOIN image ON image.id = pi.image_id
@@ -71,7 +71,7 @@ _getAllOrderUser = `SELECT o.id, u.name, u.email, total_cost, shipping_address, 
                 WHERE o.user_id = u.id`;
 _getUser       = `SELECT * FROM user WHERE id = ?`;
 _getUserFromEmail = `SELECT * FROM user WHERE email = ?`;
-_getProduct = `SELECT p.id, p.name, description, price, available, p.type, image.name as image, position as image_pos, composition, s, m, l, xl, xxl, collection, size, weight, a.type as acc_type, stock FROM product p
+_getProduct = `SELECT p.id, p.name, description, price, available, p.type, image.name as image, position as image_pos, composition, clothe.type as clothe_type, s, m, l, xl, xxl, collection, size, weight, a.type as acc_type, stock FROM product p
 			INNER JOIN product_image pi ON pi.product_id = p.id
 			INNER JOIN image ON image.id = pi.image_id
 			LEFT JOIN clothe ON clothe.product_id = p.id
@@ -99,7 +99,7 @@ _addUser  = `INSERT INTO user (name, password, email, tel, address1, address2, c
 _addOrder = `INSERT INTO \`order\` (user_id, date, total_cost, subtotal_cost, shipping_cost, shipping_address, billing_address, payment_method, shipping_method, voucher) 
                VALUES (?, NOW(), ?, ?, ?, ?, ?, ?, ?, ?)`;
 _addProduct  = `INSERT INTO product (name, description, price, weight, available, type, cover_image, collection) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
-_addClothe   = `INSERT INTO clothe (product_id, composition, s, m, l, xl, xxl) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+_addClothe   = `INSERT INTO clothe (product_id, type, composition, s, m, l, xl, xxl) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
 _addPrint    = `INSERT INTO print (product_id, size, printing) VALUES (?, ?, ?)`;
 _addAcc      = `INSERT INTO accessory (product_id, type) VALUES (?, ?)`;
 
@@ -113,7 +113,7 @@ _editUserInfo     = `UPDATE user SET name = ?, email = ?, tel = ? WHERE id = ?`;
 
 _updateOrder   = `UPDATE \`order\` SET state = ?, tracking_number = ? WHERE id = ?`;
 _updateProduct = `UPDATE product SET name = ?, description = ?, price = ?, weight = ?, available = ?, type = ?, cover_image = ?, collection = ? WHERE id = ?`;
-_updateClothe  = `UPDATE clothe SET composition = ?, s = ?, m = ?, l = ?, xl = ?, xxl = ? WHERE product_id = ?`;
+_updateClothe  = `UPDATE clothe SET type = ?, composition = ?, s = ?, m = ?, l = ?, xl = ?, xxl = ? WHERE product_id = ?`;
 _updatePrint   = `UPDATE print SET size = ?, printing = ? WHERE product_id = ?`;
 _updateAcc     = `UPDATE accessory SET type = ? WHERE product_id = ?`;
 
@@ -131,6 +131,25 @@ _getStat = `SELECT * FROM
             (SELECT count(*) as nb_product from product) as d`
 
 // ========================================= FONCTION =====================================================
+
+function test(callback) {
+    let query = `SELECT * FROM product p
+            LEFT JOIN accessory a ON a.product_id = p.id
+            LEFT JOIN clothe ON clothe.product_id = p.id
+            LEFT JOIN print ON print.product_id = p.id
+            WHERE p.visible = 1`
+
+    connection.query(query, function(err, rows, fields) {
+        if (err) throw err;
+
+        if (!rows.length) {
+            callback(false);
+            return false;
+        }
+
+        callback(rows);
+    });    
+}
 
 // Renvoit les données d'un utilisateur si les informations données sont correct
 function login([email, password], callback) {
@@ -502,7 +521,7 @@ function addProduct(data) {
 	    // Ajoute le champ Clothe ou Poster sur la BDD
 		switch (data.type) {
 			case 'clothe':
-				connection.query(_addClothe, [productId, data.composition, data.s, data.m, data.l, data.xl, data.xxl], function(err, result) {
+				connection.query(_addClothe, [productId, data.clothe_type, data.composition, data.s, data.m, data.l, data.xl, data.xxl], function(err, result) {
 				    if (err) throw err;
 				});
 				break;
@@ -716,7 +735,7 @@ function updateProduct (data) {
 		switch (data.type) {
 			case 'clothe':
 
-				connection.query(_updateClothe, [data.composition, data.s, data.m, data.l, data.xl, data.xxl, data.id], function(err, result) {
+				connection.query(_updateClothe, [data.clothe_type, data.composition, data.s, data.m, data.l, data.xl, data.xxl, data.id], function(err, result) {
 				    if (err) throw err;
 				});
 				break;
@@ -867,5 +886,6 @@ module.exports = {
 	removeOrder: removeOrder,
 	removeUser: removeUser,
 
+    test: test,
 	init: init
 };

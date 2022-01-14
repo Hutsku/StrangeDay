@@ -372,9 +372,13 @@ app.use(function(req, res, next) {
 
 .get('/shop/:link', function(req, res) {
     // Affiche la liste des articles indiquées
+    let type;
+    if (['t-shirt', 'crewneck', 'longsleeve'].includes(req.params.link)) type = 'clothe';
+    else type = req.params.link;
+
     query.getAllProduct(function(products) {
         res.render('shop.ejs', {session: req.session, products: products, link: req.params.link});
-    }, req.params.link);  
+    }, type);  
 })
 
 .get('/lookbook', function(req, res) {
@@ -500,8 +504,14 @@ app.use(function(req, res, next) {
 })
 
 .get('/test-dev', function (req, res) {
-    sendEmail('subscribe', 'arouxel@outlook.fr', {name: 'armel'});
-    res.redirect('back');
+    query.test(function (product) {
+        if (!product) {
+            res.redirect('back');
+        }
+        else {
+            console.log(product);
+        }     
+    });
 })
 
 .get('/countdown', function (req, res) {

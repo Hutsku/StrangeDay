@@ -56,7 +56,7 @@
                                     <td><a class="" href="/product/<%= product.id %>"><%= product.name %></a></td>
                                     <td style="text-align:left;"><%- nl2br(product.description) %></td>
                                     <td><%= product.price %>€</td>
-                                    <td><%= product.type %></td>
+                                    <td><%= product.type %><br/><%= product.clothe_type %><%= product.acc_type %></td>
                                     <td><%= product.id %></td>
                                     <td>
                                     <a class="btn btn-log mb-2 w-100" href="/admin-edit-product/<%= product.id %>" name="edit">Modifier</a>

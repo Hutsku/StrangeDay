@@ -72,7 +72,16 @@
                         </div>
 
                         <div class="type-clothe">
-                            <div class="compposition">
+                            <div class="clothe_type">
+                                <label class="title my-2"> Type de vêtement </label>
+                                <br/>
+                                <select class="custom-select" name="clothe_type">
+                                    <option selected value="t-shirt" class="attached enabled">T-Shirt</option>
+                                    <option value="crewneck" class="attached enabled">Crewneck</option>
+                                    <option value="longsleeve" class="attached enabled">Longsleeve</option>
+                                </select>
+                            </div>
+                            <div class="composition">
                                 <label class="title my-2"> Composition </label>
                                 <input type="text" placeholder="Composition du vêtement" class="form-control col" name="composition">
                             </div>
@@ -254,11 +263,12 @@
             let price = $('input[name="price"]');
             let weight = $('input[name="weight"]');
             let type = $('input[name="type"]:checked');
+            let clothe_type = $('.custom-select[name="clothe_type"]');
             let composition = $('input[name="composition"]');
             let size = $('input[name="size"]');
             let printing = $('input[name="printing"]');
             let acc_type = $('input[name="acc_type"]');
-            let collection = $('.custom-select');
+            let collection = $('.custom-select[name="collection"]');
             let available = $('input[name="available"]:checked');
 
             let regexPrice  = new RegExp("^(\\d+[.]\\d{1,2})$");
@@ -371,6 +381,7 @@
                     description: description.val(),
                     price: price.val(),
                     weight: weight.val(),
+                    clothe_type: clothe_type.val(),
                     composition: composition.val(),
                     s:   $('input#size-s:checked').val(),
                     m:   $('input#size-m:checked').val(),

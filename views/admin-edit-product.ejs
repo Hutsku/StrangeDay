@@ -65,6 +65,15 @@
                         </div>
 
                         <div class="type-clothe <% if (product.type!='clothe') { %> hide <% } %>">
+                            <div class="clothe_type">
+                                <label class="title my-2"> Type de vêtement </label>
+                                <br/>
+                                <select class="custom-select" name="clothe_type">
+                                    <option value="t-shirt" class="attached enabled">T-Shirt</option>
+                                    <option value="crewneck" class="attached enabled">Crewneck</option>
+                                    <option value="longsleeve" class="attached enabled">Longsleeve</option>
+                                </select>
+                            </div>
                             <div class="composition">
                                 <label class="title my-2"> Composition </label>
                                 <input type="text" placeholder="Composition du vêtement" class="form-control col" name="composition" value="<%= product.composition %>">
@@ -256,8 +265,9 @@
             }
         });  
 
-        // Ajuste la valeur par défaut du select de collection
-        $(`.custom-select option[value="<%= product.collection %>"]`).prop('selected',true);     
+        // Ajuste la valeur par défaut des select
+        $(`.custom-select[name="collection"] option[value="<%= product.collection %>"]`).prop('selected',true);   
+        $(`.custom-select[name="clothe_type"] option[value="<%= product.clothe_type %>"]`).prop('selected',true);    
 
         // Ajouter un produit
         $('form[action="/admin-edit-product"]').submit(function () {
@@ -267,11 +277,12 @@
             let price = $('input[name="price"]');
             let weight = $('input[name="weight"]');
             let type = '<%= product.type %>';
+            let clothe_type = $('.custom-select[name="clothe_type"]');
             let composition = $('input[name="composition"]');
             let size = $('input[name="size"]');
             let printing = $('input[name="printing"]');
             let acc_type = $('input[name="acc_type"]');
-            let collection = $('.custom-select');
+            let collection = $('.custom-select[name="collection"]');
             let available = $('input[name="available"]:checked');
 
             let regexPrice  = new RegExp("^(\\d+[.]\\d{1,2})$");
@@ -371,6 +382,7 @@
                     description: description.val(),
                     price: price.val(),
                     weight: weight.val(),
+                    clothe_type: clothe_type.val(),
                     composition: composition.val(),
                     s:   $('input#size-s:checked').val(),
                     m:   $('input#size-m:checked').val(),

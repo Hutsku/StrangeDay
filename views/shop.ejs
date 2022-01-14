@@ -28,6 +28,12 @@
             switch (link) { 
                 case 'clothe': title = "Vêtements";
                     break;
+                case 't-shirt': title = "T-shirt";
+                    break;
+                case 'crewneck': title = "Crewneck";
+                    break;
+                case 'longsleeve': title = "Longsleeve";
+                    break;
                 case 'print': title = "Affiches";
                     break;
                 case 'accessory': title = "Accessoires";
@@ -38,7 +44,8 @@
             </div>
             <div class="container product-list">
                 <% if (products.length) {
-                for (product of products) { %>
+                for (product of products) { 
+                    if (link == 'all' || (!product.clothe_type || product.clothe_type == link) ) { %>
                     <div class="product col-md-4 p-5">
                         <div class="product-img text-center">
                             <% if (!product.available) { %>
@@ -65,7 +72,7 @@
                             </div>
                         </div>
                     </div>
-                <% }} %>
+                <% }}} %>
             </div>
         </main>
         <footer>
