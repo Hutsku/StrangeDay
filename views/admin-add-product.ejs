@@ -221,7 +221,6 @@
             let element = file_list[start];
             file_list.splice(start, 1)
             file_list.splice(end, 0, element)
-            console.log(file_list)
         }
         function bindImageControl() {
             let target = $('.tab-switch li.active').attr('target');
@@ -594,8 +593,6 @@
                     })
                 });
             })
-            console.log(optionArray, imageArray);
-            console.log(file_list)
 
             // On check les erreurs et on ajoute la classe en consequant
             if (!file_list[0].length) {

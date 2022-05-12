@@ -177,7 +177,6 @@
             let element = file_list[start];
             file_list.splice(start, 1)
             file_list.splice(end, 0, element)
-            console.log(file_list)
         }
         function bindImageControl() {
             let target = $('.tab-switch li.active').attr('target');
@@ -574,8 +573,6 @@
             else {
                 acc_type.removeClass('is-invalid').addClass('is-valid');
             }
-
-            console.log(file_list)
 
             var form = new FormData();
             for (color of file_list) {

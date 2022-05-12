@@ -642,7 +642,6 @@ function addProduct(data) {
             for (let option of optionList) {
                 // On règle les valeurs par défaut
                 if (optionList.length == 1) option.size = "";
-                console.log(option)
 
                 // On créer le lien entre le produit et l'option             
                 let linkImageProduct = `INSERT INTO product_option (product_id, color, size, stock) VALUES (?, ?, ?, ?)`;
@@ -789,7 +788,6 @@ function editUserInfo([name, email, tel, id], callback) {
         else {
             connection.query(_editUserInfo, [name, email, tel, id], function(err, rows, fields) {
                 if (err) {
-                    console.log(tel)
                     throw err;
                 }
                 callback();     
@@ -867,7 +865,6 @@ function resetUserPassword([email, newPassword], callback) {
 function updateProduct (data) {
     data.image = JSON.parse(data.image)
     data.option = JSON.parse(data.option)
-    console.log(data.image, data.option)
 
     let cover_image = data.image[data.default_color][0]
 
@@ -949,7 +946,6 @@ function updateProduct (data) {
                 for (let option of optionList) {
                     // On règle les valeurs par défaut
                     if (optionList.length == 1) option.size = "";
-                    console.log(option)
 
                     // On créer le lien entre le produit et l'option             
                     let linkImageProduct = `INSERT INTO product_option (product_id, color, size, stock) VALUES (?, ?, ?, ?)`;
