@@ -294,19 +294,14 @@ function logEmail(parameter) {
 
 // Fonction mettant à jour la base de données si des conversions de données ou autre sont necessaires
 function updateDatabase() {
-    /* UPDATE order_content oc
-    SET name = (SELECT name
-            FROM product
-            WHERE id = oc.product_id),
-    price = (SELECT price
-            FROM product
-            WHERE id = oc.product_id)*/
-    return;
+    query.updateDatabase(function(user, error) {
+        console.log("La base de données a été mis à jour avec succès !")
+    });
 }
 
 // Vérification automatique de la fin du décompte, si activé
 function checkCountdown() {
-    let countDownDate = new Date("Nov 5, 2021 18:00:00").getTime() 
+    let countDownDate = new Date("May 20, 2022 18:00:00").getTime() 
     let now = new Date().getTime();
 
     // Si le décompte est fini, on le desactive automatiquemet
@@ -406,9 +401,16 @@ app.use(function(req, res, next) {
             res.redirect('back');
         }
         else {
+            let colorParam = req.query.color 
+            // On traite les valeurs par défaut du paramètre de couleur
+            if (!colorParam) colorParam = ''
+            else if (!product.option[colorParam]) colorParam = ''
+
+            console.log(product)
             // On envoit les données du produit à la page
             res.render('product.ejs', {
                 product: product,
+                paramColor: colorParam,
                 session: req.session
             });  
         }     
@@ -504,14 +506,15 @@ app.use(function(req, res, next) {
 })
 
 .get('/test-dev', function (req, res) {
-    query.test(function (product) {
+    /*query.test(function (product) {
         if (!product) {
             res.redirect('back');
         }
         else {
             console.log(product);
         }     
-    });
+    });*/
+    updateDatabase();
 })
 
 .get('/countdown', function (req, res) {
@@ -588,6 +591,7 @@ app.use(function(req, res, next) {
     // on vérifie que l'utilisateur est bien admin (double verification si jamais)
     if (req.session.admin && checkAdmin(req.session.account.email)) {
         query.getAllOrderUser(function(orders) {
+            console.log(orders)
             res.render('admin-orders-list.ejs', {session: req.session, orders: orders});
         });
     }
@@ -792,6 +796,7 @@ app.use(function(req, res, next) {
 .post('/admin-edit-product', urlencodedParser, function(req, res) {  
     // on vérifie que l'utilisateur est bien admin (double verification si jamais)
     if (req.session.admin && checkAdmin(req.session.account.email)) {
+        console.log(req.body)
         query.updateProduct(req.body); // Modifie le produit dans la BDD
 
         req.session.alert = "edit product";
@@ -825,6 +830,7 @@ app.use(function(req, res, next) {
         available: parseInt(req.body.available),
         price: parseFloat(req.body.price),
         weight: parseInt(req.body.weight),
+        color: req.body.color,
         option: req.body.option,
         cart_qty: parseInt(req.body.cart_qty),
         image: req.body.img,
@@ -845,6 +851,7 @@ app.use(function(req, res, next) {
 .post('/valid-cart', urlencodedParser, function(req, res) {
     // on remplace le panier par celui envoyé (en le convertissant)
     req.session.cart = cart.convertCart(req.body.cart)
+    console.log(req.session.cart)
     // On paramètre les frais de port si connecté
     if (req.session.logged) {
         req.session.cart.shipping_cost = cart.getShippingCost(req.session.account.country, req.session.account.postal_code, req.session.cart.weight); // On récupère les frais de port estimés
@@ -1053,6 +1060,7 @@ app.use(function(req, res, next) {
 
             // On met à jour le panier si jamais
             req.session.cart = cart.refreshCart(req.session);
+            console.log(user)
 
             // Si un coupon est actif, on verifie sa validité avec l'user
             if (req.session.cart.voucher_code) {

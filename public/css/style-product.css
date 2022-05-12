@@ -18,6 +18,28 @@ select.size option:disabled {
 	color: lightgrey;
 }
 
+/* ================= COLOR PICKER ================ */
+
+.color-name {
+	color: grey;
+	transition: 0.3;
+}
+
+.color-box {
+	height: 20px;
+	width: 20px;
+	border: 1px solid transparent;
+	border-radius: 50%;
+	transition: 0.3s;
+}
+.color-box.selected {
+	border: 1px solid black;
+}
+.color-box:hover {
+	cursor: pointer;
+	border: 1px solid black;
+}
+
 /* ==================== RESPONSIVE TEXT ======================= */
 
 .sticky-top .title-product, .sticky-top .price-product {
@@ -30,7 +52,7 @@ select.size option:disabled {
 /* ============================================================ */
 
 .storage-info.valid {
-	color: green;
+	color: black;
 }
 .storage-info.invalid {
 	color: grey;
@@ -40,7 +62,7 @@ select.size option:disabled {
 	color: grey
 }
 .title {
-	text-transform: uppercase;
+	text-transform: var(--product-title-ts);
 	font-size: 13px;
 	font-weight: 600;
 	padding-right: 10px;

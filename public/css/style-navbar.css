@@ -41,7 +41,11 @@
 /* style collec 3 */
 :root {
 	--main-bg: white;
+	--main-text-trans: uppercase;
 	--table-header: #5c73cc;
+
+	--font-family: -apple-system,BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
+				"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
 
 	--a: rgb(48, 97, 215);
 	--a-hover: rgb(29, 59, 130);
@@ -62,6 +66,8 @@
 	--navbar-text: rgb(255, 255, 255, 0.7);
 	--navbar-text-hover: rgb(255, 255, 255, 0.8);
 	--navbar-text-focus: rgb(255, 255, 255, 1);
+	--navbar-text-trans: uppercase;
+	--navbar-text-fontweight: 700;
 
 	--modal-header: #324075;
 	--modal-body: white;
@@ -74,12 +80,65 @@
 	--sticky-bottom: #ffffff;
 }
 
+/* style collec 4 */
+:root {
+	--main-bg: white;
+	--main-text-trans: none;
+	--table-header-bg: rgb(6, 39, 180, 0.9);
+	--table-header-text:  white;
+
+	--font-family: -apple-system,BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
+				"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+
+	--head-title-ts: none;
+	--head-title-fw: 600;
+
+	--a: rgb(48, 97, 215);
+	--a-hover: rgb(29, 59, 130);
+
+	--button1: rgb(6, 39, 180, 0.8);
+	--button1-hover: rgb(6, 39, 180, 0.9);
+	--button1-active: rgb(6, 39, 180, 1);
+	--button1-text: white;
+
+	--button2: rgb(180, 180, 180);
+	--button2-hover: rgb(150,150, 150);
+	--button2-active: rgb(130, 130, 130);
+	--button2-text: white;
+
+	--border-focus: rgb(6, 39, 180);
+
+	--navbar-bg: white;
+	--navbar-text: rgb(6, 39, 180, 0.9);
+	--navbar-text-hover: rgb(6, 39, 180, 0.7);
+	--navbar-text-focus: rgb(6, 39, 180, 1);
+	--navbar-text-trans: none;
+	--navbar-text-fontweight: 600;
+
+	--modal-header: white;
+	--modal-body: white;
+	--modal-text: rgb(6, 39, 180, 1);
+
+	--payout-frame: #f9f9f9;
+	--payout-menu: white;
+	--payout-form: #e7ecff;
+
+	--sticky-bottom: #ffffff;
+
+	--shop-name-fw: 500;
+	--product-title-ts: none;
+}
+
+body {
+	font-family: var(--font-family);
+}
+
 main {
 	position: relative;
 	min-height: 90vh;
 
 	background-color: var(--main-bg);
-	text-transform: uppercase;
+	text-transform: var(--main-text-trans);
 }
 
 a {
@@ -93,10 +152,14 @@ small {
 	text-transform: none;
 }
 
+.checkbox-inline {
+	cursor: pointer;
+}
+
 /* BOUTONS */
 .head-title h1, .head-title h2 {
 	text-align: center;
-	font-weight: 700;
+	font-weight: var(--head-title-fw);
 }
 
 .btn {
@@ -167,20 +230,20 @@ small {
 
 /* NAVBAR */
 .navbar {
-	text-transform: uppercase;
+	text-transform: var(--navbar-text-trans);
 	/*font-family: "Swiss 721";*/
-    font-weight: 700; /* en attendant de résoudre le problème de police */
+    font-weight: var(--navbar-text-fontweight);
 	font-size: 16px;
 	background-color: var(--navbar-bg);
 }
 
-.navbar-dark .navbar-nav .nav-link {
+.navbar-light .navbar-nav .nav-link {
     color: var(--navbar-text);
 }
-.navbar-dark .navbar-nav .nav-link:hover {
+.navbar-light .navbar-nav .nav-link:hover {
     color: var(--navbar-text-hover);
 }
-.navbar-dark .navbar-nav .nav-link:focus {
+.navbar-light .navbar-nav .nav-link:focus {
     color: var(--navbar-text-focus);
 }
 

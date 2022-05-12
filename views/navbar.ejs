@@ -1,14 +1,14 @@
 
 <!-- BREAKPOINT : MEDIUM -->
 
-<nav class="navbar fixed-top navbar-expand-md navbar-dark shadow d-flex">
+<nav class="navbar fixed-top navbar-expand-md navbar-light shadow-sm d-flex">
     <!-- Toggle Menu when navbar is collapsed -->
     <button class="navbar-toggler border-0" type="button" data-toggle="collapse" data-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
 
     <a class="navbar-brand" href="/">
-        <img class="" src="/img/logo_blanc.png">
+        <img class="" src="/img/logo_klein.png">
     </a>
 
     <!--
@@ -92,17 +92,17 @@
                         <% if (session.cart) {
                             if (session.cart.products.length) {
                                 for (product of session.cart.products) { %>
-                                    <div class="cart-product row align-items-center" product_id="<%= product.id %>" product_option="<%= product.option %>"> 
+                                    <div class="cart-product row align-items-center" product_id="<%= product.id %>" product_option="<%= product.option %>" product_color="<%= product.color %>"> 
                                         <img class="p-2 col-3" src="/img/<%= product.image %>">
                                         <div class="col">
                                             <a href="/product/<%= product.id %>" class="cart-product-name">
-                                                <%- product.name %> <%- product.option %>
+                                                <%- product.name %> <%= product.color == "Défaut" ? '' : product.color %> <%- product.option %>
                                             </a>
                                             <span class="ml-2">x</span>
                                             <span class="qty"><%= product.cart_qty %> </span>
                                         </div>
                                         <span class="cart-product-price col-3"><%= product.price %>€</span>
-                                        <form class="form-remove-cart col-1" action="/remove-cart" method="post" product_id="<%= product.id %>"  product_option="<%= product.option %>">
+                                        <form class="form-remove-cart col-1" action="/remove-cart" method="post" product_id="<%= product.id %>"  product_option="<%= product.option %>" product_color="<%= product.color %>">
                                             <button type="submit" name="remove-cart" class="close" aria-label="Close">
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
@@ -361,17 +361,17 @@
         for (product of cart.products) {
             // On ajoute la ligne de produit à la fenêtre
             $('div.cart-total').before(
-            `<div class="cart-product row align-items-center" product_id="${product.id}" product_option="${product.option}"> 
+            `<div class="cart-product row align-items-center" product_id="${product.id}" product_option="${product.option}" product_color="${product.color}">> 
                 <img class="p-2 col-3" src="/img/${product.img}">
                 <div class="col">
                     <a href="/product/${product.id}" class="cart-product-name">
-                        ${product.name} ${product.option}
+                        ${product.name} ${product.color == "Défaut" ? '' : product.color} ${product.option}
                     </a>
                     <span class="ml-2">x</span>
                     <span class="qty">${product.cart_qty}</span>
                 </div>
                 <span class="cart-product-price col-3">${product.price}€</span>
-                <form class="form-remove-cart col-1" action="/remove-cart" method="post" product_id="${product.id}" product_option="${product.option}">
+                <form class="form-remove-cart col-1" action="/remove-cart" method="post" product_id="${product.id}" product_option="${product.option}" product_color="${product.color}">
                     <button type="submit" name="remove-cart" class="close" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -383,6 +383,7 @@
         $(`.cart-product form`).submit(function () {
             var product_id = $(this).attr('product_id');
             var product_option = $(this).attr('product_option');
+            var product_color = $(this).attr('product_color');
             var nb = parseInt($('.cart-dropdown span').text());
             var div_empty = `<div class="cart-empty row align-items-center"> 
                                     <span class="m-5 col"> Aucun produit dans le panier ...</span>
@@ -390,6 +391,7 @@
 
             $.post("/remove-cart", {
                 id: product_id, 
+                color: product_color,
                 option: product_option
             })
             .done(function (data) {
@@ -410,11 +412,13 @@
     $('form.form-remove-cart').submit(function () {
         var product_id = $(this).attr('product_id');
         var product_option = $(this).attr('product_option');
+        var product_color = $(this).attr('product_color');
         var div_empty = `<div class="cart-empty row align-items-center"> 
                         <span class="m-5 col"> Aucun produit dans le panier ...</span>
                     </div>`
         $.post("/remove-cart", {
             id: product_id, 
+            color: product_color,
             option: product_option
         })
         .done(function (data) {

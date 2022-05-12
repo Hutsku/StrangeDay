@@ -161,24 +161,24 @@
                         </div>
                         <div class="w-100 border-bottom my-3"></div>
                         <div class="row py-3">
-                            <span class="title col-5">SOUS-TOTAL <span class="detail">(TTC)</span></span>
+                            <span class="title col-5">Sous-Total <span class="detail">(TTC)</span></span>
                             <span class="price price-sub-total col text-right"><%= subtotal_cost %>€</span>
                         </div>
                         <div class="row py-3">
-                            <span class="title col-5">LIVRAISON <span class="detail">(estimée)</span></span>
+                            <span class="title col-5">Livraison <span class="detail">(estimée)</span></span>
                             <% var ship = shipping_cost+'€';
                             if (!parseInt(ship)) ship = 'Gratuite'; %>
                             <span class="price price-shipping col text-right"><%= ship %></span>
                         </div>
                         <% if (session.cart.voucher_promo) { %>
                         <div class="row py-3">
-                            <span class="title col-5">COUPON <span class="detail">(<%= session.cart.voucher_code %>)</span></span>
+                            <span class="title col-5">Coupon <span class="detail">(<%= session.cart.voucher_code %>)</span></span>
                             <span class="price price-voucher col text-right"><%= session.cart.voucher_promo %>%</span>
                         </div>
                         <% } %>
                         <div class="w-100 border-bottom my-3"></div>
                         <div class="row pb-5">
-                            <span class="title total col-5">TOTAL <span class="detail">(TTC)</span></span>
+                            <span class="title total col-5">Total <span class="detail">(TTC)</span></span>
                             <span class="price price-total col text-right"><%= total_cost %>€</span>
                         </div>
 	    			</div>
@@ -193,22 +193,22 @@
         <div class="sticky-bottom product-payout d-md-none d-block w-100 p-3 shadow-lg">
             <div class="cart-recap">
                 <div class="row py-1">
-                    <span class="title col-5">SOUS-TOTAL <span class="detail">(TTC)</span></span>
+                    <span class="title col-5">Sous-Total <span class="detail">(TTC)</span></span>
                     <span class="price price-sub-total col text-right"><%= subtotal_cost %>€</span>
                 </div>
                 <div class="row py-2">
-                    <span class="title col-5">LIVRAISON <span class="detail">(estimée)</span></span>
+                    <span class="title col-5">Livraison <span class="detail">(estimée)</span></span>
                     <span class="price price-shipping col text-right"><%= ship %></span>
                 </div>
                 <% if (session.cart.voucher_promo) { %>
                 <div class="row py-2">
-                    <span class="title col-5">COUPON <span class="detail">(<%= session.cart.voucher_code %>)</span></span>
+                    <span class="title col-5">Coupon <span class="detail">(<%= session.cart.voucher_code %>)</span></span>
                     <span class="price price-voucher col text-right"><%= session.cart.voucher_promo %>%</span>
                 </div>
                 <% } %>
                 <div class="w-100 border-bottom my-2"></div>
                 <div class="row">
-                    <span class="title total col-5">TOTAL <span class="detail">(TTC)</span></span>
+                    <span class="title total col-5">Total <span class="detail">(TTC)</span></span>
                     <span class="price price-total col text-right"><%= total_cost %>€</span>
                 </div>
             </div>

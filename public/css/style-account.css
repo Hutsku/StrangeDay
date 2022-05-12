@@ -1,7 +1,7 @@
 .title {
 	display: block;
 
-	font-weight: 700;
+	font-weight: var(--head-title-ts);
 	font-size: 17px;
 	margin-bottom: 15px;
 }
@@ -20,7 +20,7 @@ div.account-content {
 
 .account-left {
 	color: black;
-	font-weight: 700;
+	font-weight: var(--head-title-fw);
 	height: max-content;
 }
 
@@ -65,11 +65,11 @@ ul.account-link a.header-link:hover {
 }
 
 .link-title {
-	background-color: var(--table-header);
-	color: black;
+	background-color: var(--table-header-bg);
+	color: var(--table-header-text);
 	display: block;
-	text-transform: uppercase;
-	font-weight: 700;
+	text-transform: var(--head-title-ts);
+	font-weight: var(--head-title-fw);
 }
 
 #unsubscribe-pannel a:hover{
@@ -89,9 +89,9 @@ ul.account-link a.header-link:hover {
 
 /* =========== TABLE ORDER ================== */
 .table-order thead th, .table-history thead th {
-    background-color: var(--table-header);
-    color: black;
-    border: solid 2px var(--table-header);
+	background-color: var(--table-header-bg);
+	color: var(--table-header-text);
+    border: solid 2px var(--table-header-bg);
 }
 .table-order tbody, .table-history tbody {
     text-transform:none;

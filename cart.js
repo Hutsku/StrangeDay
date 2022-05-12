@@ -72,7 +72,7 @@ function addCart(session, product) {
     // Si le produit est déjà dans le panier, on l'incremente
     var match = false;
     for (var i=0; i<cart.products.length; i++) {
-        if (cart.products[i].id == product.id && cart.products[i].option == product.option) {
+        if (cart.products[i].id == product.id && cart.products[i].option == product.option && cart.products[i].color == product.color) {
             cart.products[i].cart_qty++;
             match = true;
             break;
@@ -102,7 +102,7 @@ function removeCart(session, data) {
     // On parcours le panier pour trouver l'occurence et la supprimer
     var cart = session.cart;
     for (var i=0; i<cart.products.length; i++) {
-        if (cart.products[i].id == data.id && cart.products[i].option == data.option) {
+        if (cart.products[i].id == data.id && cart.products[i].option == data.option && cart.products[i].color == data.color) {
             // On met à jour les données du panier
             cart.nb_products -= cart.products[i].cart_qty;
             cart.weight -= cart.products[i].weight * cart.products[i].cart_qty;
@@ -147,6 +147,7 @@ function convertCart(cart) {
             available: parseInt(product.available),
             price: parseFloat(product.price),
             weight: parseInt(product.weight),
+            color: product.color,
             option: product.option,
             cart_qty: parseInt(product.cart_qty),
             image: product.img

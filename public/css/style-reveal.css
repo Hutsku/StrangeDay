@@ -12,15 +12,15 @@ main {
 	justify-content: center;
 }
 #countdown span {
-	color: #c6c9e1;
+	color: rgb(6, 39, 180, 0.9);
 }
 .days, .hours, .minutes, .seconds {
 	font-size: 25px;
 	font-weight: 600;
 	line-height: 47px;
 
-	border: 2px solid #c6c9e1;
-	color: #c6c9e1;
+	border: 2px solid rgb(6, 39, 180, 0.9);
+	color: rgb(6, 39, 180, 1);
 	height: 60px;
 	width: 60px;
 
@@ -36,11 +36,11 @@ main {
 	margin: auto;
 }
 .register-email input {
-	background-color: #c6c9e1;
+	background-color: white;
 	width: 300px;
 }
 .register-email button {
-	background-color: #3747c4;
+	background-color: rgb(6, 39, 180, 0.8);
 	width: 300px;
 }
 

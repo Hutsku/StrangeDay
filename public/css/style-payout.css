@@ -103,7 +103,7 @@ div.payout-left div.log-payout.active{
 div.payout-left .title {
 	display: inline-block;
 
-	font-weight: 700;
+	font-weight: var(--head-title-fw);
 	font-size: 17px;
 	margin-bottom: 15px;
 }
@@ -149,12 +149,12 @@ button#submit-payment {
 /* ---------------------------------- CART RECAP ------------------------------- */
 
 .cart-recap .title {
-	font-size: 12px;
-	font-weight: 700;
-	text-transform: uppercase;
+	font-size: 15px;
+	font-weight: var(--head-title-fw);
+	text-transform: var(--product-name-ts);
 }
 .cart-recap .price {
-	font-size: 14px;
+	font-size: 15px;
 	font-weight: 700;
 }
 
