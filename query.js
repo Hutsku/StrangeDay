@@ -71,7 +71,7 @@ _getAllOrderUser = `SELECT o.id, u.name, u.email, total_cost, shipping_address, 
                 WHERE o.user_id = u.id`;
 _getUser       = `SELECT * FROM user, address WHERE id = ? AND user_id = id`;
 _getUserFromEmail = `SELECT * FROM user, address WHERE email = ? AND user_id = id`;
-_getProduct = `SELECT p.id, p.name, description, price, available, p.type, image.name as image, position as image_pos, default_color, po.size as size, stock, po.color as color, composition, clothe.type as clothe_type, collection, print_size, weight, a.type as acc_type FROM product p
+_getProduct = `SELECT p.id, p.name, description, price, available, p.type, image.name as image, pi.position as image_pos, po.position as option_pos, default_color, po.size as size, stock, po.color as color, composition, clothe.type as clothe_type, collection, print_size, weight, a.type as acc_type FROM product p
             INNER JOIN product_image pi ON pi.product_id = p.id
             INNER JOIN image ON image.id = pi.image_id
             INNER JOIN product_option po ON po.product_id = p.id
@@ -79,7 +79,7 @@ _getProduct = `SELECT p.id, p.name, description, price, available, p.type, image
             LEFT JOIN print ON print.product_id = p.id
             LEFT JOIN accessory a ON a.product_id = p.id
             WHERE po.color = pi.color AND p.id = ?
-            ORDER BY image_pos`;
+            ORDER BY image_pos, option_pos;`;
 _getOrder      = `SELECT o.id, user_id, date, subtotal_cost, shipping_cost, total_cost, billing_address, shipping_address, payment_method, shipping_method, state, p.id as product_id, oc.name as product, oc.color, oc.size, oc.nb, oc.price as product_price, cover_image, voucher 
 			FROM \`order\` o
             INNER JOIN order_content oc ON oc.order_id = o.id 
@@ -639,13 +639,14 @@ function addProduct(data) {
             let optionList = data.option[color];
             if (color == "Défaut") color = ""
             // On itère chaque option par couleur
-            for (let option of optionList) {
+            for (let option_pos=0; option_pos<optionList.length; option_pos++) {
+                let option = optionList[option_pos];
                 // On règle les valeurs par défaut
                 if (optionList.length == 1) option.size = "";
 
                 // On créer le lien entre le produit et l'option             
-                let linkImageProduct = `INSERT INTO product_option (product_id, color, size, stock) VALUES (?, ?, ?, ?)`;
-                connection.query(linkImageProduct, [productId, color, option.size, option.stock], function(err, result) {
+                let linkImageProduct = `INSERT INTO product_option (product_id, color, size, stock, position) VALUES (?, ?, ?, ?, ?)`;
+                connection.query(linkImageProduct, [productId, color, option.size, option.stock, option_pos], function(err, result) {
                     if (err) throw err;
                 });
             }            
@@ -943,13 +944,14 @@ function updateProduct (data) {
                 let optionList = data.option[color];
                 if (color == "Défaut") color = ""
                 // On itère chaque option par couleur
-                for (let option of optionList) {
+                for (let option_pos=0; option_pos<optionList.length; option_pos++) {
+                    let option = optionList[option_pos];
                     // On règle les valeurs par défaut
                     if (optionList.length == 1) option.size = "";
 
                     // On créer le lien entre le produit et l'option             
-                    let linkImageProduct = `INSERT INTO product_option (product_id, color, size, stock) VALUES (?, ?, ?, ?)`;
-                    connection.query(linkImageProduct, [data.id, color, option.size, option.stock], function(err, result) {
+                    let linkImageProduct = `INSERT INTO product_option (product_id, color, size, stock, position) VALUES (?, ?, ?, ?, ?)`;
+                    connection.query(linkImageProduct, [data.id, color, option.size, option.stock, option_pos], function(err, result) {
                         if (err) throw err;
                     });
                 }            
