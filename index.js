@@ -301,7 +301,7 @@ function updateDatabase() {
 
 // Vérification automatique de la fin du décompte, si activé
 function checkCountdown() {
-    let countDownDate = new Date("May 20, 2022 18:00:00").getTime() 
+    let countDownDate = new Date("May 22, 2022 10:00:00").getTime() 
     let now = new Date().getTime();
 
     // Si le décompte est fini, on le desactive automatiquemet
