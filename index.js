@@ -406,7 +406,6 @@ app.use(function(req, res, next) {
             if (!colorParam) colorParam = ''
             else if (!product.option[colorParam]) colorParam = ''
 
-            console.log(product)
             // On envoit les données du produit à la page
             res.render('product.ejs', {
                 product: product,
@@ -850,7 +849,6 @@ app.use(function(req, res, next) {
 .post('/valid-cart', urlencodedParser, function(req, res) {
     // on remplace le panier par celui envoyé (en le convertissant)
     req.session.cart = cart.convertCart(req.body.cart)
-    console.log(req.session.cart)
     // On paramètre les frais de port si connecté
     if (req.session.logged) {
         req.session.cart.shipping_cost = cart.getShippingCost(req.session.account.country, req.session.account.postal_code, req.session.cart.weight); // On récupère les frais de port estimés
