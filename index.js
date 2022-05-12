@@ -591,7 +591,6 @@ app.use(function(req, res, next) {
     // on vérifie que l'utilisateur est bien admin (double verification si jamais)
     if (req.session.admin && checkAdmin(req.session.account.email)) {
         query.getAllOrderUser(function(orders) {
-            console.log(orders)
             res.render('admin-orders-list.ejs', {session: req.session, orders: orders});
         });
     }
@@ -796,8 +795,8 @@ app.use(function(req, res, next) {
 .post('/admin-edit-product', urlencodedParser, function(req, res) {  
     // on vérifie que l'utilisateur est bien admin (double verification si jamais)
     if (req.session.admin && checkAdmin(req.session.account.email)) {
-        console.log(req.body)
         query.updateProduct(req.body); // Modifie le produit dans la BDD
+        console.log('-> Article modifié');
 
         req.session.alert = "edit product";
         res.redirect('back');
@@ -1060,7 +1059,6 @@ app.use(function(req, res, next) {
 
             // On met à jour le panier si jamais
             req.session.cart = cart.refreshCart(req.session);
-            console.log(user)
 
             // Si un coupon est actif, on verifie sa validité avec l'user
             if (req.session.cart.voucher_code) {

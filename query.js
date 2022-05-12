@@ -605,9 +605,8 @@ function getStat(callback) {
 function addProduct(data) {
     data.images = JSON.parse(data.images)
     data.option = JSON.parse(data.option)
-    console.log(data.option)
 
-    let cover_image = data.image[data.default_color][0]
+    let cover_image = data.images[data.default_color][0]
 
 	var queryParam = [data.name, data.description, data.price, data.weight, data.available, data.type, cover_image, data.default_color, data.collection]
 	connection.query(_addProduct, queryParam, function(err, result) {
