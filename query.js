@@ -49,7 +49,7 @@ _getAllClothe = `SELECT p.id, p.name, description, price, available, p.type, ima
             INNER JOIN image ON image.id = pi.image_id 
             WHERE clothe.product_id = p.id AND p.visible = 1 AND (default_color = pi.color OR default_color = 'Défaut')
             ORDER BY id DESC, image_pos; `;
-_getAllPrint = `SELECT p.id, p.name, description, price, available, p.type, image.name as image, position as image_pos, collection, print_size, weight FROM product p
+_getAllPrint = `SELECT p.id, p.name, description, price, available, p.type, image.name as image, position as image_pos, collection, print_size, printing, weight FROM product p
             INNER JOIN print
             INNER JOIN product_image pi ON pi.product_id = p.id
             INNER JOIN image ON image.id = pi.image_id
@@ -71,7 +71,7 @@ _getAllOrderUser = `SELECT o.id, u.name, u.email, total_cost, shipping_address, 
                 WHERE o.user_id = u.id`;
 _getUser       = `SELECT * FROM user, address WHERE id = ? AND user_id = id`;
 _getUserFromEmail = `SELECT * FROM user, address WHERE email = ? AND user_id = id`;
-_getProduct = `SELECT p.id, p.name, description, price, available, p.type, image.name as image, pi.position as image_pos, po.position as option_pos, default_color, po.size as size, stock, po.color as color, composition, clothe.type as clothe_type, collection, print_size, weight, a.type as acc_type FROM product p
+_getProduct = `SELECT p.id, p.name, description, price, available, p.type, image.name as image, pi.position as image_pos, po.position as option_pos, default_color, po.size as size, stock, po.color as color, composition, clothe.type as clothe_type, collection, print_size, printing, weight, a.type as acc_type FROM product p
             INNER JOIN product_image pi ON pi.product_id = p.id
             INNER JOIN image ON image.id = pi.image_id
             INNER JOIN product_option po ON po.product_id = p.id

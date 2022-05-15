@@ -85,7 +85,7 @@
 			    				<span class="title">Type </span>
 			    				<span><%= product.acc_type %></span>
 			    			</div>
-		    			<% } else if (product.type == "poster") { %>
+		    			<% } else if (product.type == "print") { %>
 			    			<div class="material mb-1">
 			    				<span class="title">Impression </span>
 			    				<span>Impression sur papier <%= product.printing %></span>
@@ -158,7 +158,7 @@
 				    				<span class="title">Type </span>
 				    				<span><%= product.acc_type %></span>
 				    			</div>
-			    			<% } else if (product.type == "poster") { %>
+			    			<% } else if (product.type == "print") { %>
 				    			<div class="row material mb-1">
 				    				<span class="title">Impression </span>
 				    				<span>Impression sur papier <%= product.printing %></span>
@@ -450,19 +450,17 @@
         $('form.form-product').submit(function () {
         	var option = '';
         	var type = '<%= product.type %>';
-        	if (type == "clothe") {
-        		// Permet de differencier le select mobile et pc
-        		$('.custom-select').each(function () {
-        			if (!$(this).is(':hidden')) option = $(this).val();
-        		});
+    		// Permet de differencier le select mobile et pc
+    		$('.custom-select').each(function () {
+    			if (!$(this).is(':hidden')) option = $(this).val();
+    		});
 
-        		// On vérifie qu'on a bien entré une option
-	            if (!option) {
-                	$('.custom-select').removeClass('is-valid').addClass('is-invalid');
-                	return false;
-            	} else {
-                	$('.custom-select').removeClass('is-invalid').addClass('is-valid');
-            	}
+    		// On vérifie qu'on a bien entré une option
+            if (!option) {
+            	$('.custom-select').removeClass('is-valid').addClass('is-invalid');
+            	return false;
+        	} else {
+            	$('.custom-select').removeClass('is-invalid').addClass('is-valid');
         	}
 
         	$.post("/add-cart", {

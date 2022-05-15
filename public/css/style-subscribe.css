@@ -1,6 +1,6 @@
 form .title {
 	display: inline-block;
-	font-weight: 700;
+	font-weight: var(--head-title-fw);
 	font-size: 17px;
 	margin-bottom: 15px;
 }
