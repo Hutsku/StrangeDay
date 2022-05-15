@@ -301,7 +301,7 @@ function updateDatabase() {
 // Vérification automatique de la fin du décompte, si activé
 function checkCountdown() {
     // Date.UTC(année, mois, jour, heure) sachant que le mois est entre 0 et 11 et que la france est en GMT+2h
-    let countDownDate = new Date(Date.UTC(2022, 5-1, 15, 13-2, 33)).getTime();
+    let countDownDate = new Date(Date.UTC(2022, 5-1, 22, 10-2)).getTime();
     let now = new Date().getTime()
 
     // Si le décompte est fini, on le desactive automatiquemet
