@@ -2,7 +2,7 @@
 // ============================================= INITALIZATION ============================================
 
 let date = new Date()
-let date_string = `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()} ${date.getHours()+2}:${date.getMinutes()}:${date.getSeconds()}`
+let date_string = `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
 console.log(`==================== ${date_string} ====================`)
 console.log('Initalisation du site web ...')
 var config = require('./config.js');
@@ -301,11 +301,13 @@ function updateDatabase() {
 
 // Vérification automatique de la fin du décompte, si activé
 function checkCountdown() {
-    let countDownDate = new Date("May 22, 2022 10:00:00").getTime() 
-    let now = new Date().getTime();
+    let countDownDate = new Date("May 22, 2022 10:00:00").getTime();
+    let now = new Date()
+    let date_string = `${now.getDate()}/${now.getMonth()+1}/${now.getFullYear()} ${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
+    console.log(date_string)
 
     // Si le décompte est fini, on le desactive automatiquemet
-    if (countDownDate - now <= 0) config.countdown = false;
+    if (countDownDate - now.getTime() <= 0) config.countdown = false;
 }
 
 // ================================================ ROUTES ===============================================
