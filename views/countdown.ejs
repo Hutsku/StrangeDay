@@ -58,7 +58,8 @@
 
     <script type="text/javascript">
         // Date de sortie prévue
-        let countDownDate = new Date("May 22, 2022 10:00:00").getTime(); // 18h paris
+        // Date.UTC(année, mois, jour, heure) sachant que le mois est entre 0 et 11 et que la france est en GMT+2h
+        let countDownDate = new Date(Date.UTC(2022, 5-1, 15, 13-2, 33)).getTime(); // 18h paris
         function updateCountdown() {
             // Get today's date and time
             let now = new Date().getTime();

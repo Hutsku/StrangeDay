@@ -1,9 +1,8 @@
 
 // ============================================= INITALIZATION ============================================
 
-let date = new Date()
-let date_string = `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
-console.log(`==================== ${date_string} ====================`)
+let date = new Date();
+console.log(`==================== ${date.toLocaleString()} ====================`)
 console.log('Initalisation du site web ...')
 var config = require('./config.js');
 var fs     = require('fs');
@@ -301,13 +300,12 @@ function updateDatabase() {
 
 // Vérification automatique de la fin du décompte, si activé
 function checkCountdown() {
-    let countDownDate = new Date("May 22, 2022 10:00:00").getTime();
-    let now = new Date()
-    let date_string = `${now.getDate()}/${now.getMonth()+1}/${now.getFullYear()} ${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
-    console.log(date_string)
+    // Date.UTC(année, mois, jour, heure) sachant que le mois est entre 0 et 11 et que la france est en GMT+2h
+    let countDownDate = new Date(Date.UTC(2022, 5-1, 15, 13-2, 33)).getTime();
+    let now = new Date().getTime()
 
     // Si le décompte est fini, on le desactive automatiquemet
-    if (countDownDate - now.getTime() <= 0) config.countdown = false;
+    if (countDownDate - now <= 0) config.countdown = false;
 }
 
 // ================================================ ROUTES ===============================================
@@ -520,7 +518,8 @@ app.use(function(req, res, next) {
 
 .get('/countdown', function (req, res) {
     // Affiche une page défaut avant que le site soit disponible
-    res.render('countdown.ejs', {session: req.session});
+    if (!config.countdown && !req.session.unlock) res.redirect('/mainpage')
+    else res.render('countdown.ejs', {session: req.session});
 })
 
 .get('/forgot-password', function (req, res) {
