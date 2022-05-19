@@ -94,6 +94,36 @@ span.sold-out {
 	z-index: 99;
 }
 
+/* ================= COLOR PICKER ================ */
+
+.color-box {
+	height: 15px;
+	width: 15px;
+	border: 1px solid transparent;
+	border-radius: 50%;
+	transition: 0.3s;
+	opacity: 0.85;
+}
+.color-box.selected {
+	border: 1px solid black;
+}
+.color-box:hover {
+	cursor: pointer;
+	border: 1px solid black;
+}
+
+.color-picker {
+	position: absolute;
+	flex-direction: row-reverse;
+	width: 100px;
+	height: 40px;
+	right: 0px;
+
+	z-index: 99;
+}
+
+/* =============================================== */
+
 /* PANEL SWITCH */
 
 div.tab {

@@ -35,30 +35,38 @@ _getAllProductSimple = `SELECT p.id, p.name, description, price, available, p.ty
             LEFT JOIN clothe ON clothe.product_id = p.id
             LEFT JOIN print ON print.product_id = p.id
             WHERE p.visible = 1`;
-_getAllProduct = `SELECT p.id, p.name, description, price, available, p.type, default_color, image.name as image, position as image_pos, composition, clothe.type as clothe_type, collection, print_size, weight, a.type as acc_type FROM product p
+_getAllProduct = `SELECT DISTINCT p.id, p.name, description, price, available, p.type, default_color, c.name color_name, c.code color_code, image.name as image, pi.position as image_pos, composition, clothe.type as clothe_type, collection, print_size, weight, a.type as acc_type FROM product p
             INNER JOIN product_image pi ON pi.product_id = p.id
             INNER JOIN image ON image.id = pi.image_id
             LEFT JOIN accessory a ON a.product_id = p.id
             LEFT JOIN clothe ON clothe.product_id = p.id
-			LEFT JOIN print ON print.product_id = p.id
+            LEFT JOIN print ON print.product_id = p.id
+            LEFT JOIN product_option po ON po.product_id = p.id
+            LEFT JOIN color c ON c.name = po.color
             WHERE p.visible = 1 AND (default_color = pi.color OR default_color = 'Défaut')
             ORDER BY id DESC, image_pos`;
-_getAllClothe = `SELECT p.id, p.name, description, price, available, p.type, image.name as image, position as image_pos, collection, composition, clothe.type as clothe_type FROM product p 
+_getAllClothe = `SELECT DISTINCT p.id, p.name, description, price, available, p.type, default_color, c.name color_name, c.code color_code, image.name as image, pi.position as image_pos, collection, composition, clothe.type as clothe_type FROM product p 
             INNER JOIN clothe 
             INNER JOIN product_image pi ON pi.product_id = p.id 
             INNER JOIN image ON image.id = pi.image_id 
+            LEFT JOIN product_option po ON po.product_id = p.id
+            LEFT JOIN color c ON c.name = po.color
             WHERE clothe.product_id = p.id AND p.visible = 1 AND (default_color = pi.color OR default_color = 'Défaut')
             ORDER BY id DESC, image_pos; `;
-_getAllPrint = `SELECT p.id, p.name, description, price, available, p.type, image.name as image, position as image_pos, collection, print_size, printing, weight FROM product p
+_getAllPrint = `SELECT DISTINCT p.id, p.name, description, price, available, p.type, default_color, c.name color_name, c.code color_code, image.name as image, pi.position as image_pos, collection, print_size, printing, weight FROM product p
             INNER JOIN print
             INNER JOIN product_image pi ON pi.product_id = p.id
             INNER JOIN image ON image.id = pi.image_id
+            LEFT JOIN product_option po ON po.product_id = p.id
+            LEFT JOIN color c ON c.name = po.color
             WHERE print.product_id = p.id AND p.visible = 1 AND (default_color = pi.color OR default_color = 'Défaut')
             ORDER BY id DESC, image_pos`;
-_getAllAcc = `SELECT p.id, p.name, description, price, available, p.type, image.name as image, position as image_pos, collection, a.type as acc_type FROM product p
+_getAllAcc = `SELECT DISTINCT p.id, p.name, description, price, available, p.type, default_color, c.name color_name, c.code color_code, image.name as image, pi.position as image_pos, collection, a.type as acc_type FROM product p
             INNER JOIN accessory a
             INNER JOIN product_image pi ON pi.product_id = p.id
             INNER JOIN image ON image.id = pi.image_id
+            LEFT JOIN product_option po ON po.product_id = p.id
+            LEFT JOIN color c ON c.name = po.color
             WHERE a.product_id = p.id AND p.visible = 1 AND (default_color = pi.color OR default_color = 'Défaut')
             ORDER BY id DESC, image_pos`;
 
@@ -399,13 +407,26 @@ function getAllProduct(callback, type) {
         // On trie les résultats par produit et image
         let productList = [];
         let productCheck = [];
+        let colorCheck = []
         for (product of rows) {
             if (!productCheck.includes(product.id)) {
                 product.image = [product.image];
+                if (product.color_name) {
+                    product.color = [{name: product.color_name, code: product.color_code}];
+                }
+
                 productList.push(product);
                 productCheck.push(product.id)
+                colorCheck.push([product.color_name])
             } else {
-                productList[productCheck.indexOf(product.id)].image.push(product.image);
+                let index = productCheck.indexOf(product.id)
+                if (product.default_color == "Défaut" || product.color_name == product.default_color) {
+                    productList[index].image.push(product.image);
+                }
+                if (product.color_name && !colorCheck[index].includes(product.color_name)) {
+                    productList[index].color.push({name: product.color_name, code: product.color_code});
+                    colorCheck[index].push(product.color_name)
+                }
             }
         }
         callback(productList);
@@ -515,7 +536,7 @@ function getProduct(id, callback) {
             
         }
 
-        let colorQuery = `SELECT DISTINCT c.name, c.code FROM product_option po, color c WHERE po.color = c.name AND po.product_id = ?; `
+        let colorQuery = `SELECT DISTINCT c.name, c.code FROM product_option po, color c WHERE po.color = c.name AND po.product_id = ?`
         connection.query(colorQuery, [id], function(err, res, fields) {
             if (err) throw err;
 

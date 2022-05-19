@@ -76,7 +76,7 @@
             </div>-->
 
             <!------ caché tant que pas scroll -->
-            <div class="hidden-shop pt-3 hidden">
+            <div class="hidden-shop pt-3">
                 <div class="head-title my-5">
                     <h1> Tous les produits </h1>
                 </div>
@@ -87,6 +87,15 @@
                             <div class="product-img text-center">
                                 <% if (!product.available) { %>
                                     <span class="sold-out"> Indisponible </span>
+                                <% } %>
+                                <% if (product.color) { %>
+                                    <div class="color-picker d-flex">
+                                        <% for (color of product.color) { %>
+                                        <a href="/product/<%= product.id %>?color=<%= color.name %>">
+                                            <div class='color-box mr-2 <% if (color.name == product.default_color) {%> selected <% } %>' data-color="<%= color.name %>" style="background-color: <%= color.code %>;"></div>
+                                        </a>
+                                        <% } %>
+                                    </div>
                                 <% } %>
                                 <a class="product-img" href="/product/<%= product.id %>">
                                     <% let first_image = true;
@@ -132,9 +141,9 @@
 
         const observer = new IntersectionObserver(callback, options);
 
-        $('.head-title').each( function(index) {
+        /*$('.head-title').each( function(index) {
             observer.observe(this)
-        });
+        });*/
 
         // On fait defiler les iamges sur l'apercu du produit
         let eventHook, element, index;
