@@ -456,8 +456,9 @@
     		});
 
     		// On vérifie qu'on a bien entré une option
-            if (!option) {
+            if (!option && $('.custom-select').length) {
             	$('.custom-select').removeClass('is-valid').addClass('is-invalid');
+            	console.log('no option')
             	return false;
         	} else {
             	$('.custom-select').removeClass('is-invalid').addClass('is-valid');
