@@ -381,7 +381,13 @@ app.use(function(req, res, next) {
     let files_1 = fs.readdirSync('./public/img/lookbook/photomaton');
     let files_2 = fs.readdirSync('./public/img/lookbook/summer roadtrip');
     let files_3 = fs.readdirSync('./public/img/lookbook/insomnie');
-    res.render('lookbook.ejs', {session: req.session, photomaton: files_1, summer_roadtrip: files_2, insomnie: files_3});
+    let files_4 = fs.readdirSync('./public/img/lookbook/beau_sejour');
+    res.render('lookbook.ejs', {session: req.session, 
+        photomaton: files_1, 
+        summer_roadtrip: files_2, 
+        insomnie: files_3,
+        beau_sejour: files_4
+    });
 })
 
 .get('/kezako', function(req, res) {
