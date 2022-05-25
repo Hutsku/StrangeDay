@@ -41,6 +41,9 @@
 					  			if (paramColor) selected_color = paramColor
 					  			else selected_color = product.default_color
 
+					  			// Securité anti-bug
+					  			if (!product.option[selected_color]) selected_color = product.default_color
+
 					  			let imageList = product.image[selected_color];
 					  			let optionList = product.option[selected_color];
 					  			
