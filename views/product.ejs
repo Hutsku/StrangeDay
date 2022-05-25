@@ -44,19 +44,25 @@
 					  			let imageList = product.image[selected_color];
 					  			let optionList = product.option[selected_color];
 					  			
-					  			for (var i=0; i< imageList.length; i++) { %>
-								<div data-target="#carouselProduct" data-slide-to="<%= i %>" class="pr-4 p-md-0 pb-md-4 <% if (!i) { %> active <% } %>">
-						    		<img src="/img/<%= imageList[i] %>">
-						    	</div>
-					  		<% } %>
+					  			// correction temporaire du bug des ImageList
+					  			if (imageList) {
+						  			for (var i=0; i< imageList.length; i++) { %>
+									<div data-target="#carouselProduct" data-slide-to="<%= i %>" class="pr-4 p-md-0 pb-md-4 <% if (!i) { %> active <% } %>">
+							    		<img src="/img/<%= imageList[i] %>">
+							    	</div>
+						  		<% } 
+					  			} %>
 					  	</div>
 	    				<div id="carouselProduct" class="carousel slide" data-ride="carousel">
 						  	<div class="carousel-inner">
-						  		<% for (var i=0; i< imageList.length; i++) { %>
-							    	<div class="carousel-item <% if (!i) { %> active <% } %>">
-							      		<img class="d-block w-100" src="/img/<%= imageList[i] %>">
-							    	</div>
-						    	<% } %>
+					  			<% // correction temporaire du bug des ImageList
+					  			if (imageList) {
+						  			for (var i=0; i< imageList.length; i++) { %>
+							    		<div class="carousel-item <% if (!i) { %> active <% } %>">
+							      			<img class="d-block w-100" src="/img/<%= imageList[i] %>">
+							    		</div>
+						    		<% } 
+						    	} %>
 						  	</div>
 						  	<a class="carousel-control-prev" href="#carouselProduct" role="button" data-slide="prev">
 							    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
