@@ -31,7 +31,7 @@
     var emailInput = $('.account-input input[name="email"]');
     var telInput = $('.account-input input[name="tel"]');
     var regexTel = new RegExp("^([0-9]{10})$");
-    var regexEmail = new RegExp(`[\\w.+-]{1,64}@([a-zA-Z\\d-]{2,252}\\.[\\w\\.]{2,6})`);
+    var regexEmail = new RegExp(`^[\\w.+-]{1,64}@([a-zA-Z\\d-]{2,252}\\.[\\w\\.]{2,6})$`);
 
     nameInput.val("<%- session.account.name %>");
     emailInput.val("<%= session.account.email %>");
