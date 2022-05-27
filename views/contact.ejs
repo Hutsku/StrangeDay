@@ -55,7 +55,7 @@
             var nameInput = $('.contact-pannel input[name="name"]');
             var emailInput = $('.contact-pannel input[name="email"]');
             var textInput = $('.contact-pannel textarea[name="text"]');
-            var regexEmail = new RegExp(`[\\w.+-]{1,64}@([a-zA-Z\\d-]{2,252}\\.[\\w\\.]{2,6})`);
+            var regexEmail = new RegExp(`^[\\w.+-]{1,64}@([a-zA-Z\\d-]{2,252}\\.[\\w\\.]{2,6})$`);
 
             // On check les erreurs et on ajoute la classe en consequant
             if (!nameInput.val()) {
@@ -79,6 +79,9 @@
             } else {
                 textInput.removeClass('is-invalid').addClass('is-valid');
             }
+
+            // On bloque cette fonctionnalité pour l'instant
+            return false;
         });   
     </script>
 
