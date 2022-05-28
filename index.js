@@ -1043,6 +1043,7 @@ app.use(function(req, res, next) {
 
 .post('/contact', urlencodedParser, function(req, res) {
     // Envoie un email via le formulaire de contact
+    return false;
     contactEmail(req.body.email, req.body);
     res.render('contact-success.ejs', {session: req.session});
     //sendEmail('contact', config.email.from, req.body)
