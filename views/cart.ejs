@@ -278,7 +278,6 @@
             $.post("/valid-voucher", {
                 code: voucherCode
             }).done( function (data) {
-                console.log(data)
                 if (data == "badCode") $('input[name="voucher"]').removeClass('is-valid').addClass('is-invalid');
                 else location.reload();
             });
