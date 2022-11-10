@@ -34,7 +34,8 @@ _getAllProductSimple = `SELECT p.id, p.name, description, price, available, p.ty
             LEFT JOIN accessory a ON a.product_id = p.id
             LEFT JOIN clothe ON clothe.product_id = p.id
             LEFT JOIN print ON print.product_id = p.id
-            WHERE p.visible = 1`;
+            WHERE p.visible = 1
+            ORDER BY id DESC`;
 _getAllProduct = `SELECT DISTINCT p.id, p.name, description, price, available, p.type, default_color, c.name color_name, c.code color_code, image.name as image, pi.position as image_pos, composition, clothe.type as clothe_type, collection, print_size, weight, a.type as acc_type FROM product p
             INNER JOIN product_image pi ON pi.product_id = p.id
             INNER JOIN image ON image.id = pi.image_id
@@ -76,7 +77,8 @@ _getAllOrderUser = `SELECT o.id, u.name, u.email, total_cost, shipping_address, 
                 INNER JOIN user u
                 INNER JOIN order_content oc ON oc.order_id = o.id 
                 LEFT JOIN product p ON oc.product_id = p.id
-                WHERE o.user_id = u.id`;
+                WHERE o.user_id = u.id
+                ORDER BY id DESC;`;
 _getUser       = `SELECT * FROM user, address WHERE id = ? AND user_id = id`;
 _getUserFromEmail = `SELECT * FROM user, address WHERE email = ? AND user_id = id`;
 _getProduct = `SELECT p.id, p.name, description, price, available, p.type, image.name as image, pi.position as image_pos, po.position as option_pos, default_color, po.size as size, stock, po.color as color, composition, clothe.type as clothe_type, collection, print_size, printing, weight, a.type as acc_type FROM product p
