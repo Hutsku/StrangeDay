@@ -99,6 +99,7 @@ _getUserEmail  = `SELECT email FROM user WHERE id = ?`;
 _getUserNewsletter = `SELECT user.email FROM newsletter, user WHERE user.email = newsletter.email AND user.id = ?`;
 _getAllNewsletter  = `SELECT email FROM newsletter`;
 _getVoucher    = `SELECT * from voucher WHERE code = ? AND nb != 0`;
+_getColors     = `SELECT * FROM color`;
 
 _checkVoucherUser = `SELECT * FROM voucher v, user_voucher uv WHERE v.code = uv.code AND uv.user_id = ? AND v.code = ?`
 _useVoucher    = `UPDATE voucher SET nb = ? WHERE code = ?`;
@@ -489,6 +490,14 @@ function getAllOrderUser(callback) {
         }
         callback(orderList);
     });
+}
+
+// Renvoit la liste des couleurs disponibles
+function getColors(callback) {
+    connection.query(_getColors, function(err, rows, fields) {
+        if (err) throw err;
+        callback(rows);  
+    });    
 }
 
 // Renvoit un produit selon l'id donné
@@ -1060,6 +1069,7 @@ module.exports = {
     getUserNewsletter: getUserNewsletter,
     getAllNewsletter: getAllNewsletter,
     getStat: getStat,
+    getColors: getColors,
 
 	addProduct: addProduct,
 	addOrder: addOrder,

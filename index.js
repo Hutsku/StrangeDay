@@ -301,7 +301,7 @@ function updateDatabase() {
 // Vérification automatique de la fin du décompte, si activé
 function checkCountdown() {
     // Date.UTC(année, mois, jour, heure) sachant que le mois est entre 0 et 11 et que la france est en GMT+2h
-    let countDownDate = new Date(Date.UTC(2022, 5-1, 22, 10-2)).getTime();
+    let countDownDate = config.countdownDate;
     let now = new Date().getTime()
 
     // Si le décompte est fini, on le desactive automatiquemet
@@ -382,11 +382,13 @@ app.use(function(req, res, next) {
     let files_2 = fs.readdirSync('./public/img/lookbook/summer roadtrip');
     let files_3 = fs.readdirSync('./public/img/lookbook/insomnie');
     let files_4 = fs.readdirSync('./public/img/lookbook/beau_sejour');
+    let files_5 = fs.readdirSync('./public/img/lookbook/marche_fleur');
     res.render('lookbook.ejs', {session: req.session, 
         photomaton: files_1, 
         summer_roadtrip: files_2, 
         insomnie: files_3,
-        beau_sejour: files_4
+        beau_sejour: files_4,
+        marche_fleur: files_5
     });
 })
 
@@ -525,7 +527,10 @@ app.use(function(req, res, next) {
 .get('/countdown', function (req, res) {
     // Affiche une page défaut avant que le site soit disponible
     if (!config.countdown && !req.session.unlock) res.redirect('/mainpage')
-    else res.render('countdown.ejs', {session: req.session});
+    else res.render('countdown.ejs', {
+        countdownDate: config.countdownDate,
+        session: req.session
+    });
 })
 
 .get('/forgot-password', function (req, res) {
@@ -556,10 +561,13 @@ app.use(function(req, res, next) {
 .get('/admin-edit-product/:id', function(req, res) {
     // on vérifie que l'utilisateur est bien admin (double verification si jamais)
     if (req.session.admin && checkAdmin(req.session.account.email)) {
-        query.getProduct(req.params.id, function(product) {
-            res.render('admin-edit-product.ejs', {
-                product: product,
-                session: req.session
+        query.getColors(function(colors) {
+            query.getProduct(req.params.id, function(product) {
+                res.render('admin-edit-product.ejs', {
+                    colors: colors,
+                    product: product,
+                    session: req.session
+                });
             });
         });
     }
@@ -572,7 +580,12 @@ app.use(function(req, res, next) {
 .get('/admin-add-product', function(req, res) {
     // on vérifie que l'utilisateur est bien admin (double verification si jamais)
     if (req.session.admin && checkAdmin(req.session.account.email)) {
-        res.render('admin-add-product.ejs', {session: req.session});
+        query.getColors(function(colors) {
+            res.render('admin-add-product.ejs', {
+                colors: colors,
+                session: req.session
+            });
+        });
     }
     else {
         // sinon on redirige vers l'écran de connexion

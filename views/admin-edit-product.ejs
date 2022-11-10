@@ -98,6 +98,7 @@
                                 <option value="Capsule Summer Roadtrip" class="attached enabled">Capsule Summer Roadtrip</option>
                                 <option value="Capsule Insomnie" class="attached enabled">Capsule Insomnie</option>
                                 <option value="Capsule Beau Séjour" class="attached enabled">Capsule Beau Séjour</option>
+                                <option value="Capsule Marché aux Fleurs" class="attached enabled">Capsule Marché aux Fleurs</option>
                             </select>
                         </div>
                         <div class="available">
@@ -141,10 +142,9 @@
                                     <div class='color-box mr-2' style="background-color: transparent;"></div>
                                     <select class="custom-select" name="color-picker">
                                         <option selected disabled>Aucune</option>
-                                        <option value="Blanc" data-color="#ffffff" class="attached enabled">Blanc</option>
-                                        <option value="Gris" data-color="#cccccc" class="attached enabled">Gris</option>
-                                        <option value="Noir" data-color="#000000" class="attached enabled">Noir</option>
-                                        <option value="Vert" data-color="#03614f" class="attached enabled">Vert</option>
+                                        <% for (color of colors) { %>
+                                            <option value="<%= color.name %>" data-color="<%= color.code %>" class="attached enabled"><%= color.name %></option>
+                                        <% } %>
                                     </select>
                                 </div>
                             <div class="form-row justify-content-center pt-3">

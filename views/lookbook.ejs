@@ -30,7 +30,10 @@
             <div class="lookbook-content">
                 <div class="tab mb-3">
                     <ul class="tab-switch list-inline">
-                        <li class="list-inline-item active" target="beau_sejour">
+                        <li class="list-inline-item active" target="marche_fleur">
+                            AW 2022 "Le Marché aux Fleurs"                          
+                        </li>
+                        <li class="list-inline-item" target="beau_sejour">
                             SS 2022 "Beau Séjour"                          
                         </li>
                         <li class="list-inline-item" target="insomnie">
@@ -44,9 +47,24 @@
                         </li>
                     </ul>
                 </div>
-                <div class="lookbook-gallery d-flex" id="beau_sejour">
+                <div class="lookbook-gallery d-flex" id="marche_fleur">
                     <div class="w-100 text-center desc mb-3">
-                        Photos: <a href="https://instagram.com/alexandrinesnd" target="_blank">Alexandrine Shenouda</a>
+                        Photos: <a href="https://www.instagram.com/obalastar/" target="_blank">Tara Denis</a><br/>
+                        Assistants photos : <a href="https://www.instagram.com/filip_a.a/" target="_blank">Filip Assimon</a> et <a href="https://www.instagram.com/cailliou/" target="_blank">Camille Suzanne</a> Camille Suzanne <br/>
+                        Modèles: <a href="https://www.instagram.com/_t.nia" target="_blank">Tania</a>, <a href="https://www.instagram.com/dayarga_" target="_blank">Dayarga</a>, <a href="https://www.instagram.com/carla_tlse" target="_blank">Carla</a>, <a href="https://www.instagram.com/_ireal1" target="_blank">Irenee</a>, <a href="https://www.instagram.com/emi_inspirations" target="_blank">Emi</a>, <a href="https://www.instagram.com/ilionito" target="_blank">Joris</a>, <a href="https://www.instagram.com/sofiagraff" target="_blank">Sofia</a>, <a href="https://www.instagram.com/ilan_230mu" target="_blank">Amélie</a> et <a href="https://www.instagram.com/basiledmy" target="_blank">Basile</a>
+                    </div>
+                    <% for (image of marche_fleur) { %>
+                        <div class="lookbook-img col-md-4 p-0">
+                            <img class="w-100" src="/img/lookbook/marche_fleur/<%= image %>">
+                        </div>
+                    <% } %>
+                    <div class="w-100 text-center desc my-3">
+                        Merci à Amélie pour son appartement. Merci au chat pour son aide précieuse
+                    </div>
+                </div>
+                <div class="lookbook-gallery" id="beau_sejour">
+                    <div class="w-100 text-center desc mb-3">
+                        Photos: <a href="https://instagram.com/alexandrinesnd" target="_blank">Alexandrine Shenouda</a><br/>
                         Modèles: <a href="https://www.instagram.com/moilaulita" target="_blank">Laura</a>, <a href="https://www.instagram.com/eliakaniel" target="_blank">Elia</a>, <a href="https://www.instagram.com/eury.cam" target="_blank">Camille</a>, <a href="https://www.instagram.com/glacier.noir" target="_blank">Mathys</a>, <a href="https://www.instagram.com/amaeenda" target="_blank">Amandine</a>, <a href="https://www.instagram.com/jules.r_d" target="_blank">Jules</a>, <a href="https://www.instagram.com/_anaismondon_" target="_blank">Anais</a>, <a href="https://www.instagram.com/tomark2ts" target="_blank">Thomas</a> et <a href="https://www.instagram.com/caalixtooo" target="_blank">Calixte</a>
                     </div>
                     <% for (image of beau_sejour) { %>

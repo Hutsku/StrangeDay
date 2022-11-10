@@ -20,7 +20,7 @@
     <body>
         <main>
     		<div class="main-pannel container-fluid text-center">
-                <a href="/"><img class="main-logo" src="/img/logo_klein.png"></a>
+                <a href="/"><img class="main-logo" src="/img/logo_flower2.png"></a>
                 <div class="py-5 py-md-0" id="countdown">
                     <div>
                         <div class="days"></div>
@@ -58,8 +58,7 @@
 
     <script type="text/javascript">
         // Date de sortie prévue
-        // Date.UTC(année, mois, jour, heure) sachant que le mois est entre 0 et 11 et que la france est en GMT+2h
-        let countDownDate = new Date(Date.UTC(2022, 5-1, 22, 10-2)).getTime(); // 18h paris
+        let countDownDate = `<%= countdownDate %>`; // 18h paris
         function updateCountdown() {
             // Get today's date and time
             let now = new Date().getTime();
