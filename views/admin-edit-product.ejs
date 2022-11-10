@@ -141,7 +141,7 @@
                                 <div class="color-picker d-flex mt-3">
                                     <div class='color-box mr-2' style="background-color: transparent;"></div>
                                     <select class="custom-select" name="color-picker">
-                                        <option selected disabled>Aucune</option>
+                                        <option value="Défaut" selected disabled>Aucune</option>
                                         <% for (color of colors) { %>
                                             <option value="<%= color.name %>" data-color="<%= color.code %>" class="attached enabled"><%= color.name %></option>
                                         <% } %>
