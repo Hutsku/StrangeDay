@@ -222,7 +222,7 @@ function createInvoice(parameter) {
     for (product of parameter.products) {
         // la mise en forme étrange est normale
         let textProduct = `
-    ${product.name} ${product.option} (x${product.cart_qty}) ${product.price}€`;
+    ${product.name} ${product.color} ${product.option} (x${product.cart_qty}) ${product.price}€`;
 
         orderProducts += textProduct;
     }
