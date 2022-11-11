@@ -99,7 +99,7 @@ span.sold-out {
 .color-box {
 	height: 15px;
 	width: 15px;
-	border: 1px solid transparent;
+	border: 1px solid grey;
 	border-radius: 50%;
 	transition: 0.3s;
 	opacity: 0.85;
