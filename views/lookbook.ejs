@@ -30,7 +30,10 @@
             <div class="lookbook-content">
                 <div class="tab mb-3">
                     <ul class="tab-switch list-inline">
-                        <li class="list-inline-item active" target="marche_fleur">
+                        <li class="list-inline-item active" target="lazy_sunday">
+                            Lazy Sunday Club                          
+                        </li>
+                        <li class="list-inline-item" target="marche_fleur">
                             AW 2022 "Le Marché aux Fleurs"                          
                         </li>
                         <li class="list-inline-item" target="beau_sejour">
@@ -47,7 +50,20 @@
                         </li>
                     </ul>
                 </div>
-                <div class="lookbook-gallery d-flex" id="marche_fleur">
+
+                <div class="lookbook-gallery d-flex" id="lazy_sunday">
+                    <div class="w-100 text-center desc mb-3">
+                        Photos: <a href="https://www.instagram.com/obalastar" target="_blank">Tara Denis</a><br/>
+                        Modèles: <a href="https://www.instagram.com/_t.nia" target="_blank">Tania</a>, <a href="https://www.instagram.com/mathys.noir" target="_blank">Mathys</a> et <a href="https://www.instagram.com/uneptitelaura" target="_blank">Laura</a>
+                    </div>
+                    <% for (image of lazy_sunday_club) { %>
+                        <div class="lookbook-img col-md-4 p-0">
+                            <img class="w-100" src="/img/lookbook/lazy_sunday_club/<%= image %>">
+                        </div>
+                    <% } %>
+                </div>
+
+                <div class="lookbook-gallery" id="marche_fleur">
                     <div class="w-100 text-center desc mb-3">
                         Photos: <a href="https://www.instagram.com/obalastar/" target="_blank">Tara Denis</a><br/>
                         Assistants photos : <a href="https://www.instagram.com/filip_a.a/" target="_blank">Filip Assimon</a> et <a href="https://www.instagram.com/cailliou/" target="_blank">Camille Suzanne</a><br/>
@@ -62,6 +78,7 @@
                         Merci à Amélie pour son appartement. Merci à Cahouette pour son aide précieuse.
                     </div>
                 </div>
+
                 <div class="lookbook-gallery" id="beau_sejour">
                     <div class="w-100 text-center desc mb-3">
                         Photos: <a href="https://instagram.com/alexandrinesnd" target="_blank">Alexandrine Shenouda</a><br/>
@@ -76,6 +93,7 @@
                         Merci à Calixte pour sa superbe maison, merci à Loïc et Fausto pour leur aide
                     </div>
                 </div>
+
                 <div class="lookbook-gallery" id="insomnie">
                     <div class="w-100 text-center desc mb-3">
                         Photos: <a href="https://instagram.com/alexandrinesnd" target="_blank">Alexandrine Shenouda</a> avec l'aide de <a href="https://www.instagram.com/loic_hrp" target="_blank">Loïc</a><br/>
@@ -91,6 +109,7 @@
                         Merci à Colombe pour tout. Merci à Elvis pour son aide.
                     </div>
                 </div>
+
                 <div class="lookbook-gallery" id="summertrip">
                     <div class="w-100 text-center desc mb-3">
                         Photos: <a href="https://instagram.com/alexandrinesnd" target="_blank">Alexandrine Shenouda</a><br/>
@@ -102,6 +121,7 @@
                         </div>
                     <% } %>
                 </div>
+
                 <div class="lookbook-gallery" id="photomaton">
                     <div class="w-100 text-center desc mb-3">
                         Photos: <a href="https://instagram.com/alexandrinesnd" target="_blank">Alexandrine Shenouda</a> à Fotoautomat, au 53 rue des Trois Frères, 75018, Paris.<br/>
