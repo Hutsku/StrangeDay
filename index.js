@@ -368,7 +368,7 @@ app.use(function(req, res, next) {
 .get('/shop/:link', function(req, res) {
     // Affiche la liste des articles indiquées
     let type;
-    if (['t-shirt', 'crewneck', 'longsleeve'].includes(req.params.link)) type = 'clothe';
+    if (['t-shirt', 'crewneck', 'longsleeve', 'unique'].includes(req.params.link)) type = 'clothe';
     else type = req.params.link;
 
     query.getAllProduct(function(products) {
