@@ -141,11 +141,7 @@
 	        if (!telInput.val()) {
 	            telInput.removeClass('is-valid').addClass('is-invalid');
 	            return false;
-	        } else if (!telInput.val().match(regexTel)) {
-	            telInput.removeClass('is-valid').addClass('is-invalid');
-	            return false;
-	        }
-	        else {
+	        } else {
 	            telInput.removeClass('is-invalid').addClass('is-valid');
 	        }
 	        if (!address1Input.val()) {
