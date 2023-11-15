@@ -130,7 +130,7 @@
 } */
 
 /* style collec 5 */
-:root {
+/*:root {
 	--main-bg: white;
 	--main-text-trans: none;
 	--table-header-bg: rgb(117, 77, 52, 1);
@@ -171,6 +171,59 @@
 	--payout-frame: #f9f9f9;
 	--payout-menu: white;
 	--payout-form: rgb(244, 239, 217, 1);
+
+	--sticky-bottom: #ffffff;
+
+	--shop-name-fw: 500;
+	--product-title-ts: none;
+} */
+
+/* style collec 6 */
+:root {
+	--main-bg: white;
+	--main-text-trans: none;
+	--table-header-bg: rgb(155, 130, 168);
+	--table-header-text:  white;
+
+	--font-family: -apple-system,BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
+				"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+
+	--head-title-ts: none;
+	--head-title-fw: 600;
+
+	--a: rgb(155, 130, 168);
+	--a-hover: rgb(155, 130, 168);
+
+	--button1: rgb(155, 130, 168);
+	--button1-hover: rgb(155, 130, 168, 0.9);
+	--button1-active: rgb(155, 130, 168, 0.8);
+	--button1-text: white;
+
+	--button2: rgb(180, 180, 180);
+	--button2-hover: rgb(150, 150, 150);
+	--button2-active: rgb(130, 130, 130);
+	--button2-text: white;
+
+	--border-focus: rgb(155, 130, 168, 0.8);
+
+	--navbar-bg: rgb(155, 130, 168);
+	--navbar-text: rgb(255, 255, 255, 1);
+	--navbar-text-hover: rgb(255, 255, 255, 0.9);
+	--navbar-text-focus: rgb(255, 255, 255, 0.7);
+	--navbar-text-trans: none;
+	--navbar-text-fontweight: 600;
+
+	--modal-header: white;
+	--modal-body: white;
+	--modal-text: rgb(155, 130, 168, 1);
+
+	--payout-frame: #f9f9f9;
+	--payout-menu: white;
+	--payout-form: rgb(248, 237, 253, 1);
+
+	--countdown-bg: rgb(155, 130, 168);
+	--countdown-text: white;
+	--countdown-button: rgb(174, 147, 189, 1);
 
 	--sticky-bottom: #ffffff;
 

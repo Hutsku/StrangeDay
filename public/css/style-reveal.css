@@ -1,6 +1,6 @@
 main {
 	min-height: 100vh;
-	background-color: var(--navbar-text);
+	background-color: var(--countdown-bg);
 }
 .main-logo {
 	width: 250px;
@@ -12,15 +12,15 @@ main {
 	justify-content: center;
 }
 #countdown span {
-	color: var(--navbar-bg);
+	color: var(--countdown-text);
 }
 .days, .hours, .minutes, .seconds {
 	font-size: 25px;
 	font-weight: 600;
 	line-height: 47px;
 
-	border: 2px solid var(--navbar-bg);
-	color: var(--navbar-bg);
+	border: 2px solid var(--countdown-text);
+	color: var(--countdown-text);
 	height: 60px;
 	width: 60px;
 
@@ -40,7 +40,7 @@ main {
 	width: 300px;
 }
 .register-email button {
-	background-color: var(--navbar-bg);
+	background-color: var(--countdown-button);
 	width: 300px;
 }
 
