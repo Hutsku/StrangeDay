@@ -30,7 +30,10 @@
             <div class="lookbook-content">
                 <div class="tab mb-3">
                     <ul class="tab-switch list-inline">
-                        <li class="list-inline-item active" target="lazy_sunday">
+                        <li class="list-inline-item active" target="sd_records">
+                            Strange Day Records                      
+                        </li>
+                        <li class="list-inline-item" target="lazy_sunday">
                             Lazy Sunday Club                          
                         </li>
                         <li class="list-inline-item" target="marche_fleur">
@@ -51,7 +54,23 @@
                     </ul>
                 </div>
 
-                <div class="lookbook-gallery d-flex" id="lazy_sunday">
+                <div class="lookbook-gallery d-flex" id="sd_records">
+                    <div class="w-100 text-center desc mb-3">
+                        Photos: <a href="https://instagram.com/alexandrinesnd" target="_blank">Alexandrine Shenouda</a> chez <a href="https://www.instagram.com/baladessonores/" target="_blank">Balades Sonores</a>, 8 rue Pierre Picard, 75018, Paris<br/> 
+                        Vidéos: <a href="https://www.instagram.com/cailliou/" target="_blank">Cammille Suzanne</a><br/>
+                        Modèles: <a href="https://www.instagram.com/alexandre.humbert/" target="_blank">Alexandre</a>, <a href="(https://www.instagram.com/eury.cam" target="_blank">Camille</a> et <a href="https://www.instagram.com/basiledmy/" target="_blank">Basile</a>
+                    </div>
+                    <% for (image of sd_records) { %>
+                        <div class="lookbook-img col-md-4 p-0">
+                            <img class="w-100" src="/img/lookbook/sd_records/<%= image %>">
+                        </div>
+                    <% } %>
+                    <div class="w-100 text-center desc my-3">
+                        Merci à Thomas et à toute l'équipe de Balades Sonores. Merci à tous les figurants. Merci à Pépito
+                    </div>
+                </div>
+
+                <div class="lookbook-gallery" id="lazy_sunday">
                     <div class="w-100 text-center desc mb-3">
                         Photos: <a href="https://www.instagram.com/obalastar" target="_blank">Tara Denis</a><br/>
                         Modèles: <a href="https://www.instagram.com/_t.nia" target="_blank">Tania</a>, <a href="https://www.instagram.com/mathys.noir" target="_blank">Mathys</a> et <a href="https://www.instagram.com/uneptitelaura" target="_blank">Laura</a>

@@ -384,13 +384,15 @@ app.use(function(req, res, next) {
     let files_4 = fs.readdirSync('./public/img/lookbook/beau_sejour');
     let files_5 = fs.readdirSync('./public/img/lookbook/marche_fleur');
     let files_6 = fs.readdirSync('./public/img/lookbook/lazy_sunday_club');
+    let files_7 = fs.readdirSync('./public/img/lookbook/sd_records');
     res.render('lookbook.ejs', {session: req.session, 
         photomaton: files_1, 
         summer_roadtrip: files_2, 
         insomnie: files_3,
         beau_sejour: files_4,
         marche_fleur: files_5,
-        lazy_sunday_club: files_6
+        lazy_sunday_club: files_6,
+        sd_records: files_7
     });
 })
 
