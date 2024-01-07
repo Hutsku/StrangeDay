@@ -11,11 +11,11 @@ function getShippingCost(country, postal_code, weight) {
     if (free.indexOf(postal_code) >= 0) return 0;
     
     // On définie à l'avance les prix
-    let metroCost  = [4.95, 6.55, 7.45, 8.10];     // (250mg, 500, 750, 1Kg)
-    let domtomCost = [11.95, 11.95, 18.20, 18.20]; // (500mg, 1Kg)
-    let euroCost   = [13.10, 13.10, 16.20, 16.20]; // (500mg, 1Kg)
-    let inter1Cost = [19.50, 19.50, 23.30, 23.30]; // (500mg, 1Kg)
-    let inter2Cost = [28.55, 28.55, 31.75, 31.75]; // (500mg, 1Kg)
+    let metroCost  = [4.99, 6.99, 8.1, 8.80];     // (250mg, 500, 750, 1Kg)
+    let domtomCost = [12.65, 12.65, 20, 20]; // (500mg, 1Kg)
+    let euroCost   = [14.25, 14.25, 17.60, 17.60]; // (500mg, 1Kg)
+    let inter1Cost = [21.40, 21.40, 25.55, 25.55]; // (500mg, 1Kg)
+    let inter2Cost = [31.60, 31.60, 31.15, 31.15]; // (500mg, 1Kg)
 
     // On définit l'indice de prix selon le poid du colis
     let fdp_index = Math.trunc(parseFloat(weight-1) / 250);
