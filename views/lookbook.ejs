@@ -30,7 +30,10 @@
             <div class="lookbook-content">
                 <div class="tab mb-3">
                     <ul class="tab-switch list-inline">
-                        <li class="list-inline-item active" target="amour_digital">
+                        <li class="list-inline-item active" target="apres_le_soleil">
+                            AW 2024 "Après le Soleil"                    
+                        </li>
+                        <li class="list-inline-item" target="amour_digital">
                             Amour Digital                      
                         </li>
                         <li class="list-inline-item" target="sd_records">
@@ -57,7 +60,21 @@
                     </ul>
                 </div>
 
-                <div class="lookbook-gallery d-flex" id="amour_digital">
+                <div class="lookbook-gallery d-flex" id="pres_le_soleil">
+                    <div class="w-100 text-center desc mb-3">
+                        Photos : <a href="https://instagram.com/alexandrinesnd" target="_blank">Alexandrine</a><br/>
+                        Vidéos : <a href="https://www.instagram.com/bast_ck/" target="_blank">Bastien</a><br/>
+                        Makeup : <a href="https://www.instagram.com/therealkatinthehat/" target="_blank">Kat</a><br/>
+                        Modèles : <a href="https://www.instagram.com/_t.nia/" target="_blank">Tania</a> et <a href="https://www.instagram.com/gabrielma2p1/" target="_blank">Gabriel</a>
+                    </div>
+                    <% for (image of apres_le_soleil) { %>
+                        <div class="lookbook-img col-md-4 p-0">
+                            <img class="w-100" src="/img/lookbook/apres_le_soleil/<%= image %>">
+                        </div>
+                    <% } %>
+                </div>
+
+                <div class="lookbook-gallery" id="amour_digital">
                     <div class="w-100 text-center desc mb-3">
                         DA : <a href="https://www.instagram.com/strangeday.shop/" target="_blank" style="color: #98103e;">Strange Day</a> et <a href="https://www.instagram.com/softhera.studio/" target="_blank" style="color: #153359;">Softhéra</a><br/>
                         Photos : <a href="https://instagram.com/alexandrinesnd" target="_blank">Alexandrine</a><br/>
