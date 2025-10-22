@@ -48,6 +48,6 @@ config.production = true; // Active les paiements
 config.countdown  = true; // Active/desactive la page d'attente de reveal du site
 // Date.UTC(année, mois, jour, heure) sachant que le mois est entre 0 et 11 et que la france est en GMT+2h
 // À savoir que les changements d'heure en france (+1, -1) ne sont pas pris en compte, donc faudra faire gaffe
-config.countdownDate = new Date(Date.UTC(2024, 12-1, 22, 10-1)).getTime();
+config.countdownDate = new Date(Date.UTC(2025, 10-1, 24, 10-1)).getTime();
 
 module.exports = config;
