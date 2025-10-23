@@ -30,7 +30,10 @@
             <div class="lookbook-content">
                 <div class="tab mb-3">
                     <ul class="tab-switch list-inline">
-                        <li class="list-inline-item active" target="apres_le_soleil">
+                        <li class="list-inline-item active" target="sd_p01">
+                            SD-P01                   
+                        </li>
+                        <li class="list-inline-item" target="apres_le_soleil">
                             AW 2024 "Après le Soleil"                    
                         </li>
                         <li class="list-inline-item" target="amour_digital">
@@ -60,7 +63,19 @@
                     </ul>
                 </div>
 
-                <div class="lookbook-gallery d-flex" id="pres_le_soleil">
+                <div class="lookbook-gallery d-flex" id="sd_p01">
+<!--                     <div class="w-100 text-center desc mb-3">
+                        Photos : <a href="https://www.instagram.com/obalastar" target="_blank">Tara Denis</a><br/>
+                        Modèles : <a href="https://www.instagram.com/_t.nia/" target="_blank">Tania</a>, <a href="https://www.instagram.com/gabrielma2p1/" target="_blank">Gabriel</a>, <a href="https://www.instagram.com/anoukdupety/" target="_blank">Anouk</a> et <a href="https://www.instagram.com/antonin.971/" target="_blank">Antonin</a>
+                    </div> -->
+                    <% for (image of sd_p01) { %>
+                        <div class="lookbook-img col-md-4 p-0">
+                            <img class="w-100" src="/img/lookbook/sd_p01/<%= image %>">
+                        </div>
+                    <% } %>
+                </div>
+
+                <div class="lookbook-gallery" id="apres_le_soleil">
                     <div class="w-100 text-center desc mb-3">
                         Photos : <a href="https://www.instagram.com/obalastar" target="_blank">Tara Denis</a><br/>
                         Modèles : <a href="https://www.instagram.com/_t.nia/" target="_blank">Tania</a>, <a href="https://www.instagram.com/gabrielma2p1/" target="_blank">Gabriel</a>, <a href="https://www.instagram.com/anoukdupety/" target="_blank">Anouk</a> et <a href="https://www.instagram.com/antonin.971/" target="_blank">Antonin</a>

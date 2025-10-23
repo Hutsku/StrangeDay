@@ -387,6 +387,7 @@ app.use(function(req, res, next) {
     let files_7 = fs.readdirSync('./public/img/lookbook/sd_records');
     let files_8 = fs.readdirSync('./public/img/lookbook/amour_digital');
     let files_9 = fs.readdirSync('./public/img/lookbook/apres_le_soleil');
+    let files_10 = fs.readdirSync('./public/img/lookbook/sd_p01');
     res.render('lookbook.ejs', {session: req.session, 
         photomaton: files_1, 
         summer_roadtrip: files_2, 
@@ -396,7 +397,8 @@ app.use(function(req, res, next) {
         lazy_sunday_club: files_6,
         sd_records: files_7,
         amour_digital: files_8,
-        apres_le_soleil: files_9
+        apres_le_soleil: files_9,
+        sd_p01: files_10
     });
 })
 
